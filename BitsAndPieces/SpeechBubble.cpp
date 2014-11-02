@@ -17,7 +17,7 @@
 
 #include "GameCommonHeader.h"
 #include "SpeechBubble.h"
-#include "../../MyFramework/SourceCommon/Sprites/MySprite9.h"
+#include "../../Framework/MyFramework/SourceCommon/Sprites/MySprite9.h"
 
 SpeechBubble::SpeechBubble()
 {

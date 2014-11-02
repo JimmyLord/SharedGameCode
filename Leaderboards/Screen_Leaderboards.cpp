@@ -19,7 +19,7 @@
 
 #include "Screen_Leaderboards.h"
 #include "LeaderboardStorage.h"
-#include "../../../Framework/LazilySharedGameCode/Menus/MenuButton.h"
+#include "../../../SharedGameCode/Menus/MenuButton.h"
 #include "Core/ProfileManager.h"
 
 Screen_Leaderboards* g_pScreen_Leaderboards = 0;

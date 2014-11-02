@@ -18,7 +18,7 @@
 #ifndef __Screen_Leaderboards_H__
 #define __Screen_Leaderboards_H__
 
-#include "../../../Framework/LazilySharedGameCode/Screens/Screen_Base.h"
+#include "../../../SharedGameCode/Screens/Screen_Base.h"
 #include "Core/LeaderboardsConfig.h"
 
 class Screen_Leaderboards;

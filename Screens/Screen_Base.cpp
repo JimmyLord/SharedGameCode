@@ -17,10 +17,10 @@
 
 #include "GameCommonHeader.h"
 #include "Screen_Base.h"
-#include "../../../Framework/LazilySharedGameCode/Menus/MenuButton.h"
-#include "../../../Framework/LazilySharedGameCode/Menus/MenuScrollingText.h"
-#include "../../../Framework/LazilySharedGameCode/Menus/MenuInputBox.h"
-#include "../../../Framework/LazilySharedGameCode/Menus/MenuCheckBox.h"
+#include "../../../SharedGameCode/Menus/MenuButton.h"
+#include "../../../SharedGameCode/Menus/MenuScrollingText.h"
+#include "../../../SharedGameCode/Menus/MenuInputBox.h"
+#include "../../../SharedGameCode/Menus/MenuCheckBox.h"
 
 Screen_Base::Screen_Base()
 {

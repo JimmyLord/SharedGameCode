@@ -44,10 +44,9 @@ void Camera3D::LookAt(Vector3& eye, Vector3& up, Vector3& lookatpos)
 
 void Camera3D::ResetMatrix(bool calculateinverse)
 {
-    m_matView.SetLookAtRH( m_Eye, m_Up, m_LookAtPos );
+    m_matView.CreateLookAt( m_Eye, m_Up, m_LookAtPos );
 
-    m_matViewProj = m_matView;
-    m_matViewProj.Multiply( &m_matProj );
+    m_matViewProj = m_matProj * m_matView;
 
     // Calculate the inverse of the camera matrix
     if( calculateinverse )
@@ -57,7 +56,7 @@ void Camera3D::ResetMatrix(bool calculateinverse)
 
         // Calculate the x and y values of the frustum at Z=0
         Vector3 sspos( 1, 1, 0 );
-        Vector3 pos3d = m_matViewProjInverse.TransformVector3( sspos );
+        Vector3 pos3d = m_matViewProjInverse * sspos;
 
         m_FrustumRightEdgeZ0 = pos3d.x;
         m_FrustumTopEdgeZ0 = pos3d.y;

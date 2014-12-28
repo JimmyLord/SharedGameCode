@@ -23,6 +23,8 @@ MenuItem::MenuItem()
 {
     m_MenuItemType = MIT_Base;
 
+    m_Name[0] = 0;
+
     m_Visible = true;
     m_Enabled = true;
 

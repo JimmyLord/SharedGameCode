@@ -225,7 +225,7 @@ void MenuButton::Draw()
                 pShadowSprite->SetTint( m_BGShadowColor );
 
                 MyMatrix shadowmat = transform;
-                shadowmat.TranslatePostRotation( buttonshadowoffx, buttonshadowoffy, 0 );
+                shadowmat.Translate( buttonshadowoffx, buttonshadowoffy, 0 );
 
                 pShadowSprite->SetTransform( shadowmat );
                 pShadowSprite->Draw( &g_pGame->m_OrthoMatrixGameSize );
@@ -269,7 +269,7 @@ void MenuButton::Draw()
 
         MyMatrix matfinalmesh = m_MeshTransform;
         //matfinalmesh.Multiply( &m_Transform );
-        matfinalmesh.TranslatePostRotation( m_Transform.m41, m_Transform.m42, m_Transform.m43 );
+        matfinalmesh.SetTranslation( m_Transform.m41, m_Transform.m42, m_Transform.m43 );
         pMesh->m_Position = matfinalmesh;
         pMesh->m_Position.m41 = (((-g_pGame->m_OrthoLeft + matfinalmesh.m41) / devw) - 0.5f) * m_pBGMeshCamera->m_FrustumRightEdgeZ0*2;
         pMesh->m_Position.m42 = (((-g_pGame->m_OrthoBottom + matfinalmesh.m42) / devh) - 0.5f) * m_pBGMeshCamera->m_FrustumTopEdgeZ0*2;
@@ -288,7 +288,7 @@ void MenuButton::Draw()
             numlights = 1;
         }
 
-        pMesh->Draw( &m_pBGMeshCamera->m_matViewProj, &m_pBGMeshCamera->m_Eye, m_pBGMeshLight, numlights, 0, 0, 0 );
+        pMesh->Draw( &m_pBGMeshCamera->m_matViewProj, &m_pBGMeshCamera->m_Eye, m_pBGMeshLight, numlights, 0, 0, 0, 0 );
     }
 
     float y;
@@ -386,7 +386,7 @@ void MenuButton::Draw()
     if( m_pFont && m_pMeshText )
     {
         m_pMeshText->SetShaderAndTexture( g_pGame->m_pShader_TextureVertexColor, m_pFont->m_pTextureDef );
-        m_pMeshText->Draw( &g_pGame->m_OrthoMatrixGameSize, 0, 0, 0, 0, 0, 0 );
+        m_pMeshText->Draw( &g_pGame->m_OrthoMatrixGameSize, 0, 0, 0, 0, 0, 0, 0 );
     }
 }
 
@@ -578,7 +578,7 @@ void MenuButton::SetPositionAndSize(float x, float y, float w, float h, float in
 {
     m_Transform.SetIdentity();
     m_Transform.Scale( w, h, 1 );
-    m_Transform.TranslatePostRotation( x, y, 0 );
+    m_Transform.SetTranslation( x, y, 0 );
 
     if( inputw < 0 )
     {

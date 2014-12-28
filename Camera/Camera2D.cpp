@@ -98,14 +98,14 @@ void Camera2D::ResetMatrix()
 
     m_matView.SetIdentity();
     //m_matView.Scale( m_Zoom, m_Zoom, 1 );
-    m_matView.SetPosition( - ( m_OffsetX - (m_Width/m_Zoom)/2 ) ,//- (m_Width/m_Zoom)/2 ),
-                           - ( m_OffsetY - (m_Height/m_Zoom)/2 ),//- m_Height/2 ),
-                           0 );
+    m_matView.SetTranslation( - ( m_OffsetX - (m_Width/m_Zoom)/2 ) ,//- (m_Width/m_Zoom)/2 ),
+                              - ( m_OffsetY - (m_Height/m_Zoom)/2 ),//- m_Height/2 ),
+                              0 );
 
     MyMatrix scale;
     scale.SetIdentity();
     scale.Scale( m_Zoom, m_Zoom, 1 );
-    m_matView.Multiply( &scale );
+    m_matView = scale * m_matView;
     //m_matView.SetPosition( (-m_OffsetX + m_Width/2)*m_Zoom - zoomoffsetx,
     //                       (-m_OffsetY + m_Height/2)*m_Zoom - zoomoffsety, 0 );
 
@@ -121,7 +121,7 @@ void Camera2D::ResetMatrix()
         //m_matProj.SetOrtho( ortholeft+zoomoffsetx, orthoright+zoomoffsetx,
         //                    orthobottom+zoomoffsety, orthotop+zoomoffsety, 1, -1 );
 
-        m_matProj.SetOrtho( ortholeft, orthoright, orthobottom, orthotop, 1, -1 );
+        m_matProj.CreateOrtho( ortholeft, orthoright, orthobottom, orthotop, 1, -1 );
 
 #if MYFW_WP8
         // orientation hack for WP8
@@ -141,8 +141,7 @@ void Camera2D::ResetMatrix()
         }
 #endif
 
-        m_matViewProj = m_matView;
-        m_matViewProj.Multiply( &m_matProj );
+        m_matViewProj = m_matProj * m_matView;
     }
 }
 

@@ -373,13 +373,13 @@ int MyMeshText::CreateString(bool concat, float fontheight, float x, float y, fl
         MyMatrix position;
         position.SetIdentity();
         position.Rotate( rotz, 0, 0, 1 );
-        position.SetPosition( x, y - (numlines-1)*fontheight, z );
+        position.SetTranslation( x, y - (numlines-1)*fontheight, z );
         //position.SetPosition( x, y - (numlines-1)*g_pRTQGlobals->m_WordWrapLineIncSize, z );
         //position.SetPosition( x, y, z );
 
         for( unsigned int i=0; i<textstrlen*4; i++ )
         {
-            Vector3 out = position.TransformVector3( *(Vector3*)&pVertsToDraw[i].x );
+            Vector3 out = position * (*(Vector3*)&pVertsToDraw[i].x);
             pVertsToDraw[i].x = out.x;
             pVertsToDraw[i].y = out.y;
             pVertsToDraw[i].z = out.z;

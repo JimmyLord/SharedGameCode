@@ -135,7 +135,7 @@ void MenuSprite::SetPositionAndSize(float x, float y, float w, float h, float in
 {
     m_Transform.SetIdentity();
     m_Transform.Scale( w, h, 1 );
-    m_Transform.TranslatePostRotation( x, y, 0 );
+    m_Transform.SetTranslation( x, y, 0 );
 
     m_BGWidth = w;
     m_BGHeight = h;

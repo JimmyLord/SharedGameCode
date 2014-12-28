@@ -369,7 +369,7 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
             MyMatrix position;
             position.SetIdentity();
             position.Rotate( rotz, 0, 0, 1 );
-            position.SetPosition( x, y - (numlines-1)*g_pRTQGlobals->m_WordWrapLineIncSize, z );
+            position.SetTranslation( x, y - (numlines-1)*g_pRTQGlobals->m_WordWrapLineIncSize, z );
 
             //if( g_pRTQGlobals->m_pVertexBufferIDImmediate->m_Dirty )
             //{
@@ -383,7 +383,7 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
             {
                 for( int i=0; i<textstrlen*6; i++ )
                 {
-                    Vector3 out = position.TransformVector3( *(Vector3*)&pVertToDraws[i].x );
+                    Vector3 out = position * (*(Vector3*)&pVertToDraws[i].x);
                     pVertToDraws[i].x = out.x;
                     pVertToDraws[i].y = out.y;
                     pVertToDraws[i].z = out.z;

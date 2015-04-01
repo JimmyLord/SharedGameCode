@@ -1,18 +1,10 @@
 //
-// Copyright (c) 2012-2014 Jimmy Lord http://www.flatheadgames.com
+// Copyright (c) 2012-2015 Jimmy Lord http://www.flatheadgames.com
 //
-// This software is provided 'as-is', without any express or implied
-// warranty.  In no event will the authors be held liable for any damages
-// arising from the use of this software.
-// Permission is granted to anyone to use this software for any purpose,
-// including commercial applications, and to alter it and redistribute it
-// freely, subject to the following restrictions:
-// 1. The origin of this software must not be misrepresented; you must not
-// claim that you wrote the original software. If you use this software
-// in a product, an acknowledgment in the product documentation would be
-// appreciated but is not required.
-// 2. Altered source versions must be plainly marked as such, and must not be
-// misrepresented as being the original software.
+// This software is provided 'as-is', without any express or implied warranty.  In no event will the authors be held liable for any damages arising from the use of this software.
+// Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
+// 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+// 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
 #include "GameCommonHeader.h"
@@ -124,7 +116,7 @@ MenuButton::MenuButton(int maxletters)
 
 MenuButton::~MenuButton()
 {
-    SAFE_DELETE( m_pMeshText );
+    SAFE_RELEASE( m_pMeshText );
 
     SAFE_RELEASE( m_pBGSprite );
     SAFE_RELEASE( m_pDisabledBGSprite );
@@ -268,12 +260,12 @@ void MenuButton::Draw()
         float devh = g_pGame->m_GameFullHeight;
 
         MyMatrix matfinalmesh = m_MeshTransform;
-        //matfinalmesh.Multiply( &m_Transform );
         matfinalmesh.SetTranslation( m_Transform.m41, m_Transform.m42, m_Transform.m43 );
-        pMesh->m_Position = matfinalmesh;
-        pMesh->m_Position.m41 = (((-g_pGame->m_OrthoLeft + matfinalmesh.m41) / devw) - 0.5f) * m_pBGMeshCamera->m_FrustumRightEdgeZ0*2;
-        pMesh->m_Position.m42 = (((-g_pGame->m_OrthoBottom + matfinalmesh.m42) / devh) - 0.5f) * m_pBGMeshCamera->m_FrustumTopEdgeZ0*2;
-        pMesh->m_Position.m43 = matfinalmesh.m43;
+        matfinalmesh.m41 = (((-g_pGame->m_OrthoLeft + matfinalmesh.m41) / devw) - 0.5f) * m_pBGMeshCamera->m_FrustumRightEdgeZ0*2;
+        matfinalmesh.m42 = (((-g_pGame->m_OrthoBottom + matfinalmesh.m42) / devh) - 0.5f) * m_pBGMeshCamera->m_FrustumTopEdgeZ0*2;
+        matfinalmesh.m43 = matfinalmesh.m43;
+        
+        pMesh->SetTransform( matfinalmesh );
 
         int numlights = 0;
         if( m_pBGMeshLight )
@@ -385,6 +377,7 @@ void MenuButton::Draw()
 
     if( m_pFont && m_pMeshText )
     {
+        m_pMeshText->m_MeshReady = true;
         m_pMeshText->SetShaderAndTexture( g_pGame->m_pShader_TextureVertexColor, m_pFont->m_pTextureDef );
         m_pMeshText->Draw( &g_pGame->m_OrthoMatrixGameSize, 0, 0, 0, 0, 0, 0, 0 );
     }

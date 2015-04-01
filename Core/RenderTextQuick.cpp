@@ -1,18 +1,10 @@
 //
-// Copyright (c) 2012-2014 Jimmy Lord http://www.flatheadgames.com
+// Copyright (c) 2012-2015 Jimmy Lord http://www.flatheadgames.com
 //
-// This software is provided 'as-is', without any express or implied
-// warranty.  In no event will the authors be held liable for any damages
-// arising from the use of this software.
-// Permission is granted to anyone to use this software for any purpose,
-// including commercial applications, and to alter it and redistribute it
-// freely, subject to the following restrictions:
-// 1. The origin of this software must not be misrepresented; you must not
-// claim that you wrote the original software. If you use this software
-// in a product, an acknowledgment in the product documentation would be
-// appreciated but is not required.
-// 2. Altered source versions must be plainly marked as such, and must not be
-// misrepresented as being the original software.
+// This software is provided 'as-is', without any express or implied warranty.  In no event will the authors be held liable for any damages arising from the use of this software.
+// Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
+// 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+// 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
 #include "GameCommonHeader.h"
@@ -49,10 +41,8 @@ RenderTextQuickGlobals::RenderTextQuickGlobals()
 
 RenderTextQuickGlobals::~RenderTextQuickGlobals()
 {
-    if( m_pVertexBufferIDImmediate )
-        m_pVertexBufferIDImmediate->Release();
-    if( m_pVertexBuffer )
-        m_pVertexBuffer->Release();
+    SAFE_RELEASE( m_pVertexBufferIDImmediate );
+    SAFE_RELEASE( m_pVertexBuffer );
 }
 
 void RenderTextQuickGlobals::SetWrapMode(bool wrap, int widthlimit, int lineincsize, bool countonly)
@@ -361,7 +351,7 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
                 // create a large buffer...
                 g_pRTQGlobals->m_pVertexBufferIDImmediate = g_pBufferManager->CreateBuffer( 0, sizeof(Vertex_XYZUV_RGBA)*100*6, GL_ARRAY_BUFFER, GL_DYNAMIC_DRAW, true, 2, VertexFormat_XYZUV_RGBA, "RenderTextQuick", "VertsImmediate" );
 
-                g_pRTQGlobals->m_pVertexBuffer = g_pBufferManager->CreateBuffer( 0, sizeof(Vertex_XYZUV_RGBA)*g_pRTQGlobals->m_VBONumVerts, GL_ARRAY_BUFFER, GL_DYNAMIC_DRAW, false, 2, VertexFormat_None, "RenderTextQuick", "Verts" );
+                g_pRTQGlobals->m_pVertexBuffer = g_pBufferManager->CreateBuffer( 0, sizeof(Vertex_XYZUV_RGBA)*g_pRTQGlobals->m_VBONumVerts, GL_ARRAY_BUFFER, GL_DYNAMIC_DRAW, false, 2, VertexFormat_XYZUV_RGBA, "RenderTextQuick", "Verts" );
             }
 
             textstrlen = pFont->m_pFont->GenerateVerts( stringtodraw, false, pVertToDraws, fontheight, GL_TRIANGLES, justificationflags, color );
@@ -441,7 +431,7 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
                     g_pRTQGlobals->m_pVertexBufferIDImmediate->Rebuild( 0, sizeof(Vertex_XYZUV_RGBA)*textstrlen*6 );
 
                     if( pShader->ActivateAndProgramShader(
-                        VertexFormat_XYZUV_RGBA, g_pRTQGlobals->m_pVertexBufferIDImmediate, 0, GL_UNSIGNED_SHORT,
+                        g_pRTQGlobals->m_pVertexBufferIDImmediate, 0, GL_UNSIGNED_SHORT,
                         &g_pGame->m_OrthoMatrixGameSize, &position, pFont->m_pTextureDef->m_TextureID ) )
                     //if( pShader->ActivateAndProgramShader( &g_pGame->m_OrthoMatrixGameSize,
                     //    &position, pVertToDraws, pFont->m_pTextureDef->m_TextureID ) )
@@ -516,7 +506,7 @@ void RenderTextQuickEndBatch()
     if( pShader )
     {
         if( pShader->ActivateAndProgramShader(
-                VertexFormat_XYZUV_RGBA, g_pRTQGlobals->m_pVertexBuffer, 0, GL_UNSIGNED_SHORT,
+                g_pRTQGlobals->m_pVertexBuffer, 0, GL_UNSIGNED_SHORT,
                 &g_pGame->m_OrthoMatrixGameSize, &position, g_pRTQGlobals->m_BatchTexture ) )
         {
 #if USE_D3D

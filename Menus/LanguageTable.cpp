@@ -58,7 +58,7 @@ bool LanguageTable::StringExists(const char* stringtofind, int languagetosearch,
     if( m_pJSON == 0 )
     {
         assert( m_pFile ); // don't call StringExists before requesting the file.
-        if( m_pFile == 0 || m_pFile->m_FileReady == false )
+        if( m_pFile == 0 || m_pFile->m_FileLoadStatus != FileLoadStatus_Success )
             return false;
 
         // parse file.
@@ -110,7 +110,7 @@ const char* LanguageTable::LookUp(const char* stringtofind, int languagetosearch
     if( m_pJSON == 0 )
     {
         assert( m_pFile ); // don't call LookUp before requesting the file.
-        if( m_pFile == 0 || m_pFile->m_FileReady == false )
+        if( m_pFile == 0 || m_pFile->m_FileLoadStatus != FileLoadStatus_Success )
             return "!language file not ready!";
 
         // parse file.

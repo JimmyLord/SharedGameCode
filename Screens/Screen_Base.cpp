@@ -1,18 +1,10 @@
 //
-// Copyright (c) 2012-2014 Jimmy Lord http://www.flatheadgames.com
+// Copyright (c) 2012-2015 Jimmy Lord http://www.flatheadgames.com
 //
-// This software is provided 'as-is', without any express or implied
-// warranty.  In no event will the authors be held liable for any damages
-// arising from the use of this software.
-// Permission is granted to anyone to use this software for any purpose,
-// including commercial applications, and to alter it and redistribute it
-// freely, subject to the following restrictions:
-// 1. The origin of this software must not be misrepresented; you must not
-// claim that you wrote the original software. If you use this software
-// in a product, an acknowledgment in the product documentation would be
-// appreciated but is not required.
-// 2. Altered source versions must be plainly marked as such, and must not be
-// misrepresented as being the original software.
+// This software is provided 'as-is', without any express or implied warranty.  In no event will the authors be held liable for any damages arising from the use of this software.
+// Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
+// 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+// 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
 #include "GameCommonHeader.h"
@@ -389,7 +381,7 @@ void Screen_Base::Init()
 #if MYFW_USING_WX
     // Add this screen to the root of the tree.
     wxTreeItemId rootid = g_pPanelObjectList->GetTreeRoot();
-    wxTreeItemId screenid = g_pPanelObjectList->AddObject( this, Screen_Base::StaticFillPropertiesWindow, rootid, m_ScreenName );
+    wxTreeItemId screenid = g_pPanelObjectList->AddObject( this, Screen_Base::StaticFillPropertiesWindow, 0, rootid, m_ScreenName );
 
     // Add all of it's menu items to the screen object.
     for( int i=0; i<MAX_MENUITEMS; i++ )
@@ -400,17 +392,17 @@ void Screen_Base::Init()
             wxTreeItemId id;
             switch( m_pMenuItems[i]->m_MenuItemType )
             {
-            case MIT_Sprite:        id = g_pPanelObjectList->AddObject( m_pMenuItems[i], MenuSprite::StaticFillPropertiesWindow,        screenid, label ); break;
-            case MIT_Text:          id = g_pPanelObjectList->AddObject( m_pMenuItems[i], MenuText::StaticFillPropertiesWindow,          screenid, label ); break;
-            case MIT_Button:        id = g_pPanelObjectList->AddObject( m_pMenuItems[i], MenuButton::StaticFillPropertiesWindow,        screenid, label ); break;
-            case MIT_ScrollBox:     id = g_pPanelObjectList->AddObject( m_pMenuItems[i], MenuScrollBox::StaticFillPropertiesWindow,     screenid, label ); break;
-            case MIT_ScrollingText: id = g_pPanelObjectList->AddObject( m_pMenuItems[i], MenuScrollingText::StaticFillPropertiesWindow, screenid, label ); break;
-            case MIT_InputBox:      id = g_pPanelObjectList->AddObject( m_pMenuItems[i], MenuInputBox::StaticFillPropertiesWindow,      screenid, label ); break;
-            case MIT_CheckBox:      id = g_pPanelObjectList->AddObject( m_pMenuItems[i], MenuCheckBox::StaticFillPropertiesWindow,      screenid, label ); break;
+            case MIT_Sprite:        id = g_pPanelObjectList->AddObject( m_pMenuItems[i], MenuSprite::StaticFillPropertiesWindow,        0, screenid, label ); break;
+            case MIT_Text:          id = g_pPanelObjectList->AddObject( m_pMenuItems[i], MenuText::StaticFillPropertiesWindow,          0, screenid, label ); break;
+            case MIT_Button:        id = g_pPanelObjectList->AddObject( m_pMenuItems[i], MenuButton::StaticFillPropertiesWindow,        0, screenid, label ); break;
+            case MIT_ScrollBox:     id = g_pPanelObjectList->AddObject( m_pMenuItems[i], MenuScrollBox::StaticFillPropertiesWindow,     0, screenid, label ); break;
+            case MIT_ScrollingText: id = g_pPanelObjectList->AddObject( m_pMenuItems[i], MenuScrollingText::StaticFillPropertiesWindow, 0, screenid, label ); break;
+            case MIT_InputBox:      id = g_pPanelObjectList->AddObject( m_pMenuItems[i], MenuInputBox::StaticFillPropertiesWindow,      0, screenid, label ); break;
+            case MIT_CheckBox:      id = g_pPanelObjectList->AddObject( m_pMenuItems[i], MenuCheckBox::StaticFillPropertiesWindow,      0, screenid, label ); break;
 
             case MIT_Base:
             case MIT_NumMenuItemTypes:
-            default:                id = g_pPanelObjectList->AddObject( m_pMenuItems[i], MenuItem::StaticFillPropertiesWindow,          screenid, label ); break;
+            default:                id = g_pPanelObjectList->AddObject( m_pMenuItems[i], MenuItem::StaticFillPropertiesWindow,          0, screenid, label ); break;
             }
 
             // if this is a scrollbox containing more mene items, then add those to that tree limb.
@@ -424,17 +416,17 @@ void Screen_Base::Init()
                     const char* label = GetMenuItemLabel( pItem );
                     switch( m_pMenuItems[i]->m_MenuItemType )
                     {
-                    case MIT_Sprite:        g_pPanelObjectList->AddObject( pItem, MenuSprite::StaticFillPropertiesWindow,        id, label ); break;
-                    case MIT_Text:          g_pPanelObjectList->AddObject( pItem, MenuText::StaticFillPropertiesWindow,          id, label ); break;
-                    case MIT_Button:        g_pPanelObjectList->AddObject( pItem, MenuButton::StaticFillPropertiesWindow,        id, label ); break;
-                    case MIT_ScrollBox:     g_pPanelObjectList->AddObject( pItem, MenuScrollBox::StaticFillPropertiesWindow,     id, label ); break;
-                    case MIT_ScrollingText: g_pPanelObjectList->AddObject( pItem, MenuScrollingText::StaticFillPropertiesWindow, id, label ); break;
-                    case MIT_InputBox:      g_pPanelObjectList->AddObject( pItem, MenuInputBox::StaticFillPropertiesWindow,      id, label ); break;
-                    case MIT_CheckBox:      g_pPanelObjectList->AddObject( pItem, MenuCheckBox::StaticFillPropertiesWindow,      id, label ); break;
+                    case MIT_Sprite:        g_pPanelObjectList->AddObject( pItem, MenuSprite::StaticFillPropertiesWindow,        0, id, label ); break;
+                    case MIT_Text:          g_pPanelObjectList->AddObject( pItem, MenuText::StaticFillPropertiesWindow,          0, id, label ); break;
+                    case MIT_Button:        g_pPanelObjectList->AddObject( pItem, MenuButton::StaticFillPropertiesWindow,        0, id, label ); break;
+                    case MIT_ScrollBox:     g_pPanelObjectList->AddObject( pItem, MenuScrollBox::StaticFillPropertiesWindow,     0, id, label ); break;
+                    case MIT_ScrollingText: g_pPanelObjectList->AddObject( pItem, MenuScrollingText::StaticFillPropertiesWindow, 0, id, label ); break;
+                    case MIT_InputBox:      g_pPanelObjectList->AddObject( pItem, MenuInputBox::StaticFillPropertiesWindow,      0, id, label ); break;
+                    case MIT_CheckBox:      g_pPanelObjectList->AddObject( pItem, MenuCheckBox::StaticFillPropertiesWindow,      0, id, label ); break;
 
                     case MIT_Base:
                     case MIT_NumMenuItemTypes:
-                    default:                g_pPanelObjectList->AddObject( pItem, MenuItem::StaticFillPropertiesWindow,          id, label ); break;
+                    default:                g_pPanelObjectList->AddObject( pItem, MenuItem::StaticFillPropertiesWindow,          0, id, label ); break;
                     }
                 }
             }
@@ -670,8 +662,7 @@ bool Screen_Base::OnButtons(GameCoreButtonActions action, GameCoreButtonIDs id)
 bool Screen_Base::OnKeyDown(int keycode, int unicodechar)
 {
 #if MYFW_WINDOWS && MYFW_USING_WX && _DEBUG
-    bool MYFW_GetKey(int value);
-    if( keycode == 'R' && MYFW_GetKey( MYKEYCODE_LCTRL ) )
+    if( keycode == 'R' && g_pGameCore->m_KeysHeld[MYKEYCODE_LCTRL] )
     {
         float scrw = g_pGame->m_DeviceWidth;
         float scrh = g_pGame->m_DeviceHeight;
@@ -683,7 +674,7 @@ bool Screen_Base::OnKeyDown(int keycode, int unicodechar)
         if( scrw == scrh )
             ImportMenuLayout( m_LayoutJSON_Square );
     }
-    if( keycode == 'S' && MYFW_GetKey( MYKEYCODE_LCTRL ) )
+    if( keycode == 'S' && g_pGameCore->m_KeysHeld[MYKEYCODE_LCTRL] )
     {
         float scrw = g_pGame->m_DeviceWidth;
         float scrh = g_pGame->m_DeviceHeight;

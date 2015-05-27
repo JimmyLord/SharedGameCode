@@ -25,13 +25,15 @@ RenderTextQuickGlobals* g_pRTQGlobals = 0;
 RenderTextQuickGlobals::RenderTextQuickGlobals()
 {
     m_BatchMode = false;
-    m_BatchTexture = 0;
+    m_pBatchTexture = 0;
     m_BatchNumLetters = 0;
     m_VBONumVerts = 0;
     m_VBOsInitialized = false;
     m_pVertexBufferIDImmediate = 0;
     m_pVertexBuffer = 0;
     //BufferDefinition* m_pIndexBufferID = 0; // TODO: cleanup.
+
+    m_pMaterial = g_pMaterialManager->CreateMaterial();
 
     m_WordWrap = false;
     m_WordWrapWidthLimit = 0;
@@ -43,6 +45,8 @@ RenderTextQuickGlobals::~RenderTextQuickGlobals()
 {
     SAFE_RELEASE( m_pVertexBufferIDImmediate );
     SAFE_RELEASE( m_pVertexBuffer );
+
+    SAFE_RELEASE( m_pMaterial );
 }
 
 void RenderTextQuickGlobals::SetWrapMode(bool wrap, int widthlimit, int lineincsize, bool countonly)
@@ -254,7 +258,7 @@ int RenderTextQuickWithColorShadowStyleZAndRot(FontDefinition* pFont, float font
 
 int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float x, float y, float z, float rotz, unsigned char justificationflags, ColorByte color, const char* text)
 {
-    assert( g_pRTQGlobals );
+    MyAssert( g_pRTQGlobals );
 
     const char* stringtodraw = text;
     if( g_pLanguageTable != 0 && text[0] == '.' )
@@ -285,7 +289,7 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
                     *singlelinebufferpos = 0;
                     stringpos++;
 
-                    assert( singlelinebufferpos < singlelinebuffer + 300 );
+                    MyAssert( singlelinebufferpos < singlelinebuffer + 300 );
                 }
 
                 while( ( *(singlelinebufferpos-1) != ' ' && *stringpos != 0 ) &&
@@ -324,7 +328,7 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
                 //        g_pRTQGlobals->m_pVertexBufferIDImmediate->Rebuild(
                 //            0, g_pRTQGlobals->m_pVertexBufferIDImmediate->m_DataSize );
                 //    }
-                //    assert( g_pRTQGlobals->m_pVertexBufferIDImmediate->m_Dirty == false );
+                //    MyAssert( g_pRTQGlobals->m_pVertexBufferIDImmediate->m_Dirty == false );
                 //}
             }
 
@@ -341,8 +345,8 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
 
             if( g_pRTQGlobals->m_VBOsInitialized == false )
             {
-                assert( g_pRTQGlobals->m_pVertexBufferIDImmediate == 0 );
-                assert( g_pRTQGlobals->m_pVertexBuffer == 0 );
+                MyAssert( g_pRTQGlobals->m_pVertexBufferIDImmediate == 0 );
+                MyAssert( g_pRTQGlobals->m_pVertexBuffer == 0 );
 
                 g_pRTQGlobals->m_VBOsInitialized = true;
 
@@ -366,7 +370,7 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
             //    LOGInfo( LOGTag, "m_pVertexBufferIDImmediate->m_Dirty\n" );
             //    g_pRTQGlobals->m_pVertexBufferIDImmediate->Rebuild( 0, g_pRTQGlobals->m_pVertexBufferIDImmediate->m_DataSize );
             //}
-            //assert( g_pRTQGlobals->m_pVertexBufferIDImmediate->m_Dirty == false );
+            //MyAssert( g_pRTQGlobals->m_pVertexBufferIDImmediate->m_Dirty == false );
             //checkGlError( "MyBindBuffer" );
 
             if( g_pRTQGlobals->m_BatchMode )
@@ -379,7 +383,7 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
                     pVertToDraws[i].z = out.z;
                 }
                 
-                if( g_pRTQGlobals->m_BatchTexture != pFont->m_pTextureDef->m_TextureID ||
+                if( g_pRTQGlobals->m_pBatchTexture != pFont->m_pTextureDef ||
                     (g_pRTQGlobals->m_BatchNumLetters + textstrlen)*6 > g_pRTQGlobals->m_VBONumVerts )
                 {
                     LOGInfo( LOGTag, "RenderTextQuick Batch Forced to render, look into it\n" );
@@ -430,9 +434,12 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
                     g_pRTQGlobals->m_pVertexBufferIDImmediate->m_Dirty = true;
                     g_pRTQGlobals->m_pVertexBufferIDImmediate->Rebuild( 0, sizeof(Vertex_XYZUV_RGBA)*textstrlen*6 );
 
+                    g_pRTQGlobals->m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
+                    g_pRTQGlobals->m_pMaterial->SetTextureColor( pFont->m_pTextureDef );
+
                     if( pShader->ActivateAndProgramShader(
                         g_pRTQGlobals->m_pVertexBufferIDImmediate, 0, GL_UNSIGNED_SHORT,
-                        &g_pGame->m_OrthoMatrixGameSize, &position, pFont->m_pTextureDef->m_TextureID ) )
+                        &g_pGame->m_OrthoMatrixGameSize, &position, g_pRTQGlobals->m_pMaterial ) )
                     //if( pShader->ActivateAndProgramShader( &g_pGame->m_OrthoMatrixGameSize,
                     //    &position, pVertToDraws, pFont->m_pTextureDef->m_TextureID ) )
                     {
@@ -459,14 +466,14 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
 
 void RenderTextQuickStartBatch(FontDefinition* pFont)
 {
-    assert( g_pRTQGlobals );
-    assert( pFont );
-    assert( pFont->m_pTextureDef );
-    assert( pFont->m_pTextureDef->m_TextureID );
+    MyAssert( g_pRTQGlobals );
+    MyAssert( pFont );
+    MyAssert( pFont->m_pTextureDef );
+    MyAssert( pFont->m_pTextureDef->m_TextureID );
 
     if( g_pRTQGlobals->m_BatchMode == true && g_pRTQGlobals->m_BatchNumLetters )
     {
-        if( g_pRTQGlobals->m_BatchTexture == pFont->m_pTextureDef->m_TextureID )
+        if( g_pRTQGlobals->m_pBatchTexture == pFont->m_pTextureDef )
         {
             LOGInfo( LOGTag, "RenderTextQuickStartBatch called without endbatch and with same texture\n" );
         }
@@ -478,13 +485,13 @@ void RenderTextQuickStartBatch(FontDefinition* pFont)
     }
 
     g_pRTQGlobals->m_BatchMode = true;
-    g_pRTQGlobals->m_BatchTexture = pFont->m_pTextureDef->m_TextureID;
+    g_pRTQGlobals->m_pBatchTexture = pFont->m_pTextureDef;
     g_pRTQGlobals->m_BatchNumLetters = 0;
 }
 
 void RenderTextQuickEndBatch()
 {
-    assert( g_pRTQGlobals );
+    MyAssert( g_pRTQGlobals );
 
     if( g_pRTQGlobals->m_BatchMode == false )
         return;
@@ -500,14 +507,17 @@ void RenderTextQuickEndBatch()
     // rebuild buffer if dirty.
     g_pRTQGlobals->m_pVertexBuffer->m_Dirty = true;
     g_pRTQGlobals->m_pVertexBuffer->Rebuild( 0, sizeof(Vertex_XYZUV_RGBA)*g_pRTQGlobals->m_BatchNumLetters*6 );
-    assert( g_pRTQGlobals->m_pVertexBuffer->m_Dirty == false );
+    MyAssert( g_pRTQGlobals->m_pVertexBuffer->m_Dirty == false );
 
     Shader_Base* pShader = (Shader_Base*)g_pGame->m_pShader_TextureVertexColor->GlobalPass();
     if( pShader )
     {
+        g_pRTQGlobals->m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
+        g_pRTQGlobals->m_pMaterial->SetTextureColor( g_pRTQGlobals->m_pBatchTexture );
+
         if( pShader->ActivateAndProgramShader(
                 g_pRTQGlobals->m_pVertexBuffer, 0, GL_UNSIGNED_SHORT,
-                &g_pGame->m_OrthoMatrixGameSize, &position, g_pRTQGlobals->m_BatchTexture ) )
+                &g_pGame->m_OrthoMatrixGameSize, &position, g_pRTQGlobals->m_pMaterial ) )
         {
 #if USE_D3D
             //g_pD3DContext->Draw( textstrlen*6, 0 );
@@ -521,6 +531,6 @@ void RenderTextQuickEndBatch()
     }
 
     g_pRTQGlobals->m_BatchNumLetters = 0;
-    g_pRTQGlobals->m_BatchTexture = 0;
+    g_pRTQGlobals->m_pBatchTexture = 0;
 }
 

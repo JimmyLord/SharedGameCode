@@ -182,12 +182,12 @@ void Screen_Base::ImportMenuLayout(const char* layout)
         return;
 
     cJSON* menuitemarray = cJSON_Parse( layout );
-    assert( menuitemarray );
+    MyAssert( menuitemarray );
 
     if( menuitemarray )
     {
         int numitems = cJSON_GetArraySize( menuitemarray );
-        assert( numitems <= MAX_MENUITEMS );
+        MyAssert( numitems <= MAX_MENUITEMS );
 
         for( int i=0; i<numitems; i++ )
         {
@@ -789,7 +789,7 @@ MenuItem* Screen_Base::GetMenuItem(int index)
 
 MenuItemTypes Screen_Base::GetMenuItemType(int index)
 {
-    assert( m_pMenuItems[index] != 0 );
+    MyAssert( m_pMenuItems[index] != 0 );
     if( m_pMenuItems[index] == 0 )
         return MIT_NumMenuItemTypes;
 
@@ -797,7 +797,7 @@ MenuItemTypes Screen_Base::GetMenuItemType(int index)
 }
 
 #define GETMENUTYPE(index, type, typeclass) \
-    assert( m_pMenuItems[index]->m_MenuItemType == type ); \
+    MyAssert( m_pMenuItems[index]->m_MenuItemType == type ); \
     if( m_pMenuItems[index]->m_MenuItemType != type ) return 0; \
     return (typeclass*)m_pMenuItems[index];
 
@@ -810,12 +810,12 @@ MenuInputBox* Screen_Base::GetMenuInputBox(int index)           { GETMENUTYPE( i
 MenuCheckBox* Screen_Base::GetMenuCheckBox(int index)           { GETMENUTYPE( index, MIT_CheckBox, MenuCheckBox ); }
 
 #define CREATEMENUTYPE(index, typeclass) \
-    assert( m_pMenuItems[index] == 0 ); \
+    MyAssert( m_pMenuItems[index] == 0 ); \
     m_pMenuItems[index] = MyNew typeclass; \
     return (typeclass*)m_pMenuItems[index];
 
 #define CREATEMENUTYPEINT(index, typeclass, value) \
-    assert( m_pMenuItems[index] == 0 ); \
+    MyAssert( m_pMenuItems[index] == 0 ); \
     m_pMenuItems[index] = MyNew typeclass(value); \
     return (typeclass*)m_pMenuItems[index];
 

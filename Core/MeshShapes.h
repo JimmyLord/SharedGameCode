@@ -22,7 +22,7 @@ public:
 
 public:
     MyMeshText(int maxletters, FontDefinition* pFont);
-    ~MyMeshText() {}
+    virtual ~MyMeshText();
 
     void ClearText();
 

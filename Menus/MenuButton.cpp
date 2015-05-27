@@ -63,6 +63,8 @@ MenuButton::MenuButton(int maxletters)
         m_Strings[i][0] = 0;
     m_ToolTipString[0] = 0;
 
+    m_pMaterial = g_pMaterialManager->CreateMaterial();
+
     if( maxletters == -1 )
         m_pMeshText = MyNew MyMeshText( 3*MAX_MENUBUTTON_STRING, 0 );
     else if( maxletters > 0 )
@@ -116,6 +118,7 @@ MenuButton::MenuButton(int maxletters)
 
 MenuButton::~MenuButton()
 {
+    SAFE_RELEASE( m_pMaterial );
     SAFE_RELEASE( m_pMeshText );
 
     SAFE_RELEASE( m_pBGSprite );
@@ -144,8 +147,8 @@ void MenuButton::Draw()
 
     if( m_pMeshText )
     {
-        m_pMeshText->m_NumVertsToDraw = 0;
-        m_pMeshText->m_NumIndicesToDraw = 0;
+        m_pMeshText->m_SubmeshList[0]->m_NumVertsToDraw = 0;
+        m_pMeshText->m_SubmeshList[0]->m_NumIndicesToDraw = 0;
     }
 
     //float scrw = g_pGame->m_GameWidth;
@@ -295,7 +298,7 @@ void MenuButton::Draw()
 
         if( m_State == MBS_HeldDown && m_ToolTipString[0] != 0 )
         {
-            assert( false );
+            MyAssert( false );
 
             // ATM hardcoded for option overlay in A Game of Words.
             y = posy + 100;
@@ -378,7 +381,9 @@ void MenuButton::Draw()
     if( m_pFont && m_pMeshText )
     {
         m_pMeshText->m_MeshReady = true;
-        m_pMeshText->SetShaderAndTexture( g_pGame->m_pShader_TextureVertexColor, m_pFont->m_pTextureDef );
+        m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
+        m_pMaterial->SetTextureColor( m_pFont->m_pTextureDef );
+        m_pMeshText->SetMaterial( m_pMaterial, 0 );
         m_pMeshText->Draw( &g_pGame->m_OrthoMatrixGameSize, 0, 0, 0, 0, 0, 0, 0 );
     }
 }
@@ -589,7 +594,7 @@ void MenuButton::SetString(const char* str1, const char* str2, const char* str3)
 {
     int totallen = 0;
 
-    assert( str1 != 0 );
+    MyAssert( str1 != 0 );
     if( str1 != 0 )
     {
         if( str1[0] == '.' )
@@ -631,7 +636,7 @@ void MenuButton::SetString(const char* str1, const char* str2, const char* str3)
 
 void MenuButton::SetStringNumber(int stringnumber, const char* str1, ...)
 {
-    assert( stringnumber >= 0 && stringnumber < 3 );
+    MyAssert( stringnumber >= 0 && stringnumber < 3 );
 
     va_list arg;
     va_start(arg, str1);
@@ -657,7 +662,7 @@ void MenuButton::SetToolTipString(const char* str)
 
 void MenuButton::SetPressedState(const ColorByte& textcolor, const ColorByte& bgcolor, MySprite* sprite, const Vector4& uvs)
 {
-    assert( m_pPressedBGSprite == 0 );
+    MyAssert( m_pPressedBGSprite == 0 );
 
     m_UsePressedState = true;
     m_PressedTextColor = textcolor;
@@ -669,7 +674,7 @@ void MenuButton::SetPressedState(const ColorByte& textcolor, const ColorByte& bg
 
 void MenuButton::SetOverlay(const Vector2& size, const Vector2& offset, const ColorByte& bgcolor, MySprite* sprite, const Vector4& uvs)
 {
-    //assert( m_pOverlayBGSprite == 0 );
+    //MyAssert( m_pOverlayBGSprite == 0 );
 
     m_HasOverlay = true;
     m_OverlaySize = size;
@@ -677,8 +682,7 @@ void MenuButton::SetOverlay(const Vector2& size, const Vector2& offset, const Co
     m_OverlayBGColor = bgcolor;
     if( m_pOverlayBGSprite )
     {
-        m_pOverlayBGSprite->m_TextureID = sprite->m_TextureID;
-        m_pOverlayBGSprite->m_pTexture = sprite->m_pTexture;
+        m_pOverlayBGSprite->GetMaterial()->SetTextureColor( sprite->GetMaterial()->GetTextureColor() );
     }
     else
     {
@@ -689,11 +693,11 @@ void MenuButton::SetOverlay(const Vector2& size, const Vector2& offset, const Co
 
 void MenuButton::SetSprites(MySprite* bg, MySprite* disabled, MySprite* pressed, MySprite* overlay, MySprite* shadow)
 {
-    assert( m_pBGSprite == 0 );
-    assert( m_pDisabledBGSprite == 0 );
-    assert( m_pPressedBGSprite == 0 );
-    assert( m_pOverlayBGSprite == 0 );
-    assert( m_pShadowSprite == 0 );
+    MyAssert( m_pBGSprite == 0 );
+    MyAssert( m_pDisabledBGSprite == 0 );
+    MyAssert( m_pPressedBGSprite == 0 );
+    MyAssert( m_pOverlayBGSprite == 0 );
+    MyAssert( m_pShadowSprite == 0 );
 
     if( bg )
     {
@@ -728,11 +732,11 @@ void MenuButton::SetSprites(MySprite* bg, MySprite* disabled, MySprite* pressed,
 
 void MenuButton::SetSpritesCopy(MySprite* bg, MySprite* disabled, MySprite* pressed, MySprite* overlay, MySprite* shadow)
 {
-    assert( m_pBGSprite == 0 );
-    assert( m_pDisabledBGSprite == 0 );
-    assert( m_pPressedBGSprite == 0 );
-    assert( m_pOverlayBGSprite == 0 );
-    assert( m_pShadowSprite == 0 );
+    MyAssert( m_pBGSprite == 0 );
+    MyAssert( m_pDisabledBGSprite == 0 );
+    MyAssert( m_pPressedBGSprite == 0 );
+    MyAssert( m_pOverlayBGSprite == 0 );
+    MyAssert( m_pShadowSprite == 0 );
 
     if( bg )
     {

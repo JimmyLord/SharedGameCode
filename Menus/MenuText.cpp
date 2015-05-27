@@ -18,6 +18,8 @@ MenuText::MenuText()
 
     m_String[0] = 0;
 
+    m_pMaterial = g_pMaterialManager->CreateMaterial();
+
     int maxletters = MAX_MenuText_STRING;
     m_pMeshText = MyNew MyMeshText( maxletters, 0 );
     m_MeshAllocatedLocally = true;
@@ -41,6 +43,8 @@ MenuText::MenuText(int maxletters)
     m_MenuItemType = MIT_Text;
 
     m_String[0] = 0;
+
+    m_pMaterial = g_pMaterialManager->CreateMaterial();
 
     if( maxletters == -1 )
         m_pMeshText = MyNew MyMeshText( MAX_MenuText_STRING*2, 0 );
@@ -71,6 +75,8 @@ MenuText::MenuText(MyMeshText* pMeshText)
 
     m_String[0] = 0;
 
+    m_pMaterial = g_pMaterialManager->CreateMaterial();
+
     m_pMeshText = pMeshText;
     m_MeshAllocatedLocally = false;
     m_DrawAsPartOfBatch = true;
@@ -90,6 +96,8 @@ MenuText::~MenuText()
 {
     if( m_MeshAllocatedLocally )
         SAFE_RELEASE( m_pMeshText );
+
+    SAFE_RELEASE( m_pMaterial );
 }
 
 void MenuText::Draw()
@@ -122,7 +130,9 @@ void MenuText::Draw()
         {
             m_pMeshText->CreateString( m_DrawAsPartOfBatch, m_FontHeight*m_Scale.y, posx, posy, 0, 0, m_Justification, textcolor, m_Size, m_String );
         }
-        m_pMeshText->SetShaderAndTexture( g_pGame->m_pShader_TextureVertexColor, m_pFont->m_pTextureDef );
+        m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
+        m_pMaterial->SetTextureColor( m_pFont->m_pTextureDef );
+        m_pMeshText->SetMaterial( m_pMaterial, 0 );
 
         if( m_DrawAsPartOfBatch == false )
             m_pMeshText->Draw( &g_pGame->m_OrthoMatrixGameSize, 0, 0, 0, 0, 0, 0, 0 );
@@ -163,7 +173,7 @@ void MenuText::SetPositionAndSize(float x, float y, float w, float h, float inpu
 
 void MenuText::SetString(const char* str, ...)
 {
-    assert( str != 0 );
+    MyAssert( str != 0 );
 
     char buffer[MAX_MenuText_STRING];
     va_list arg;

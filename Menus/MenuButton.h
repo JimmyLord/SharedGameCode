@@ -74,6 +74,7 @@ public:
     char m_Strings[3][MAX_MENUBUTTON_STRING];
     char m_ToolTipString[MAX_MENUBUTTON_STRING];
 
+    MaterialDefinition* m_pMaterial;
     MyMeshText* m_pMeshText;
 
     // behaviour

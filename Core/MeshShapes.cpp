@@ -34,10 +34,14 @@ MyMeshText::MyMeshText(int maxletters, FontDefinition* pFont)
     RebuildIndices();
 }
 
+MyMeshText::~MyMeshText()
+{
+}
+
 void MyMeshText::ClearText()
 {
-    m_NumVertsToDraw = 0;
-    m_NumIndicesToDraw = 0;
+    m_SubmeshList[0]->m_NumVertsToDraw = 0;
+    m_SubmeshList[0]->m_NumIndicesToDraw = 0;
 
 #if _DEBUG
     m_MostLettersAttemptedToDrawThisFrame = 0;
@@ -265,7 +269,7 @@ int MyMeshText::CreateStringColorShadowStyleZAndRot(bool concat, float fontheigh
 
 int MyMeshText::CreateString(bool concat, float fontheight, float x, float y, float z, float rotz, unsigned char justificationflags, ColorByte color, Vector2 size, const char* text, ...)
 {
-    assert( m_pFont && m_pFont->m_pFont );
+    MyAssert( m_pFont && m_pFont->m_pFont );
 
     if( strlen( text ) == 0 )
         return 0;
@@ -306,7 +310,7 @@ int MyMeshText::CreateString(bool concat, float fontheight, float x, float y, fl
 
                 linewidth = GetStringSize( fontheight, Vector2(0,0), singlelinebuffer ).x;
 
-                assert( singlelinebufferpos < singlelinebuffer + 300 );
+                MyAssert( singlelinebufferpos < singlelinebuffer + 300 );
             }
 
             int numcharswewentback = 0;
@@ -346,21 +350,21 @@ int MyMeshText::CreateString(bool concat, float fontheight, float x, float y, fl
             m_MostLettersAttemptedToDrawEver = m_MostLettersAttemptedToDrawThisFrame;
 #endif
 
-        if( m_NumVertsToDraw + newverts > GetNumVerts() )
+        if( m_SubmeshList[0]->m_NumVertsToDraw + newverts > GetNumVerts() )
         {
 #if _DEBUG
-            LOGInfo( LOGTag, "TextMesh buffer isn't big enough for string (%s) - %d of %d letters used - most letters needed (%d)\n", stringtodraw, m_NumVertsToDraw/4, GetNumVerts()/4, m_MostLettersAttemptedToDrawEver );
+            LOGInfo( LOGTag, "TextMesh buffer isn't big enough for string (%s) - %d of %d letters used - most letters needed (%d)\n", stringtodraw, m_SubmeshList[0]->m_NumVertsToDraw/4, GetNumVerts()/4, m_MostLettersAttemptedToDrawEver );
 #endif
-            //assert( false ); // drawing more than we have room for.
+            //MyAssert( false ); // drawing more than we have room for.
             return 0;
         }
 
-        pVertsToDraw += m_NumVertsToDraw;
+        pVertsToDraw += m_SubmeshList[0]->m_NumVertsToDraw;
 
         unsigned int textstrlen = m_pFont->m_pFont->GenerateVerts( stringtodraw, true, pVertsToDraw, fontheight, GL_TRIANGLES, justificationflags, color );
 
-        m_NumVertsToDraw += (unsigned short)(textstrlen * 4);
-        m_NumIndicesToDraw += textstrlen * 6;
+        m_SubmeshList[0]->m_NumVertsToDraw += (unsigned short)(textstrlen * 4);
+        m_SubmeshList[0]->m_NumIndicesToDraw += textstrlen * 6;
 
         MyMatrix position;
         position.SetIdentity();

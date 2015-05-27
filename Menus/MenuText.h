@@ -23,6 +23,7 @@ protected:
 public:
     char m_String[MAX_MenuText_STRING];
 
+    MaterialDefinition* m_pMaterial;
     MyMeshText* m_pMeshText;
     bool m_MeshAllocatedLocally;
     bool m_DrawAsPartOfBatch;

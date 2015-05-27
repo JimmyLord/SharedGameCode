@@ -30,13 +30,15 @@ class RenderTextQuickGlobals
 {
 public:
     bool m_BatchMode;
-    GLuint m_BatchTexture;
+    TextureDefinition* m_pBatchTexture;
     int m_BatchNumLetters;
     int m_VBONumVerts;
     bool m_VBOsInitialized;
     BufferDefinition* m_pVertexBufferIDImmediate;
     BufferDefinition* m_pVertexBuffer;
     //BufferDefinition* m_pIndexBufferID;
+
+    MaterialDefinition* m_pMaterial;
 
     bool m_WordWrap;
     int m_WordWrapWidthLimit;

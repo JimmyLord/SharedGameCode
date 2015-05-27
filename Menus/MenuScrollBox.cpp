@@ -227,7 +227,7 @@ int MenuScrollBox::OnTouch(int action, int id, float x, float y, float pressure,
 
     if( newfingerup )
     {
-        assert( m_pParentMenuPage != 0 );
+        MyAssert( m_pParentMenuPage != 0 );
         if( m_pParentMenuPage )
         {
             for( int i=m_NumMenuItems-1; i>=0; i-- )
@@ -261,7 +261,7 @@ MenuItem* MenuScrollBox::GetMenuItem(int index)
 
 MenuItemTypes MenuScrollBox::GetMenuItemType(int index)
 {
-    assert( m_pMenuItems[index] != 0 );
+    MyAssert( m_pMenuItems[index] != 0 );
     if( m_pMenuItems[index] == 0 )
         return MIT_NumMenuItemTypes;
 
@@ -269,7 +269,7 @@ MenuItemTypes MenuScrollBox::GetMenuItemType(int index)
 }
 
 #define GETMENUTYPE(index, type, typeclass) \
-    assert( m_pMenuItems[index]->m_MenuItemType == type ); \
+    MyAssert( m_pMenuItems[index]->m_MenuItemType == type ); \
     if( m_pMenuItems[index]->m_MenuItemType != type ) return 0; \
     return (typeclass*)m_pMenuItems[index];
 
@@ -305,42 +305,42 @@ MenuInputBox* MenuScrollBox::GetMenuInputBox(int index)
 
 MenuSprite* MenuScrollBox::CreateMenuSprite(int index)
 {
-    assert( m_pMenuItems[index] == 0 );
+    MyAssert( m_pMenuItems[index] == 0 );
     m_pMenuItems[index] = MyNew MenuSprite;
     return (MenuSprite*)m_pMenuItems[index];
 }
 
 MenuText* MenuScrollBox::CreateMenuText(int index, MyMeshText* pMeshText)
 {
-    assert( m_pMenuItems[index] == 0 );
+    MyAssert( m_pMenuItems[index] == 0 );
     m_pMenuItems[index] = MyNew MenuText( pMeshText );
     return (MenuText*)m_pMenuItems[index];
 }
 
 MenuButton* MenuScrollBox::CreateMenuButton(int index)
 {
-    assert( m_pMenuItems[index] == 0 );
+    MyAssert( m_pMenuItems[index] == 0 );
     m_pMenuItems[index] = MyNew MenuButton(0);
     return (MenuButton*)m_pMenuItems[index];
 }
 
 MenuScrollBox* MenuScrollBox::CreateMenuScrollBox(int index)
 {
-    assert( m_pMenuItems[index] == 0 );
+    MyAssert( m_pMenuItems[index] == 0 );
     m_pMenuItems[index] = MyNew MenuScrollBox;
     return (MenuScrollBox*)m_pMenuItems[index];
 }
 
 MenuScrollingText* MenuScrollBox::CreateMenuScrollingText(int index)
 {
-    assert( m_pMenuItems[index] == 0 );
+    MyAssert( m_pMenuItems[index] == 0 );
     m_pMenuItems[index] = MyNew MenuScrollingText;
     return (MenuScrollingText*)m_pMenuItems[index];
 }
 
 MenuInputBox* MenuScrollBox::CreateMenuInputBox(int index)
 {
-    assert( m_pMenuItems[index] == 0 );
+    MyAssert( m_pMenuItems[index] == 0 );
     m_pMenuItems[index] = MyNew MenuInputBox;
     return (MenuInputBox*)m_pMenuItems[index];
 }

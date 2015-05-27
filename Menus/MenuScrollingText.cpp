@@ -17,6 +17,7 @@ MenuScrollingText::MenuScrollingText()
 {
     m_MenuItemType = MIT_ScrollingText;
 
+    m_pMaterial = g_pMaterialManager->CreateMaterial();
     m_peTextMesh = 0;
 
     m_StringToShow = 0;
@@ -29,6 +30,8 @@ MenuScrollingText::MenuScrollingText()
 MenuScrollingText::~MenuScrollingText()
 {
     // SAFE_DELETE( m_peTextMesh ); // allocated externally
+
+    SAFE_RELEASE( m_pMaterial );
 }
 
 void MenuScrollingText::SetTextMesh(MyMeshText* pMesh)
@@ -38,7 +41,7 @@ void MenuScrollingText::SetTextMesh(MyMeshText* pMesh)
 
 void MenuScrollingText::Draw()
 {
-    assert( m_peTextMesh );
+    MyAssert( m_peTextMesh );
 
     MenuScrollBox::Draw();
 
@@ -87,7 +90,7 @@ void MenuScrollingText::Draw()
 
             if( color.a > 0 && strlen( line ) > 0 )
             {
-                assert( m_peTextMesh->m_pFont == m_pFont );
+                MyAssert( m_peTextMesh->m_pFont == m_pFont );
                 m_peTextMesh->m_pFont = m_pFont; // ugh...
 
                 if( m_peTextMesh )
@@ -113,6 +116,8 @@ void MenuScrollingText::Draw()
     }
 
     m_peTextMesh->m_MeshReady = true;
-    m_peTextMesh->SetShaderAndTexture( g_pGame->m_pShader_TextureVertexColor, m_pFont->m_pTextureDef );
+    m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
+    m_pMaterial->SetTextureColor( m_pFont->m_pTextureDef );
+    m_peTextMesh->SetMaterial( m_pMaterial, 0 );
     m_peTextMesh->Draw( &g_pGame->m_OrthoMatrixGameSize, 0, 0, 0, 0, 0, 0, 0 );
 }

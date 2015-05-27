@@ -84,7 +84,7 @@ bool MenuInputBox::OnKeyDown(int keycode, int unicodechar)
         return true;
     }
 
-    //assert( nextpos < m_MaxLength );
+    //MyAssert( nextpos < m_MaxLength );
     if( nextpos >= m_MaxLength )
         return true;
 

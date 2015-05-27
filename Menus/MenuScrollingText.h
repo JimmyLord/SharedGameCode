@@ -15,6 +15,7 @@
 class MenuScrollingText : public MenuScrollBox
 {
 protected:
+    MaterialDefinition* m_pMaterial;
     MyMeshText* m_peTextMesh;
 
 public:

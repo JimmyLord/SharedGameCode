@@ -114,7 +114,7 @@ bool ScreenManager::IsScreenWithIDOpen(int id)
 
 void ScreenManager::InsertScreen(int index, Screen_Base* screen)
 {
-    assert( m_ScreensActive.Count() < MAX_SCREENS );
+    MyAssert( m_ScreensActive.Count() < MAX_SCREENS );
     m_ScreensActive.InsertAtIndex( index, screen );
 }
 
@@ -144,7 +144,7 @@ void ScreenManager::CloseScreen(Screen_Base* screen)
     screen->OnClose();
 
     bool removed = m_ScreensActive.Remove_MaintainOrder( screen );
-    assert( removed );
+    MyAssert( removed );
 
     screen->CloseScreen();
 
@@ -154,7 +154,7 @@ void ScreenManager::CloseScreen(Screen_Base* screen)
 void ScreenManager::RemoveScreen(Screen_Base* screen)
 {
     bool removed = m_ScreensActive.Remove_MaintainOrder( screen );
-    assert( removed );
+    MyAssert( removed );
 }
 
 void ScreenManager::CloseAllScreens(bool closelowest)
@@ -176,7 +176,7 @@ void ScreenManager::CloseAllScreens(bool closelowest)
 void ScreenManager::CloseTopScreen()
 {
     Screen_Base* pScreen = m_ScreensActive.RemoveIndex_MaintainOrder( m_ScreensActive.Count()-1 );
-    assert( pScreen );
+    MyAssert( pScreen );
 
     pScreen->CloseScreen();
 
@@ -185,13 +185,13 @@ void ScreenManager::CloseTopScreen()
 
 void ScreenManager::PushScreen(Screen_Base* screen)
 {
-    assert( m_ScreensActive.Count() < MAX_SCREENS );
+    MyAssert( m_ScreensActive.Count() < MAX_SCREENS );
     m_ScreensActive.Add( screen );
 }
 
 Screen_Base* ScreenManager::PopScreen()
 {
-    assert( false );
+    MyAssert( false );
     return 0;
     //return m_ScreensActive.RemoveIndex_MaintainOrder( m_ScreensActive.Count()-1 );
 }
@@ -236,7 +236,7 @@ void ScreenManager::Tick(double timepassed)
 
         if( m_ScreensActive[i]->GetState() == SS_DoneClosing )
         {
-            assert( false ); // should already be in closing list when closing.
+            MyAssert( false ); // should already be in closing list when closing.
             Screen_Base* pScreen = m_ScreensActive.RemoveIndex_MaintainOrder( i );
             i--;
 
@@ -301,7 +301,7 @@ void ScreenManager::OnResized()
 
 bool ScreenManager::OnTouch(int action, int id, float x, float y, float pressure, float size)
 {
-    assert( m_ScreensActive.Count() >= 1 );
+    MyAssert( m_ScreensActive.Count() >= 1 );
     if( m_ScreensActive.Count() == 0 )
         return false;
 

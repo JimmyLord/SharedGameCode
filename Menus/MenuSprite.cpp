@@ -135,8 +135,8 @@ void MenuSprite::SetPositionAndSize(float x, float y, float w, float h, float in
 
 void MenuSprite::SetSprites(MySprite* bgsprite, MySprite* shadowsprite)
 {
-    assert( m_pBGSprite == 0 );
-    assert( m_pShadowSprite == 0 );
+    MyAssert( m_pBGSprite == 0 );
+    MyAssert( m_pShadowSprite == 0 );
 
     if( bgsprite )
     {
@@ -153,8 +153,8 @@ void MenuSprite::SetSprites(MySprite* bgsprite, MySprite* shadowsprite)
 
 void MenuSprite::SetSpritesCopy(MySprite* bgsprite, MySprite* shadowsprite)
 {
-    assert( m_pBGSprite == 0 );
-    assert( m_pShadowSprite == 0 );
+    MyAssert( m_pBGSprite == 0 );
+    MyAssert( m_pShadowSprite == 0 );
 
     if( bgsprite )
     {

@@ -125,7 +125,7 @@ public:
     virtual bool OnMenuAction(int action) { return false; }
 
 #if MYFW_USING_WX
-    static void StaticFillPropertiesWindow(void* pObjectPtr) { ((Screen_Base*)pObjectPtr)->FillPropertiesWindow(); }
+    static void StaticFillPropertiesWindow(void* pObjectPtr, unsigned int count) { ((Screen_Base*)pObjectPtr)->FillPropertiesWindow(); }
     void FillPropertiesWindow();
 #endif //MYFW_USING_WX
 

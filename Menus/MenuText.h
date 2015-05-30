@@ -61,7 +61,7 @@ public:
     void SetString(const char* str, ...);
 
 #if MYFW_USING_WX
-    static void StaticFillPropertiesWindow(void* pObjectPtr) { ((MenuText*)pObjectPtr)->FillPropertiesWindow(); }
+    static void StaticFillPropertiesWindow(void* pObjectPtr, unsigned int count) { ((MenuText*)pObjectPtr)->FillPropertiesWindow(); }
     void FillPropertiesWindow();
 #endif //MYFW_USING_WX
 };

@@ -56,7 +56,7 @@ public:
     MySprite* GetBGSprite() { return m_pBGSprite; }
 
 #if MYFW_USING_WX
-    static void StaticFillPropertiesWindow(void* pObjectPtr) { ((MenuSprite*)pObjectPtr)->FillPropertiesWindow(); }
+    static void StaticFillPropertiesWindow(void* pObjectPtr, unsigned int count) { ((MenuSprite*)pObjectPtr)->FillPropertiesWindow(); }
     void FillPropertiesWindow();
 #endif //MYFW_USING_WX
 };

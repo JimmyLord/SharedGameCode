@@ -107,7 +107,7 @@ public:
     virtual MyRect GetBoundingRect() { return MyRect(0,0,0,0); }
 
 #if MYFW_USING_WX
-    static void StaticFillPropertiesWindow(void* pObjectPtr) { ((MenuItem*)pObjectPtr)->FillPropertiesWindow(); }
+    static void StaticFillPropertiesWindow(void* pObjectPtr, unsigned int count) { ((MenuItem*)pObjectPtr)->FillPropertiesWindow(); }
     void FillPropertiesWindow();
 #endif //MYFW_USING_WX
 

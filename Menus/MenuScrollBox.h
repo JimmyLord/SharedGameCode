@@ -38,12 +38,15 @@ public:
 
     int m_InitialFinger;
 
+    int m_ScreenTop;
+    int m_ScreenBottom;
+
 public:
     MenuScrollBox();
     virtual ~MenuScrollBox();
 
     virtual void Tick(double timepassed);
-    virtual void Draw();
+    virtual void Draw(MyMatrix* matviewproj);
     virtual bool CheckForCollision(float x, float y);
 
     //virtual float TestCollision(int fingerid, float x, float y, bool fingerwentdown = true);

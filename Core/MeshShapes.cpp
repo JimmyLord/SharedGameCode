@@ -7,7 +7,7 @@
 // 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
-#include "GameCommonHeader.h"
+#include PCHFILE
 
 MyMeshText::MyMeshText(int maxletters, FontDefinition* pFont)
 {
@@ -65,6 +65,10 @@ Vector2 MyMeshText::GetStringSize(float fontheight, Vector2 size, const char* te
 
 int MyMeshText::CreateStringWhite(bool concat, float fontheight, float x, float y, unsigned char justificationflags, Vector2 size, const char* text, ...)
 {
+    MyAssert( g_pRTQGlobals );
+    if( g_pRTQGlobals == 0 )
+        return 0;
+
     const char* stringtodraw = text;
     if( g_pLanguageTable != 0 && text[0] == '.' )
         stringtodraw = g_pLanguageTable->LookUp( text );
@@ -82,6 +86,10 @@ int MyMeshText::CreateStringWhite(bool concat, float fontheight, float x, float 
 
 int MyMeshText::CreateStringColor(bool concat, float fontheight, float x, float y, unsigned char justificationflags, ColorByte color, Vector2 size, const char* text, ...)
 {
+    MyAssert( g_pRTQGlobals );
+    if( g_pRTQGlobals == 0 )
+        return 0;
+
     const char* stringtodraw = text;
     if( g_pLanguageTable != 0 && text[0] == '.' )
         stringtodraw = g_pLanguageTable->LookUp( text );
@@ -97,6 +105,10 @@ int MyMeshText::CreateStringColor(bool concat, float fontheight, float x, float 
 
 int MyMeshText::CreateStringColorAndShadow(bool concat, float fontheight, float x, float y, unsigned char justificationflags, ColorByte color, ColorByte shadowcolor, float shadowoffx, float shadowoffy, Vector2 size, const char* text, ...)
 {
+    MyAssert( g_pRTQGlobals );
+    if( g_pRTQGlobals == 0 )
+        return 0;
+
     const char* stringtodraw = text;
     if( g_pLanguageTable != 0 && text[0] == '.' )
         stringtodraw = g_pLanguageTable->LookUp( text );
@@ -114,6 +126,10 @@ int MyMeshText::CreateStringColorAndShadow(bool concat, float fontheight, float 
 
 int MyMeshText::CreateStringColorAndShadowStyle(bool concat, float fontheight, float x, float y, unsigned char justificationflags, ColorByte color, TextShadowStyles shadowstyle, ColorByte shadowcolor, float shadowoffx, float shadowoffy, Vector2 size, const char* text, ...)
 {
+    MyAssert( g_pRTQGlobals );
+    if( g_pRTQGlobals == 0 )
+        return 0;
+
     const char* stringtodraw = text;
     if( g_pLanguageTable != 0 && text[0] == '.' )
         stringtodraw = g_pLanguageTable->LookUp( text );
@@ -175,6 +191,10 @@ int MyMeshText::CreateStringColorAndShadowStyle(bool concat, float fontheight, f
 
 int MyMeshText::CreateStringColorAndZ(bool concat, float fontheight, float x, float y, float z, unsigned char justificationflags, ColorByte color, Vector2 size, const char* text, ...)
 {
+    MyAssert( g_pRTQGlobals );
+    if( g_pRTQGlobals == 0 )
+        return 0;
+
     const char* stringtodraw = text;
     if( g_pLanguageTable != 0 && text[0] == '.' )
         stringtodraw = g_pLanguageTable->LookUp( text );
@@ -190,6 +210,10 @@ int MyMeshText::CreateStringColorAndZ(bool concat, float fontheight, float x, fl
 
 int MyMeshText::CreateStringColorZAndRot(bool concat, float fontheight, float x, float y, float z, float rotz, unsigned char justificationflags, ColorByte color, Vector2 size, const char* text, ...)
 {
+    MyAssert( g_pRTQGlobals );
+    if( g_pRTQGlobals == 0 )
+        return 0;
+
     const char* stringtodraw = text;
     if( g_pLanguageTable != 0 && text[0] == '.' )
         stringtodraw = g_pLanguageTable->LookUp( text );
@@ -205,6 +229,10 @@ int MyMeshText::CreateStringColorZAndRot(bool concat, float fontheight, float x,
 
 int MyMeshText::CreateStringColorShadowZAndRot(bool concat, float fontheight, float x, float y, float z, float rotz, unsigned char justificationflags, ColorByte color, ColorByte shadowcolor, float shadowoffx, float shadowoffy, Vector2 size, const char* text, ...)
 {
+    MyAssert( g_pRTQGlobals );
+    if( g_pRTQGlobals == 0 )
+        return 0;
+
     const char* stringtodraw = text;
     if( g_pLanguageTable != 0 && text[0] == '.' )
         stringtodraw = g_pLanguageTable->LookUp( text );
@@ -222,6 +250,10 @@ int MyMeshText::CreateStringColorShadowZAndRot(bool concat, float fontheight, fl
 
 int MyMeshText::CreateStringColorShadowStyleZAndRot(bool concat, float fontheight, float x, float y, float z, float rotz, unsigned char justificationflags, ColorByte color, TextShadowStyles shadowstyle, ColorByte shadowcolor, float shadowoffx, float shadowoffy, Vector2 size, const char* text, ...)
 {
+    MyAssert( g_pRTQGlobals );
+    if( g_pRTQGlobals == 0 )
+        return 0;
+
     const char* stringtodraw = text;
     if( g_pLanguageTable != 0 && text[0] == '.' )
         stringtodraw = g_pLanguageTable->LookUp( text );
@@ -269,6 +301,10 @@ int MyMeshText::CreateStringColorShadowStyleZAndRot(bool concat, float fontheigh
 
 int MyMeshText::CreateString(bool concat, float fontheight, float x, float y, float z, float rotz, unsigned char justificationflags, ColorByte color, Vector2 size, const char* text, ...)
 {
+    //MyAssert( g_pRTQGlobals );
+    //if( g_pRTQGlobals == 0 )
+    //    return 0;
+
     MyAssert( m_pFont && m_pFont->m_pFont );
 
     if( strlen( text ) == 0 )

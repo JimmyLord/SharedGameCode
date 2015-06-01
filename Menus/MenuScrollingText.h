@@ -31,7 +31,7 @@ public:
 
     void SetTextMesh(MyMeshText* pMesh);
 
-    virtual void Draw();
+    virtual void Draw(MyMatrix* matviewproj);
 };
 
 #endif //__MenuScrollingText_H__

@@ -49,7 +49,7 @@ public:
 
     //virtual void StartClosing();
     //virtual void Tick(double TimePassed);
-    virtual void Draw();
+    virtual void Draw(MyMatrix* matviewproj);
 
     //virtual float TestCollision(int fingerid, float x, float y, bool fingerwentdown = true);
     //virtual bool HoldOnCollision(int fingerid, float x, float y, bool releaseifnottouching, bool fingerwentdown = true);

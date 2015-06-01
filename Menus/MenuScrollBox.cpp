@@ -7,9 +7,9 @@
 // 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
-#include "GameCommonHeader.h"
-#include "Core/ResourceManager.h"
-#include "../Screens/Screen_Base.h"
+#include PCHFILE
+//#include "Core/ResourceManager.h"
+//#include "../Screens/Screen_Base.h"
 #include "MenuItem.h"
 #include "MenuScrollBox.h"
 #include "MenuScrollingText.h"
@@ -30,6 +30,9 @@ MenuScrollBox::MenuScrollBox()
 
     m_MinScrollAmount.Set( 0, 0 );
     m_MaxScrollAmount.Set( 400, 400 );
+
+    m_ScreenTop = 640;
+    m_ScreenBottom = 0;
 
     m_InitialFinger = -1;
 }
@@ -60,7 +63,7 @@ void MenuScrollBox::Tick(double timepassed)
     MyClamp( m_ScrollAmount.y, m_MinScrollAmount.y, m_MaxScrollAmount.y );
 }
 
-void MenuScrollBox::Draw()
+void MenuScrollBox::Draw(MyMatrix* matviewproj)
 {
     //MenuButton::Draw();
     if( m_Visible == false )
@@ -79,10 +82,14 @@ void MenuScrollBox::Draw()
             MyRect bbox = m_pMenuItems[i]->GetBoundingRect();
 
             //if( bbox.y + bbox.h < 0 || bbox.y > g_pGame->m_GameHeight ) // use for debugging...
-            if( bbox.y + bbox.h < g_pGame->m_OrthoBottom || bbox.y > g_pGame->m_OrthoTop )
+
+            //m_ScreenBottom = g_pGame->m_OrthoBottom;
+            //m_ScreenTop = g_pGame->m_OrthoTop;
+
+            if( bbox.y + bbox.h < m_ScreenBottom || bbox.y > m_ScreenTop )
                 continue;
 
-            m_pMenuItems[i]->Draw();
+            m_pMenuItems[i]->Draw( matviewproj );
         }
     }
 }
@@ -113,135 +120,136 @@ int MenuScrollBox::TriggerOnCollision(int fingerid, float x, float y, bool carei
 
 int MenuScrollBox::OnTouch(int action, int id, float x, float y, float pressure, float size)
 {
-    //if( m_FingerHolding != fingerid )
-    //    return false;
+// TODO: MYENGINE
+    ////if( m_FingerHolding != fingerid )
+    ////    return false;
 
-    //if( m_State != MBS_Idle )
-    //    return false;
+    ////if( m_State != MBS_Idle )
+    ////    return false;
 
-    // flip y to make it start at bottom left.
-    y = g_pGame->m_GameHeight - y;
+    //// flip y to make it start at bottom left.
+    ////y = g_pGame->m_GameHeight - y;
 
-    bool newfingerdown = false;
-    bool newfingerup = false;
+    //bool newfingerdown = false;
+    //bool newfingerup = false;
 
-    if( action == GCBA_Down ) // first finger down
-    {
-        g_Fingers[id].set( x, y, id );
-        newfingerdown = true;
+    //if( action == GCBA_Down ) // first finger down
+    //{
+    //    g_Fingers[id].set( x, y, id );
+    //    newfingerdown = true;
 
-        m_InitialFinger = id;
-        m_Momentum.Set( 0, 0 );
+    //    m_InitialFinger = id;
+    //    m_Momentum.Set( 0, 0 );
 
-        bool found = false;
-        for( int i=m_NumMenuItems-1; i>=0; i-- )
-        {
-            if( m_pMenuItems[i] )
-            {
-                if( m_pMenuItems[i]->HoldOnCollision( id, x, y, true ) )
-                {
-                    found = true;
-                    break;
-                }
-            }
-        }
-    }
-
-    if( action == GCBA_Up ) // last finger up... i.e. no fingers still down.
-    {
-        for( int i=0; i<10; i++ )
-        {
-            g_Fingers[i].reset();
-        }
-        newfingerup = true;
-
-        m_InitialFinger = -1;
-    }
-
-    if( action == GCBA_Held ) // any finger might have moved
-    {
-        int fingerindex = -1;
-
-        for( int i=0; i<10; i++ )
-        {
-            if( g_Fingers[i].id == id )
-                fingerindex = i;
-        }
-
-        if( fingerindex != -1 )
-        {
-            g_Fingers[fingerindex].set( x, y, id );
-
-            int diffx = (int)(g_Fingers[fingerindex].currx) - (int)(g_Fingers[fingerindex].lastx);
-            int diffy = (int)(g_Fingers[fingerindex].curry) - (int)(g_Fingers[fingerindex].lasty);
-
-            if( id == m_InitialFinger )
-            {
-                if( diffx != 0 )
-                {
-                    m_ScrollAmount.x -= diffx;
-                    m_Momentum.x = (float)diffx;
-                }
-                if( diffy != 0 )
-                {
-                    m_ScrollAmount.y += diffy;
-                    m_Momentum.y = (float)diffy;
-                }
-            }
-
-            if( abs(diffx) > 4 || abs(diffy) > 4 )
-            {
-                for( int i=m_NumMenuItems-1; i>=0; i-- )
-                {
-                    if( GetMenuItemType(i) == MIT_Button )
-                        GetMenuButton( i )->ClearHeldState();
-                }
-            }
-            else
-            {
-                for( int i=m_NumMenuItems-1; i>=0; i-- )
-                {
-                    if( m_pMenuItems[i] )
-                    {
-                        if( m_pMenuItems[i]->ReleaseOnNoCollision( fingerindex, x, y ) )
-                        {
-                            //// finger is further down than when it was on the button.
-                            //if( y < m_pMenuItems[i]->m_Transform.m42 )
-                            //{
-                            //    if( GetMenuItemType(i) == MIT_Button )
-                            //    {
-                            //        if( OnMenuReleasedDown( GetMenuButton( i )->m_ButtonAction ) )
-                            //            return true;
-                            //    }
-                            //}
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    //if( newfingerdown )
-    //{   
+    //    bool found = false;
+    //    for( int i=m_NumMenuItems-1; i>=0; i-- )
+    //    {
+    //        if( m_pMenuItems[i] )
+    //        {
+    //            if( m_pMenuItems[i]->HoldOnCollision( id, x, y, true ) )
+    //            {
+    //                found = true;
+    //                break;
+    //            }
+    //        }
+    //    }
     //}
 
-    if( newfingerup )
-    {
-        MyAssert( m_pParentMenuPage != 0 );
-        if( m_pParentMenuPage )
-        {
-            for( int i=m_NumMenuItems-1; i>=0; i-- )
-            {
-                if( m_pMenuItems[i] )
-                {
-                    int action = m_pMenuItems[i]->TriggerOnCollision( id, x, y, true );
+    //if( action == GCBA_Up ) // last finger up... i.e. no fingers still down.
+    //{
+    //    for( int i=0; i<10; i++ )
+    //    {
+    //        g_Fingers[i].reset();
+    //    }
+    //    newfingerup = true;
 
-                    if( action != -1 && m_pParentMenuPage->OnMenuAction( action ) )
-                        return true;
-                }
-            }
-        }
-    }
+    //    m_InitialFinger = -1;
+    //}
+
+    //if( action == GCBA_Held ) // any finger might have moved
+    //{
+    //    int fingerindex = -1;
+
+    //    for( int i=0; i<10; i++ )
+    //    {
+    //        if( g_Fingers[i].id == id )
+    //            fingerindex = i;
+    //    }
+
+    //    if( fingerindex != -1 )
+    //    {
+    //        g_Fingers[fingerindex].set( x, y, id );
+
+    //        int diffx = (int)(g_Fingers[fingerindex].currx) - (int)(g_Fingers[fingerindex].lastx);
+    //        int diffy = (int)(g_Fingers[fingerindex].curry) - (int)(g_Fingers[fingerindex].lasty);
+
+    //        if( id == m_InitialFinger )
+    //        {
+    //            if( diffx != 0 )
+    //            {
+    //                m_ScrollAmount.x -= diffx;
+    //                m_Momentum.x = (float)diffx;
+    //            }
+    //            if( diffy != 0 )
+    //            {
+    //                m_ScrollAmount.y += diffy;
+    //                m_Momentum.y = (float)diffy;
+    //            }
+    //        }
+
+    //        if( abs(diffx) > 4 || abs(diffy) > 4 )
+    //        {
+    //            for( int i=m_NumMenuItems-1; i>=0; i-- )
+    //            {
+    //                if( GetMenuItemType(i) == MIT_Button )
+    //                    GetMenuButton( i )->ClearHeldState();
+    //            }
+    //        }
+    //        else
+    //        {
+    //            for( int i=m_NumMenuItems-1; i>=0; i-- )
+    //            {
+    //                if( m_pMenuItems[i] )
+    //                {
+    //                    if( m_pMenuItems[i]->ReleaseOnNoCollision( fingerindex, x, y ) )
+    //                    {
+    //                        //// finger is further down than when it was on the button.
+    //                        //if( y < m_pMenuItems[i]->m_Transform.m42 )
+    //                        //{
+    //                        //    if( GetMenuItemType(i) == MIT_Button )
+    //                        //    {
+    //                        //        if( OnMenuReleasedDown( GetMenuButton( i )->m_ButtonAction ) )
+    //                        //            return true;
+    //                        //    }
+    //                        //}
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
+
+    ////if( newfingerdown )
+    ////{   
+    ////}
+
+    //if( newfingerup )
+    //{
+    //    MyAssert( m_pParentMenuPage != 0 );
+    //    if( m_pParentMenuPage )
+    //    {
+    //        for( int i=m_NumMenuItems-1; i>=0; i-- )
+    //        {
+    //            if( m_pMenuItems[i] )
+    //            {
+    //                int action = m_pMenuItems[i]->TriggerOnCollision( id, x, y, true );
+
+    //                if( action != -1 && m_pParentMenuPage->OnMenuAction( action ) )
+    //                    return true;
+    //            }
+    //        }
+    //    }
+    //}
 
     return false;
 }

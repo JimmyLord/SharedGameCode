@@ -7,7 +7,7 @@
 // 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
-#include "GameCommonHeader.h"
+#include PCHFILE
 #include "MenuButton.h"
 
 ColorByte MenuButtonColors[MBCT_NumColors] = 
@@ -102,7 +102,7 @@ MenuButton::MenuButton(int maxletters)
 
     m_hack_PasswordHideString2 = false;
     
-    m_SoundPressed = GameAudioCue_None;
+    m_SoundPressed = 0; //GameAudioCue_None;
 #if SOUNDHACK_USE_CLICK_AS_DEFAULT
     m_SoundPressed = GameAudioCue_Click;
 #endif
@@ -140,7 +140,7 @@ void MenuButton::Tick(double timepassed)
     MenuItem::Tick( timepassed );
 }
 
-void MenuButton::Draw()
+void MenuButton::Draw(MyMatrix* matviewproj)
 {
     if( m_Visible == false )
         return;
@@ -223,13 +223,13 @@ void MenuButton::Draw()
                 shadowmat.Translate( buttonshadowoffx, buttonshadowoffy, 0 );
 
                 pShadowSprite->SetTransform( shadowmat );
-                pShadowSprite->Draw( &g_pGame->m_OrthoMatrixGameSize );
+                pShadowSprite->Draw( matviewproj ); //&g_pGame->m_OrthoMatrixGameSize );
             }
 
             pSprite->SetTint( bgcolor );
 
             pSprite->SetTransform( transform );
-            pSprite->Draw( &g_pGame->m_OrthoMatrixGameSize );
+            pSprite->Draw( matviewproj ); //&g_pGame->m_OrthoMatrixGameSize );
         }
     }
 
@@ -250,41 +250,42 @@ void MenuButton::Draw()
             transform.m42 = m_Transform.m42 + m_PositionOffset.y + m_OverlayOffset.y;
 
             pSprite->SetTransform( transform );
-            pSprite->Draw( &g_pGame->m_OrthoMatrixGameSize );
+            pSprite->Draw( matviewproj ); //&g_pGame->m_OrthoMatrixGameSize );
         }
     }
 
-    if( pMesh && m_pBGMeshCamera )
-    {
-        float gamew = g_pGame->m_GameWidth;
-        float gameh = g_pGame->m_GameHeight;
+    // TODO: MYENGINE
+    //if( pMesh && m_pBGMeshCamera )
+    //{
+    //    float gamew = g_pGame->m_GameWidth;
+    //    float gameh = g_pGame->m_GameHeight;
 
-        float devw = g_pGame->m_GameFullWidth;
-        float devh = g_pGame->m_GameFullHeight;
+    //    float devw = g_pGame->m_GameFullWidth;
+    //    float devh = g_pGame->m_GameFullHeight;
 
-        MyMatrix matfinalmesh = m_MeshTransform;
-        matfinalmesh.SetTranslation( m_Transform.m41, m_Transform.m42, m_Transform.m43 );
-        matfinalmesh.m41 = (((-g_pGame->m_OrthoLeft + matfinalmesh.m41) / devw) - 0.5f) * m_pBGMeshCamera->m_FrustumRightEdgeZ0*2;
-        matfinalmesh.m42 = (((-g_pGame->m_OrthoBottom + matfinalmesh.m42) / devh) - 0.5f) * m_pBGMeshCamera->m_FrustumTopEdgeZ0*2;
-        matfinalmesh.m43 = matfinalmesh.m43;
-        
-        pMesh->SetTransform( matfinalmesh );
+    //    MyMatrix matfinalmesh = m_MeshTransform;
+    //    matfinalmesh.SetTranslation( m_Transform.m41, m_Transform.m42, m_Transform.m43 );
+    //    matfinalmesh.m41 = (((-g_pGame->m_OrthoLeft + matfinalmesh.m41) / devw) - 0.5f) * m_pBGMeshCamera->m_FrustumRightEdgeZ0*2;
+    //    matfinalmesh.m42 = (((-g_pGame->m_OrthoBottom + matfinalmesh.m42) / devh) - 0.5f) * m_pBGMeshCamera->m_FrustumTopEdgeZ0*2;
+    //    matfinalmesh.m43 = matfinalmesh.m43;
+    //    
+    //    pMesh->SetTransform( matfinalmesh );
 
-        int numlights = 0;
-        if( m_pBGMeshLight )
-        {
-            Vector3 lightpos = m_pBGMeshLight->m_Position;
-            lightpos.x = ((lightpos.x / gamew) - 0.5f) * m_pBGMeshCamera->m_FrustumRightEdgeZ0*2;
-            lightpos.y = ((lightpos.y / gameh) - 0.5f) * m_pBGMeshCamera->m_FrustumTopEdgeZ0*2;
-            //lightpos.z = lightpos.z;
+    //    int numlights = 0;
+    //    if( m_pBGMeshLight )
+    //    {
+    //        Vector3 lightpos = m_pBGMeshLight->m_Position;
+    //        lightpos.x = ((lightpos.x / gamew) - 0.5f) * m_pBGMeshCamera->m_FrustumRightEdgeZ0*2;
+    //        lightpos.y = ((lightpos.y / gameh) - 0.5f) * m_pBGMeshCamera->m_FrustumTopEdgeZ0*2;
+    //        //lightpos.z = lightpos.z;
 
-            m_pBGMeshLight->m_Position = lightpos;
+    //        m_pBGMeshLight->m_Position = lightpos;
 
-            numlights = 1;
-        }
+    //        numlights = 1;
+    //    }
 
-        pMesh->Draw( &m_pBGMeshCamera->m_matViewProj, &m_pBGMeshCamera->m_Eye, m_pBGMeshLight, numlights, 0, 0, 0, 0 );
-    }
+    //    pMesh->Draw( &m_pBGMeshCamera->m_matViewProj, &m_pBGMeshCamera->m_Eye, m_pBGMeshLight, numlights, 0, 0, 0, 0 );
+    //}
 
     float y;
 
@@ -324,7 +325,7 @@ void MenuButton::Draw()
                 y = posy;
                 if( m_Strings[0][0] != 0 )
                 {
-                    m_pMeshText->CreateStringColorAndShadowStyle( true, m_FontHeight*m_Scale.y, posx, y, m_Justification, textcolor, textshadowstyle, textshadowcolor, shadowoffx, shadowoffy, m_Size, m_Strings[0] );
+                    m_pMeshText->CreateStringColorAndShadowStyle( false, m_FontHeight*m_Scale.y, posx, y, m_Justification, textcolor, textshadowstyle, textshadowcolor, shadowoffx, shadowoffy, m_Size, m_Strings[0] );
                 }
             }
             else if( m_Style == MBTS_DoubleLine )
@@ -381,10 +382,13 @@ void MenuButton::Draw()
     if( m_pFont && m_pMeshText )
     {
         m_pMeshText->m_MeshReady = true;
-        m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
+        // TODO: MYENGINE
+        //m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
+        m_pMaterial->SetShader( g_pShaderGroupManager->FindShaderGroupByName( "Shader_Texture" ) );
         m_pMaterial->SetTextureColor( m_pFont->m_pTextureDef );
         m_pMeshText->SetMaterial( m_pMaterial, 0 );
-        m_pMeshText->Draw( &g_pGame->m_OrthoMatrixGameSize, 0, 0, 0, 0, 0, 0, 0 );
+        //m_pMeshText->Draw( &g_pGame->m_OrthoMatrixGameSize, 0, 0, 0, 0, 0, 0, 0 );
+        m_pMeshText->Draw( matviewproj, 0, 0, 0, 0, 0, 0, 0 );
     }
 }
 
@@ -566,10 +570,11 @@ MyRect MenuButton::GetBoundingRect()
 
 void MenuButton::PlaySound()
 {
-    if( m_SoundPressed != GameAudioCue_None )
-    {
-        g_pGame->m_pGameAudio->Play( m_SoundPressed );
-    }
+// TODO: MYENGINE
+    //if( m_SoundPressed != GameAudioCue_None )
+    //{
+    //    g_pGame->m_pGameAudio->Play( m_SoundPressed );
+    //}
 }
 
 void MenuButton::SetPositionAndSize(float x, float y, float w, float h, float inputw, float inputh)
@@ -783,5 +788,32 @@ void MenuButton::FillPropertiesWindow()
     g_pPanelWatch->AddFloat( "TextShadowOffsetX", &m_DropShadowOffsetText_X, -10, 10 );
     g_pPanelWatch->AddFloat( "TextShadowOffsetY", &m_DropShadowOffsetText_Y, -10, 10 );
 
+    if( m_pFont && m_pFont->m_pFile )
+        g_pPanelWatch->AddPointerWithDescription( "Font", &m_pFont, m_pFont->m_pFile->m_FullPath, this, MenuButton::StaticOnDropFont );
+    else
+        g_pPanelWatch->AddPointerWithDescription( "Font", &m_pFont, "no font", this, MenuButton::StaticOnDropFont );
+}
+
+void MenuButton::OnDropFont(int controlid, wxCoord x, wxCoord y)
+{
+    if( g_DragAndDropStruct.m_Type == DragAndDropType_FileObjectPointer )
+    {
+        MyFileObject* pFile = (MyFileObject*)g_DragAndDropStruct.m_Value;
+        MyAssert( pFile );
+
+        size_t len = strlen( pFile->m_FullPath );
+        const char* filenameext = &pFile->m_FullPath[len-4];
+
+        if( strcmp( filenameext, ".fnt" ) == 0 )
+        {
+            FontDefinition* pFontDef = g_pFontManager->FindFont( pFile );
+            if( pFontDef == 0 )
+                pFontDef = g_pFontManager->CreateFont( pFile );
+            m_pFont = pFontDef;
+        }
+
+        // update the panel so new Shader name shows up.
+        g_pPanelWatch->m_pVariables[g_DragAndDropStruct.m_ID].m_Description = pFile->m_FullPath;
+    }
 }
 #endif //MYFW_USING_WX

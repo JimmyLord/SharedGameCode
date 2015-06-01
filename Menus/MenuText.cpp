@@ -7,7 +7,7 @@
 // 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
-#include "GameCommonHeader.h"
+#include PCHFILE
 #include "MenuText.h"
 
 MenuText::MenuText()
@@ -100,7 +100,7 @@ MenuText::~MenuText()
     SAFE_RELEASE( m_pMaterial );
 }
 
-void MenuText::Draw()
+void MenuText::Draw(MyMatrix* matviewproj)
 {
     if( m_Visible == false )
         return;
@@ -130,12 +130,12 @@ void MenuText::Draw()
         {
             m_pMeshText->CreateString( m_DrawAsPartOfBatch, m_FontHeight*m_Scale.y, posx, posy, 0, 0, m_Justification, textcolor, m_Size, m_String );
         }
-        m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
-        m_pMaterial->SetTextureColor( m_pFont->m_pTextureDef );
-        m_pMeshText->SetMaterial( m_pMaterial, 0 );
+        //m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
+        //m_pMaterial->SetTextureColor( m_pFont->m_pTextureDef );
+        //m_pMeshText->SetMaterial( m_pMaterial, 0 );
 
-        if( m_DrawAsPartOfBatch == false )
-            m_pMeshText->Draw( &g_pGame->m_OrthoMatrixGameSize, 0, 0, 0, 0, 0, 0, 0 );
+        //if( m_DrawAsPartOfBatch == false )
+        //    m_pMeshText->Draw( &g_pGame->m_OrthoMatrixGameSize, 0, 0, 0, 0, 0, 0, 0 );
     }
 }
 

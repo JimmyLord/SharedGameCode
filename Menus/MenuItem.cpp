@@ -7,8 +7,8 @@
 // 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
-#include "GameCommonHeader.h"
-#include "Core/ResourceManager.h"
+#include PCHFILE
+//#include "Core/ResourceManager.h"
 #include "MenuItem.h"
 
 MenuItem::MenuItem()
@@ -33,6 +33,11 @@ MenuItem::MenuItem()
 
     for( int i=0; i<4; i++ )
         m_MenuItemNavigation[i] = 0;
+
+#if MYFW_USING_WX
+    m_MenuItemDeletedCallbackStruct.pFunc = 0;
+    m_MenuItemDeletedCallbackStruct.pObj = 0;
+#endif
 }
 
 MenuItem::~MenuItem()
@@ -55,7 +60,7 @@ void MenuItem::Tick(double timepassed)
         m_TweenOut.Tick( timepassed );
 }
 
-void MenuItem::Draw()
+void MenuItem::Draw(MyMatrix* matviewproj)
 {
 }
 
@@ -110,13 +115,41 @@ int MenuItem::TriggerOnCollision(int fingerid, float x, float y, bool careifheld
 void MenuItem::FillPropertiesWindow()
 {
     g_pPanelWatch->ClearAllVariables();
-    g_pPanelWatch->AddFloat( "m_PosX", &m_Transform.m41, -1000, 1000 );
-    g_pPanelWatch->AddFloat( "m_PosY", &m_Transform.m42, -1000, 1000 );
+    g_pPanelWatch->AddVector2( "Position", (Vector2*)&m_Transform.m41, -1000, 1000 );
+    //g_pPanelWatch->AddFloat( "m_PosY", &m_Transform.m42, -1000, 1000 );
     g_pPanelWatch->AddFloat( "m_Scale", &m_Scale.x, 0, 5 );
-    g_pPanelWatch->AddFloat( "m_SizeX", &m_Size.x, 0, 10 );
-    g_pPanelWatch->AddFloat( "m_SizeY", &m_Size.y, 0, 10 );
-    g_pPanelWatch->AddFloat( "m_PositionOffsetX", &m_PositionOffset.x, -1000, 1000 );
-    g_pPanelWatch->AddFloat( "m_PositionOffsetY", &m_PositionOffset.y, -1000, 1000 );
+    g_pPanelWatch->AddVector2( "Size", &m_Size, 0, 10 );
+    g_pPanelWatch->AddVector2( "Position Offset", &m_PositionOffset, -1000, 1000 );
+}
+
+void MenuItem::OnRightClick()
+{
+ 	wxMenu menu;
+    menu.SetClientData( this );
+
+    menu.Append( 1000, "Delete Menu Item" );
+ 	menu.Connect( wxEVT_COMMAND_MENU_SELECTED, (wxObjectEventFunction)&MenuItem::OnPopupClick );
+
+    // blocking call.
+    g_pPanelWatch->PopupMenu( &menu ); // there's no reason this is using g_pPanelWatch other than convenience.
+}
+
+void MenuItem::OnPopupClick(wxEvent &evt)
+{
+    MenuItem* pMenuItem = (MenuItem*)static_cast<wxMenu*>(evt.GetEventObject())->GetClientData();
+
+    int id = evt.GetId();
+    if( id == 1000 )
+    {
+        if( pMenuItem->m_MenuItemDeletedCallbackStruct.pFunc )
+            pMenuItem->m_MenuItemDeletedCallbackStruct.pFunc( pMenuItem->m_MenuItemDeletedCallbackStruct.pObj, pMenuItem );
+    }
+}
+
+void MenuItem::RegisterMenuItemDeletedCallback(void* pObj, MenuItemDeletedCallbackFunc pFunc)
+{
+    m_MenuItemDeletedCallbackStruct.pFunc = pFunc;
+    m_MenuItemDeletedCallbackStruct.pObj = pObj;
 }
 #endif //MYFW_USING_WX
 

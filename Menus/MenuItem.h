@@ -53,7 +53,19 @@ enum MenuNavDir
     MenuNavDir_Left,
 };
 
+#if MYFW_USING_WX
+typedef void (*MenuItemDeletedCallbackFunc)(void* pObjectPtr, MenuItem* pMenuItem);
+struct MenuItemDeletedCallbackStruct
+{
+    void* pObj;
+    MenuItemDeletedCallbackFunc pFunc;
+};
+#endif
+
 class MenuItem
+#if MYFW_USING_WX
+: public wxEvtHandler
+#endif
 {
 public:
     static const int MAX_MENUITEM_NAME_LENGTH = 32;
@@ -86,7 +98,7 @@ public:
 
     virtual void StartClosing();
     virtual void Tick(double timepassed);
-    virtual void Draw();
+    virtual void Draw(MyMatrix* matviewproj);
     virtual bool CheckForCollision(float x, float y);
     virtual int CheckForCollisionPosition(float x, float y, bool held);
 
@@ -109,6 +121,13 @@ public:
 #if MYFW_USING_WX
     static void StaticFillPropertiesWindow(void* pObjectPtr, unsigned int count) { ((MenuItem*)pObjectPtr)->FillPropertiesWindow(); }
     void FillPropertiesWindow();
+
+    static void StaticOnRightClick(void* pObjectPtr) { ((MenuItem*)pObjectPtr)->OnRightClick(); }
+    virtual void OnRightClick();
+    void OnPopupClick(wxEvent &evt);
+
+    MenuItemDeletedCallbackStruct m_MenuItemDeletedCallbackStruct;
+    void RegisterMenuItemDeletedCallback(void* pObj, MenuItemDeletedCallbackFunc pFunc);
 #endif //MYFW_USING_WX
 
     void SetMenuItemNavigation(int up, int right, int down, int left);

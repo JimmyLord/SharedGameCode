@@ -7,9 +7,9 @@
 // 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
-#include "GameCommonHeader.h"
-#include "Core/ResourceManager.h"
-#include "../Screens/Screen_Base.h"
+#include PCHFILE
+//#include "Core/ResourceManager.h"
+//#include "../Screens/Screen_Base.h"
 #include "MenuItem.h"
 #include "MenuScrollingText.h"
 
@@ -39,11 +39,11 @@ void MenuScrollingText::SetTextMesh(MyMeshText* pMesh)
     m_peTextMesh = pMesh;
 }
 
-void MenuScrollingText::Draw()
+void MenuScrollingText::Draw(MyMatrix* matviewproj)
 {
     MyAssert( m_peTextMesh );
 
-    MenuScrollBox::Draw();
+    MenuScrollBox::Draw( matviewproj );
 
     float x = m_Transform.m41 + m_PositionOffset.x + m_ScrollAmount.x;
     float y = m_Transform.m42 + m_PositionOffset.y + m_ScrollAmount.y;
@@ -116,8 +116,10 @@ void MenuScrollingText::Draw()
     }
 
     m_peTextMesh->m_MeshReady = true;
-    m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
+    // TODO: MYENGINE
+    //m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
     m_pMaterial->SetTextureColor( m_pFont->m_pTextureDef );
     m_peTextMesh->SetMaterial( m_pMaterial, 0 );
-    m_peTextMesh->Draw( &g_pGame->m_OrthoMatrixGameSize, 0, 0, 0, 0, 0, 0, 0 );
+    //m_peTextMesh->Draw( &g_pGame->m_OrthoMatrixGameSize, 0, 0, 0, 0, 0, 0, 0 );
+    m_peTextMesh->Draw( matviewproj, 0, 0, 0, 0, 0, 0, 0 );
 }

@@ -124,7 +124,7 @@ public:
 
     bool m_hack_PasswordHideString2;
 
-    GameAudioCues m_SoundPressed;
+    int m_SoundPressed;
 
 protected:
     MySprite* m_pBGSprite;
@@ -143,7 +143,7 @@ public:
 
     virtual void StartClosing();
     virtual void Tick(double TimePassed);
-    virtual void Draw();
+    virtual void Draw(MyMatrix* matviewproj);
 
     virtual float TestCollision(int fingerid, float x, float y, bool fingerwentdown = true);
     virtual bool HoldOnCollision(int fingerid, float x, float y, bool releaseifnottouching, bool fingerwentdown = true);
@@ -176,6 +176,9 @@ public:
 #if MYFW_USING_WX
     static void StaticFillPropertiesWindow(void* pObjectPtr, unsigned int count) { ((MenuButton*)pObjectPtr)->FillPropertiesWindow(); }
     void FillPropertiesWindow();
+
+    static void StaticOnDropFont(void* pObjectPtr, int controlid, wxCoord x, wxCoord y) { ((MenuButton*)pObjectPtr)->OnDropFont(controlid, x, y); }
+    void OnDropFont(int controlid, wxCoord x, wxCoord y);
 #endif //MYFW_USING_WX
 };
 

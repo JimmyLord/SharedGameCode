@@ -7,8 +7,8 @@
 // 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
-#include "GameCommonHeader.h"
-#include "Core/ResourceManager.h"
+#include PCHFILE
+//#include "Core/ResourceManager.h"
 #include "MenuInputBox.h"
 
 MenuInputBox::MenuInputBox()
@@ -40,11 +40,11 @@ void MenuInputBox::SetInputString(const char* str, ...)
     va_end( arg );
 }
 
-void MenuInputBox::Draw()
+void MenuInputBox::Draw(MyMatrix* matviewproj)
 {
     SetString( m_Strings[0], m_InputBuffer );
 
-    MenuButton::Draw();
+    MenuButton::Draw( matviewproj );
 }
 
 int MenuInputBox::TriggerOnCollision(int fingerid, float x, float y, bool careifheld, bool releaseifnocollision)
@@ -53,9 +53,7 @@ int MenuInputBox::TriggerOnCollision(int fingerid, float x, float y, bool careif
 
     if( action != -1 )
     {
-        g_pGame->m_KeyboardOpenRequested = true;
-        //ShowKeyboard( true ); // don't call JNI functions in key/button/touch callbacks... threading issues.
-        
+        g_pGameCore->m_KeyboardOpenRequested = true;
         return m_ButtonAction;
     }
 
@@ -79,8 +77,7 @@ bool MenuInputBox::OnKeyDown(int keycode, int unicodechar)
 
     if( keycode == MYKEYCODE_ENTER )
     {
-        g_pGame->m_KeyboardCloseRequested = true;
-        //ShowKeyboard( false ); // don't call JNI functions in key/button callbacks... threading issues.
+        g_pGameCore->m_KeyboardCloseRequested = true;
         return true;
     }
 

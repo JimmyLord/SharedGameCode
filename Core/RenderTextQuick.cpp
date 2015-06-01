@@ -7,7 +7,7 @@
 // 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
-#include "GameCommonHeader.h"
+#include PCHFILE
 
 #include "RenderTextQuick.h"
 
@@ -24,6 +24,8 @@ RenderTextQuickGlobals* g_pRTQGlobals = 0;
 
 RenderTextQuickGlobals::RenderTextQuickGlobals()
 {
+    MyAssert( g_pMaterialManager );
+
     m_BatchMode = false;
     m_pBatchTexture = 0;
     m_BatchNumLetters = 0;
@@ -424,7 +426,8 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
                 //    //glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(Vertex_XYZUV_RGBA)*textstrlen*6, (void*)pVertToDraws );
                 //}
 
-                Shader_Base* pShader = (Shader_Base*)g_pGame->m_pShader_TextureVertexColor->GlobalPass();
+                // TODO: MYENGINE
+                Shader_Base* pShader = 0; //(Shader_Base*)g_pGame->m_pShader_TextureVertexColor->GlobalPass();
                 if( pShader )
                 {   
                     int size = sizeof(Vertex_XYZUV_RGBA)*textstrlen*6;
@@ -434,12 +437,14 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
                     g_pRTQGlobals->m_pVertexBufferIDImmediate->m_Dirty = true;
                     g_pRTQGlobals->m_pVertexBufferIDImmediate->Rebuild( 0, sizeof(Vertex_XYZUV_RGBA)*textstrlen*6 );
 
-                    g_pRTQGlobals->m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
+                    // TODO: MYENGINE
+                    //g_pRTQGlobals->m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
                     g_pRTQGlobals->m_pMaterial->SetTextureColor( pFont->m_pTextureDef );
 
                     if( pShader->ActivateAndProgramShader(
                         g_pRTQGlobals->m_pVertexBufferIDImmediate, 0, GL_UNSIGNED_SHORT,
-                        &g_pGame->m_OrthoMatrixGameSize, &position, g_pRTQGlobals->m_pMaterial ) )
+                        g_pRTQGlobals->m_pMatViewProj, //&g_pGame->m_OrthoMatrixGameSize,
+                        &position, g_pRTQGlobals->m_pMaterial ) )
                     //if( pShader->ActivateAndProgramShader( &g_pGame->m_OrthoMatrixGameSize,
                     //    &position, pVertToDraws, pFont->m_pTextureDef->m_TextureID ) )
                     {
@@ -509,15 +514,18 @@ void RenderTextQuickEndBatch()
     g_pRTQGlobals->m_pVertexBuffer->Rebuild( 0, sizeof(Vertex_XYZUV_RGBA)*g_pRTQGlobals->m_BatchNumLetters*6 );
     MyAssert( g_pRTQGlobals->m_pVertexBuffer->m_Dirty == false );
 
-    Shader_Base* pShader = (Shader_Base*)g_pGame->m_pShader_TextureVertexColor->GlobalPass();
+    // TODO: MYENGINE
+    Shader_Base* pShader = 0;//(Shader_Base*)g_pGame->m_pShader_TextureVertexColor->GlobalPass();
     if( pShader )
     {
-        g_pRTQGlobals->m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
+        // TODO: MYENGINE
+        //g_pRTQGlobals->m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
         g_pRTQGlobals->m_pMaterial->SetTextureColor( g_pRTQGlobals->m_pBatchTexture );
 
         if( pShader->ActivateAndProgramShader(
                 g_pRTQGlobals->m_pVertexBuffer, 0, GL_UNSIGNED_SHORT,
-                &g_pGame->m_OrthoMatrixGameSize, &position, g_pRTQGlobals->m_pMaterial ) )
+                g_pRTQGlobals->m_pMatViewProj, //&g_pGame->m_OrthoMatrixGameSize,
+                &position, g_pRTQGlobals->m_pMaterial ) )
         {
 #if USE_D3D
             //g_pD3DContext->Draw( textstrlen*6, 0 );

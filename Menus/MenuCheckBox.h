@@ -74,7 +74,7 @@ public:
     Vector4 m_UncheckedBGSpriteUVs;
     ColorByte m_UncheckedBGColor;
 
-    GameAudioCues m_SoundPressed;
+    int m_SoundPressed;
 
 protected:
     virtual bool CheckForCollision(float x, float y);
@@ -84,7 +84,7 @@ public:
     MenuCheckBox();
     ~MenuCheckBox();
 
-    virtual void Draw();
+    virtual void Draw(MyMatrix* matviewproj);
 
     virtual float TestCollision(int fingerid, float x, float y, bool fingerwentdown = true);
     virtual bool HoldOnCollision(int fingerid, float x, float y, bool releaseifnottouching, bool fingerwentdown = true);

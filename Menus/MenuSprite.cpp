@@ -7,7 +7,7 @@
 // 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
-#include "GameCommonHeader.h"
+#include PCHFILE
 #include "MenuSprite.h"
 
 MenuSprite::MenuSprite()
@@ -37,7 +37,7 @@ MenuSprite::~MenuSprite()
     SAFE_RELEASE( m_pShadowSprite );
 }
 
-void MenuSprite::Draw()
+void MenuSprite::Draw(MyMatrix* matviewproj)
 {
     if( m_Visible == false )
         return;
@@ -87,7 +87,7 @@ void MenuSprite::Draw()
             pShadowSprite->m_Position.m41 += bgshadowoffx;
             pShadowSprite->m_Position.m42 += bgshadowoffy;
 
-            pShadowSprite->Draw( &g_pGame->m_OrthoMatrixGameSize );
+            pShadowSprite->Draw( matviewproj );//&g_pGame->m_OrthoMatrixGameSize );
         }
 
         //pSprite->Create( bgwidth, bgheight, uvs.x, uvs.y, uvs.z, uvs.w, m_Justification );
@@ -96,7 +96,7 @@ void MenuSprite::Draw()
         //pSprite->SetPosition( posx, posy, 0 );
         pSprite->SetTransform( m_Transform );
 
-        pSprite->Draw( &g_pGame->m_OrthoMatrixGameSize );
+        pSprite->Draw( matviewproj );//&g_pGame->m_OrthoMatrixGameSize );
     }
 
 }

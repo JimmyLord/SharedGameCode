@@ -7,8 +7,8 @@
 // 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
-#include "GameCommonHeader.h"
-#include "Core/ResourceManager.h"
+#include PCHFILE
+//#include "Core/ResourceManager.h"
 #include "MenuSlider.h"
 
 ColorByte MenuSliderColors[MSCT_NumColors] = 
@@ -45,13 +45,15 @@ MenuSlider::MenuSlider()
     m_BGHeight = 0;
     m_DropShadowOffsetBG_X = 0;
     m_DropShadowOffsetBG_Y = 0;
+
+    m_pSprite = 0;
 }
 
 MenuSlider::~MenuSlider()
 {
 }
 
-void MenuSlider::Draw()
+void MenuSlider::Draw(MyMatrix* matviewproj)
 {
     float centerx = m_PosX;
     float top = m_PosY;
@@ -64,24 +66,30 @@ void MenuSlider::Draw()
 
     float emptypos = (m_PosY - m_VisualRange);
 
-    g_pGame->m_pResources->m_pSprites[SL_WhiteSquareResizable]->Create( "MenuSlider", m_BarThickness, m_VisualRange, 0, 1, 0, 1, Justify_CenterX|Justify_Top );
-    g_pGame->m_pResources->m_pSprites[SL_WhiteSquareResizable]->SetPosition( centerx, top, 0 );
-    g_pGame->m_pResources->m_pSprites[SL_WhiteSquareResizable]->SetTint( m_Colors[MSCT_BarColor] );
-    g_pGame->m_pResources->m_pSprites[SL_WhiteSquareResizable]->Draw( &g_pGame->m_OrthoMatrix );
+    MyAssert( m_pSprite );
+    //m_pSprite = g_pGame->m_pResources->m_pSprites[SL_WhiteSquareResizable];
 
-    g_pGame->m_pResources->m_pSprites[SL_WhiteSquareResizable]->Create( "MenuSlider", m_HandleWidth, m_HandleHeight, 0, 1, 0, 1, Justify_CenterX|Justify_Top );
-    g_pGame->m_pResources->m_pSprites[SL_WhiteSquareResizable]->SetPosition( centerx, emptypos + m_ValuePerc*m_VisualRange, 0 );
-    g_pGame->m_pResources->m_pSprites[SL_WhiteSquareResizable]->SetTint( m_Colors[MSCT_HandleColor] );
-    g_pGame->m_pResources->m_pSprites[SL_WhiteSquareResizable]->Draw( &g_pGame->m_OrthoMatrix );
+    if( m_pSprite )
+    {
+        m_pSprite->Create( "MenuSlider", m_BarThickness, m_VisualRange, 0, 1, 0, 1, Justify_CenterX|Justify_Top );
+        m_pSprite->SetPosition( centerx, top, 0 );
+        m_pSprite->SetTint( m_Colors[MSCT_BarColor] );
+        m_pSprite->Draw( matviewproj ); //&g_pGame->m_OrthoMatrix );
+
+        m_pSprite->Create( "MenuSlider", m_HandleWidth, m_HandleHeight, 0, 1, 0, 1, Justify_CenterX|Justify_Top );
+        m_pSprite->SetPosition( centerx, emptypos + m_ValuePerc*m_VisualRange, 0 );
+        m_pSprite->SetTint( m_Colors[MSCT_HandleColor] );
+        m_pSprite->Draw( matviewproj ); //&g_pGame->m_OrthoMatrix );
+    }
 }
 
-int MenuSlider::CheckForCollisionPosition(float x, float y, bool held)
+int MenuSlider::CheckForCollisionPosition(float x, float y, float gamewidth, float gameheight, bool held)
 {
     if( m_Disabled )
         return 0;
 
-    float transx = x / g_pGame->m_GameWidth;
-    float transy = y / g_pGame->m_GameHeight;
+    float transx = x / gamewidth; //g_pGame->m_GameWidth;
+    float transy = y / gameheight; //g_pGame->m_GameHeight;
 
     float centerx = m_PosX;
     float centery = m_PosY;

@@ -56,12 +56,14 @@ public:
     float m_DropShadowOffsetBG_X;
     float m_DropShadowOffsetBG_Y;
 
+    MySprite* m_pSprite;
+
 public:
     MenuSlider();
     ~MenuSlider();
 
-    void Draw();
-    virtual int CheckForCollisionPosition(float x, float y, bool held);
+    void Draw(MyMatrix* matviewproj);
+    virtual int CheckForCollisionPosition(float x, float y, float gamewidth, float gameheight, bool held);
 };
 
 #endif //__MenuSlider_H__

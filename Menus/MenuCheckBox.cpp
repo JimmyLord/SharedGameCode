@@ -7,7 +7,7 @@
 // 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
-#include "GameCommonHeader.h"
+#include PCHFILE
 //#include "../GameSliders.h"
 //#include "../Core/ResourceManager.h"
 //#include "../GravityBalls/GravityBalls_Resources.h"
@@ -60,14 +60,14 @@ MenuCheckBox::MenuCheckBox()
     m_UncheckedBGSpriteUVs = Vector4( 0, 1, 0, 1 );
     m_UncheckedBGColor = ColorByte(255,255,255,255);
 
-    m_SoundPressed = GameAudioCue_None;
+    m_SoundPressed = 0;//GameAudioCue_None;
 }
 
 MenuCheckBox::~MenuCheckBox()
 {
 }
 
-void MenuCheckBox::Draw()
+void MenuCheckBox::Draw(MyMatrix* matviewproj)
 {
     if( m_Visible == false )
         return;
@@ -98,7 +98,8 @@ void MenuCheckBox::Draw()
 
     if( pSprite == 0 )
     {
-        pSprite = g_pGame->m_pResources->m_pSprites[SL_WhiteSquareResizable];
+        return;
+        //pSprite = g_pGame->m_pResources->m_pSprites[SL_WhiteSquareResizable];
     }
 
     pSprite->SetTint( bgcolor );
@@ -107,7 +108,7 @@ void MenuCheckBox::Draw()
     Vector4 shuvs = uvs;
     if( pShadowSprite == 0 )
     {
-        pShadowSprite = g_pGame->m_pResources->m_pSprites[SL_WhiteSquareResizable];
+        //pShadowSprite = g_pGame->m_pResources->m_pSprites[SL_WhiteSquareResizable];
         shuvs = Vector4( 0, 1, 0, 1 );
     }
 
@@ -120,7 +121,7 @@ void MenuCheckBox::Draw()
 
             pShadowSprite->SetTint( ColorByte(0,0,0,64) );
             pShadowSprite->SetPosition( m_PosX+CheckBoxshadowoffx, m_PosY+CheckBoxshadowoffy, 0.1f );
-            pShadowSprite->Draw( &g_pGame->m_OrthoMatrixGameSize );
+            pShadowSprite->Draw( matviewproj ); //&g_pGame->m_OrthoMatrixGameSize );
         }
 
         pSprite->Create( "MenuCheckBox", bgwidth, bgheight, uvs.x, uvs.y, uvs.z, uvs.w, Justify_CenterX|Justify_CenterY );
@@ -131,7 +132,7 @@ void MenuCheckBox::Draw()
             pSprite->SetTint( ColorByte(200,200,200,255) );
         }
         pSprite->SetPosition( m_PosX, m_PosY, 0 );
-        pSprite->Draw( &g_pGame->m_OrthoMatrixGameSize );
+        pSprite->Draw( matviewproj ); //&g_pGame->m_OrthoMatrixGameSize );
     }
 
     float y;
@@ -279,14 +280,15 @@ int MenuCheckBox::TriggerOnCollision(int fingerid, float x, float y, bool careif
 
 void MenuCheckBox::PlaySound()
 {
-    if( m_SoundPressed != GameAudioCue_None )
-    {
-        g_pGame->m_pGameAudio->Play( m_SoundPressed );
-    }
-    else
-    {
-#if ORTHOHACK_ZERO_TO_ONE
-        g_pGame->m_pGameAudio->Play( GameAudioCue_Click );
-#endif
-    }
+// TODO: MYENGINE
+//    if( m_SoundPressed != GameAudioCue_None )
+//    {
+//        g_pGame->m_pGameAudio->Play( m_SoundPressed );
+//    }
+//    else
+//    {
+//#if ORTHOHACK_ZERO_TO_ONE
+//        g_pGame->m_pGameAudio->Play( GameAudioCue_Click );
+//#endif
+//    }
 }

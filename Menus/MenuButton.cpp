@@ -63,7 +63,7 @@ MenuButton::MenuButton(int maxletters)
         m_Strings[i][0] = 0;
     m_ToolTipString[0] = 0;
 
-    m_pMaterial = g_pMaterialManager->CreateMaterial();
+    m_pMaterial = 0; //g_pMaterialManager->CreateMaterial();
 
     if( maxletters == -1 )
         m_pMeshText = MyNew MyMeshText( 3*MAX_MENUBUTTON_STRING, 0 );
@@ -379,16 +379,19 @@ void MenuButton::Draw(MyMatrix* matviewproj)
         }
     }
 
+    // draw the text mesh.
     if( m_pFont && m_pMeshText )
     {
         m_pMeshText->m_MeshReady = true;
-        // TODO: MYENGINE
+
+        // create a material for the fond on the stack and set it. TODO: do better...
+        MaterialDefinition pMaterial;
         //m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
-        m_pMaterial->SetShader( g_pShaderGroupManager->FindShaderGroupByName( "Shader_Texture" ) );
-        m_pMaterial->SetTextureColor( m_pFont->m_pTextureDef );
-        m_pMeshText->SetMaterial( m_pMaterial, 0 );
-        //m_pMeshText->Draw( &g_pGame->m_OrthoMatrixGameSize, 0, 0, 0, 0, 0, 0, 0 );
+        pMaterial.SetShader( g_pShaderGroupManager->FindShaderGroupByName( "Shader_Texture" ) );
+        pMaterial.SetTextureColor( m_pFont->m_pTextureDef );
+        m_pMeshText->SetMaterial( &pMaterial, 0 );
         m_pMeshText->Draw( matviewproj, 0, 0, 0, 0, 0, 0, 0 );
+        m_pMeshText->SetMaterial( 0, 0 );
     }
 }
 
@@ -774,6 +777,14 @@ void MenuButton::SetSpritesBGShadow(MySprite* sprite)
     SetSprites( sprite, 0, 0, 0, sprite );
 }
 
+void MenuButton::SetMaterial(MaterialDefinition* pMaterial)
+{
+    if( pMaterial )
+        pMaterial->AddRef();
+    SAFE_RELEASE( m_pMaterial );
+    m_pMaterial = pMaterial;
+}
+
 #if MYFW_USING_WX
 void MenuButton::FillPropertiesWindow()
 {
@@ -792,6 +803,11 @@ void MenuButton::FillPropertiesWindow()
         g_pPanelWatch->AddPointerWithDescription( "Font", &m_pFont, m_pFont->m_pFile->m_FullPath, this, MenuButton::StaticOnDropFont );
     else
         g_pPanelWatch->AddPointerWithDescription( "Font", &m_pFont, "no font", this, MenuButton::StaticOnDropFont );
+
+    if( m_pMaterial )
+        g_pPanelWatch->AddPointerWithDescription( "Material", &m_pMaterial, m_pMaterial->GetName(), this, MenuButton::StaticOnDropMaterial );
+    else
+        g_pPanelWatch->AddPointerWithDescription( "Material", &m_pMaterial, "no material", this, MenuButton::StaticOnDropMaterial );
 }
 
 void MenuButton::OnDropFont(int controlid, wxCoord x, wxCoord y)
@@ -814,6 +830,20 @@ void MenuButton::OnDropFont(int controlid, wxCoord x, wxCoord y)
 
         // update the panel so new Shader name shows up.
         g_pPanelWatch->m_pVariables[g_DragAndDropStruct.m_ID].m_Description = pFile->m_FullPath;
+    }
+}
+
+void MenuButton::OnDropMaterial(int controlid, wxCoord x, wxCoord y)
+{
+    if( g_DragAndDropStruct.m_Type == DragAndDropType_MaterialDefinitionPointer )
+    {
+        MaterialDefinition* pMaterial = (MaterialDefinition*)g_DragAndDropStruct.m_Value;
+        MyAssert( pMaterial );
+
+        SetMaterial( pMaterial );
+
+        // update the panel so new Material name shows up.
+        g_pPanelWatch->m_pVariables[g_DragAndDropStruct.m_ID].m_Description = pMaterial->GetName();
     }
 }
 #endif //MYFW_USING_WX

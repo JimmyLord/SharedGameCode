@@ -35,7 +35,7 @@ RenderTextQuickGlobals::RenderTextQuickGlobals()
     m_pVertexBuffer = 0;
     //BufferDefinition* m_pIndexBufferID = 0; // TODO: cleanup.
 
-    m_pMaterial = g_pMaterialManager->CreateMaterial();
+    m_pMaterial = 0;
 
     m_WordWrap = false;
     m_WordWrapWidthLimit = 0;
@@ -261,6 +261,11 @@ int RenderTextQuickWithColorShadowStyleZAndRot(FontDefinition* pFont, float font
 int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float x, float y, float z, float rotz, unsigned char justificationflags, ColorByte color, const char* text)
 {
     MyAssert( g_pRTQGlobals );
+    if( g_pRTQGlobals == 0 )
+        return 0;
+
+    if( g_pRTQGlobals->m_pMaterial == 0 )
+        g_pRTQGlobals->m_pMaterial = g_pMaterialManager->CreateMaterial();
 
     const char* stringtodraw = text;
     if( g_pLanguageTable != 0 && text[0] == '.' )
@@ -497,6 +502,7 @@ void RenderTextQuickStartBatch(FontDefinition* pFont)
 void RenderTextQuickEndBatch()
 {
     MyAssert( g_pRTQGlobals );
+    MyAssert( g_pRTQGlobals->m_pMaterial );
 
     if( g_pRTQGlobals->m_BatchMode == false )
         return;

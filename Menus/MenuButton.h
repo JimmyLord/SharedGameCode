@@ -173,12 +173,18 @@ public:
     void SetBGShadow(float offsetx, float offsety) { m_DropShadowOffsetBG_X = offsetx; m_DropShadowOffsetBG_Y = offsety; }
     MySprite* GetBGSprite() { return m_pBGSprite; }
 
+    virtual MaterialDefinition* GetMaterial() { return m_pMaterial; }
+    virtual void SetMaterial(MaterialDefinition* pMaterial);
+
 #if MYFW_USING_WX
     static void StaticFillPropertiesWindow(void* pObjectPtr, unsigned int count) { ((MenuButton*)pObjectPtr)->FillPropertiesWindow(); }
     void FillPropertiesWindow();
 
     static void StaticOnDropFont(void* pObjectPtr, int controlid, wxCoord x, wxCoord y) { ((MenuButton*)pObjectPtr)->OnDropFont(controlid, x, y); }
     void OnDropFont(int controlid, wxCoord x, wxCoord y);
+
+    static void StaticOnDropMaterial(void* pObjectPtr, int controlid, wxCoord x, wxCoord y) { ((MenuButton*)pObjectPtr)->OnDropMaterial(controlid, x, y); }
+    void OnDropMaterial(int controlid, wxCoord x, wxCoord y);
 #endif //MYFW_USING_WX
 };
 

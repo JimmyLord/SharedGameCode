@@ -53,7 +53,19 @@ enum MenuButtonTextStyle
 
 class MenuButton : public MenuItem
 {
-    friend class Screen_Base; // for import/export of menu page layout
+    enum MaterialTypes
+    {
+        Material_BG,
+        Material_BGDisabled,
+        Material_BGPressed,
+        Material_BGOverlay,
+        Material_Shadow,
+        Materials_NumTypes,
+    };
+    static const char* m_MaterialNames[Materials_NumTypes];
+
+    //friend class Screen_Base; // for import/export of menu page layout
+    friend class Menu_ImportExport; // for import/export of menu page layout
 
 protected:
     MenuButtonState m_State;
@@ -74,7 +86,7 @@ public:
     char m_Strings[3][MAX_MENUBUTTON_STRING];
     char m_ToolTipString[MAX_MENUBUTTON_STRING];
 
-    MaterialDefinition* m_pMaterial;
+    //MaterialDefinition* m_pMaterial;
     MyMeshText* m_pMeshText;
 
     // behaviour
@@ -127,11 +139,14 @@ public:
     int m_SoundPressed;
 
 protected:
-    MySprite* m_pBGSprite;
-    MySprite* m_pDisabledBGSprite;
-    MySprite* m_pPressedBGSprite;
-    MySprite* m_pOverlayBGSprite;
-    MySprite* m_pShadowSprite;
+    //MySprite* m_pBGSprite;
+    //MySprite* m_pDisabledBGSprite;
+    //MySprite* m_pPressedBGSprite;
+    //MySprite* m_pOverlayBGSprite;
+    //MySprite* m_pShadowSprite;
+
+    MySprite* m_pSprite;
+    MaterialDefinition* m_pMaterials[Materials_NumTypes];
 
 public:
     virtual bool CheckForCollision(float x, float y);
@@ -160,23 +175,25 @@ public:
     virtual void SetString(const char* str1, const char* str2 = 0, const char* str3 = 0);
     virtual void SetStringNumber(int stringnumber, const char* str1, ...);
     virtual void SetToolTipString(const char* str);
-    void SetPressedState(const ColorByte& textcolor, const ColorByte& bgcolor, MySprite* sprite, const Vector4& uvs);
-    void SetOverlay(const Vector2& size, const Vector2& offset, const ColorByte& bgcolor, MySprite* sprite, const Vector4& uvs);
+    //void SetPressedState(const ColorByte& textcolor, const ColorByte& bgcolor, MySprite* sprite, const Vector4& uvs);
+    //void SetOverlay(const Vector2& size, const Vector2& offset, const ColorByte& bgcolor, MySprite* sprite, const Vector4& uvs);
 
     MenuButtonState GetState() { return m_State; }
 
-    void SetSprites(MySprite* bg, MySprite* disabled, MySprite* pressed, MySprite* overlay, MySprite* shadow);
-    void SetSpritesCopy(MySprite* bg, MySprite* disabled, MySprite* pressed, MySprite* overlay, MySprite* shadow);
-    void SetSpritesBGShadow(MySprite* sprite);
+    //void SetSprites(MySprite* bg, MySprite* disabled, MySprite* pressed, MySprite* overlay, MySprite* shadow);
+    //void SetSpritesCopy(MySprite* bg, MySprite* disabled, MySprite* pressed, MySprite* overlay, MySprite* shadow);
+    //void SetSpritesBGShadow(MySprite* sprite);
 
     void SetTextShadow(float offsetx, float offsety) { m_DropShadowOffsetText_X = offsetx; m_DropShadowOffsetText_Y = offsety; }
     void SetBGShadow(float offsetx, float offsety) { m_DropShadowOffsetBG_X = offsetx; m_DropShadowOffsetBG_Y = offsety; }
-    MySprite* GetBGSprite() { return m_pBGSprite; }
+    //MySprite* GetBGSprite() { return m_pBGSprite; }
 
-    virtual MaterialDefinition* GetMaterial() { return m_pMaterial; }
-    virtual void SetMaterial(MaterialDefinition* pMaterial);
+    //virtual MaterialDefinition* GetMaterial() { return m_pMaterial; }
+    virtual void SetMaterial(unsigned int materialindex, MaterialDefinition* pMaterial);
 
 #if MYFW_USING_WX
+    int m_CONTROLID_Materials[Materials_NumTypes];
+
     static void StaticFillPropertiesWindow(void* pObjectPtr, unsigned int count) { ((MenuButton*)pObjectPtr)->FillPropertiesWindow(); }
     void FillPropertiesWindow();
 

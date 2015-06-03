@@ -20,6 +20,7 @@ class MenuButton;
 class MenuScrollBox;
 class MenuScrollingText;
 class MenuInputBox;
+class Screen_Base;
 
 class MenuScrollBox : public MenuButton
 {

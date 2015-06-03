@@ -33,6 +33,11 @@ Vector4 g_DefaultEnabledBGSpriteUVs;
 MySprite* g_DefaultDisabledBGSprite = 0;
 Vector4 g_DefaultDisabledBGSpriteUVs;
 
+const char* MenuButton::m_MaterialNames[Materials_NumTypes] =
+{
+    "MatBG", "MatBGDisabled", "MatBGPressed", "MatBGOverlay", "MatShadow",
+};
+
 MenuButton::MenuButton(int maxletters)
 : m_TextShadowStyle(TextShadowStyle_Single)
 , m_TextOffset(0,0)
@@ -63,7 +68,7 @@ MenuButton::MenuButton(int maxletters)
         m_Strings[i][0] = 0;
     m_ToolTipString[0] = 0;
 
-    m_pMaterial = 0; //g_pMaterialManager->CreateMaterial();
+    //m_pMaterial = 0; //g_pMaterialManager->CreateMaterial();
 
     if( maxletters == -1 )
         m_pMeshText = MyNew MyMeshText( 3*MAX_MENUBUTTON_STRING, 0 );
@@ -109,23 +114,33 @@ MenuButton::MenuButton(int maxletters)
 
     m_Style = MBTS_SingleLine;
 
-    m_pBGSprite = 0;
-    m_pDisabledBGSprite = 0;
-    m_pPressedBGSprite = 0;
-    m_pOverlayBGSprite = 0;
-    m_pShadowSprite = 0;
+    //m_pBGSprite = 0;
+    //m_pDisabledBGSprite = 0;
+    //m_pPressedBGSprite = 0;
+    //m_pOverlayBGSprite = 0;
+    //m_pShadowSprite = 0;
+
+    m_pSprite = 0;
+
+    for( unsigned int i=0; i<Materials_NumTypes; i++ )
+        m_pMaterials[i] = 0;
 }
 
 MenuButton::~MenuButton()
 {
-    SAFE_RELEASE( m_pMaterial );
+    //SAFE_RELEASE( m_pMaterial );
     SAFE_RELEASE( m_pMeshText );
 
-    SAFE_RELEASE( m_pBGSprite );
-    SAFE_RELEASE( m_pDisabledBGSprite );
-    SAFE_RELEASE( m_pPressedBGSprite );
-    SAFE_RELEASE( m_pOverlayBGSprite );
-    SAFE_RELEASE( m_pShadowSprite );
+    //SAFE_RELEASE( m_pBGSprite );
+    //SAFE_RELEASE( m_pDisabledBGSprite );
+    //SAFE_RELEASE( m_pPressedBGSprite );
+    //SAFE_RELEASE( m_pOverlayBGSprite );
+    //SAFE_RELEASE( m_pShadowSprite );
+
+    SAFE_RELEASE( m_pSprite );
+
+    for( unsigned int i=0; i<Materials_NumTypes; i++ )
+        SAFE_RELEASE( m_pMaterials[i] );
 }
 
 void MenuButton::StartClosing()
@@ -144,6 +159,13 @@ void MenuButton::Draw(MyMatrix* matviewproj)
 {
     if( m_Visible == false )
         return;
+
+    // create a sprite if one doesn't exist.
+    if( m_pSprite == 0 )
+    {
+        m_pSprite = MyNew MySprite();
+        m_pSprite->Create( "MenuButton Sprite", 1, 1, 0, 1, 0, 1, Justify_Center, false );
+    }
 
     if( m_pMeshText )
     {
@@ -169,7 +191,8 @@ void MenuButton::Draw(MyMatrix* matviewproj)
 
     ColorByte textcolor = m_TextColor;
     ColorByte textshadowcolor = m_TextShadowColor;
-    MySprite* pSprite = m_pBGSprite;
+    //MySprite* pSprite = m_pBGSprite;
+    MaterialDefinition* pMaterial = m_pMaterials[Material_BG];
     MyMesh* pMesh = m_pBGMesh;
     Vector4 uvs = m_BGSpriteUVs;
     ColorByte bgcolor = m_BGColor;
@@ -177,15 +200,18 @@ void MenuButton::Draw(MyMatrix* matviewproj)
     {
         textcolor = m_DisabledTextColor;
         bgcolor = m_DisabledBGColor;
-        pSprite = m_pDisabledBGSprite;
+        pMaterial = m_pMaterials[Material_BGDisabled];
+        //pSprite = m_pDisabledBGSprite;
         uvs = m_DisabledBGSpriteUVs;
     }
     if( m_UsePressedState && m_State == MBS_HeldDown )
     {
         textcolor = m_PressedTextColor;
         bgcolor = m_PressedBGColor;
-        if( m_pPressedBGSprite )
-            pSprite = m_pPressedBGSprite;
+        if( m_pMaterials[Material_BGPressed] )
+            pMaterial = m_pMaterials[Material_BGPressed];
+        //if( m_pPressedBGSprite )
+            //pSprite = m_pPressedBGSprite;
         uvs = m_PressedBGSpriteUVs;
     }
 
@@ -200,7 +226,8 @@ void MenuButton::Draw(MyMatrix* matviewproj)
         //    //pSprite->SetTint( bgcolor );
         //}
 
-        MySprite* pShadowSprite = m_pShadowSprite;
+        //MySprite* pShadowSprite = m_pShadowSprite;
+        MaterialDefinition* pMaterialShadow = m_pMaterials[Material_Shadow];
         //Vector4 shuvs = m_ShadowSpriteUVs;
         //if( pShadowSprite == 0 )
         //{
@@ -208,51 +235,55 @@ void MenuButton::Draw(MyMatrix* matviewproj)
         //    shuvs = Vector4( 0, 1, 0, 1 );
         //}
 
-        if( pSprite )
+        if( m_pSprite )
         {
             MyMatrix transform = m_Transform;
 
             transform.m41 += m_PositionOffset.x;
             transform.m42 += m_PositionOffset.y;
 
-            if( pShadowSprite && (buttonshadowoffx != 0 || buttonshadowoffy != 0) )
+            if( pMaterialShadow && (buttonshadowoffx != 0 || buttonshadowoffy != 0) )
             {
-                pShadowSprite->SetTint( m_BGShadowColor );
+                m_pSprite->SetMaterial( pMaterialShadow );
+                m_pSprite->SetTint( m_BGShadowColor );
 
                 MyMatrix shadowmat = transform;
                 shadowmat.Translate( buttonshadowoffx, buttonshadowoffy, 0 );
 
-                pShadowSprite->SetTransform( shadowmat );
-                pShadowSprite->Draw( matviewproj ); //&g_pGame->m_OrthoMatrixGameSize );
+                m_pSprite->SetTransform( shadowmat );
+                m_pSprite->Draw( matviewproj ); //&g_pGame->m_OrthoMatrixGameSize );
             }
 
-            pSprite->SetTint( bgcolor );
+            if( pMaterial )
+                m_pSprite->SetMaterial( pMaterial );
+            m_pSprite->SetTint( bgcolor );
 
-            pSprite->SetTransform( transform );
-            pSprite->Draw( matviewproj ); //&g_pGame->m_OrthoMatrixGameSize );
+            m_pSprite->SetTransform( transform );
+            m_pSprite->Draw( matviewproj ); //&g_pGame->m_OrthoMatrixGameSize );
         }
     }
 
-    if( m_HasOverlay )
-    {
-        bgcolor = m_OverlayBGColor;
-        pSprite = m_pOverlayBGSprite;
-        uvs = m_OverlayBGSpriteUVs;
+    // TODO: MYENGINE
+    //if( m_HasOverlay )
+    //{
+    //    bgcolor = m_OverlayBGColor;
+    //    pSprite = m_pOverlayBGSprite;
+    //    uvs = m_OverlayBGSpriteUVs;
 
-        if( pSprite )
-        {
-            pSprite->SetTint( bgcolor );
+    //    if( pSprite )
+    //    {
+    //        pSprite->SetTint( bgcolor );
 
-            MyMatrix transform;
-            transform.SetIdentity();
-            transform.Scale( m_OverlaySize.x, m_OverlaySize.y, 1 );
-            transform.m41 = m_Transform.m41 + m_PositionOffset.x + m_OverlayOffset.x;
-            transform.m42 = m_Transform.m42 + m_PositionOffset.y + m_OverlayOffset.y;
+    //        MyMatrix transform;
+    //        transform.SetIdentity();
+    //        transform.Scale( m_OverlaySize.x, m_OverlaySize.y, 1 );
+    //        transform.m41 = m_Transform.m41 + m_PositionOffset.x + m_OverlayOffset.x;
+    //        transform.m42 = m_Transform.m42 + m_PositionOffset.y + m_OverlayOffset.y;
 
-            pSprite->SetTransform( transform );
-            pSprite->Draw( matviewproj ); //&g_pGame->m_OrthoMatrixGameSize );
-        }
-    }
+    //        pSprite->SetTransform( transform );
+    //        pSprite->Draw( matviewproj ); //&g_pGame->m_OrthoMatrixGameSize );
+    //    }
+    //}
 
     // TODO: MYENGINE
     //if( pMesh && m_pBGMeshCamera )
@@ -668,121 +699,121 @@ void MenuButton::SetToolTipString(const char* str)
     sprintf_s( m_ToolTipString, MAX_MENUBUTTON_STRING, "%s", str );
 }
 
-void MenuButton::SetPressedState(const ColorByte& textcolor, const ColorByte& bgcolor, MySprite* sprite, const Vector4& uvs)
-{
-    MyAssert( m_pPressedBGSprite == 0 );
+//void MenuButton::SetPressedState(const ColorByte& textcolor, const ColorByte& bgcolor, MySprite* sprite, const Vector4& uvs)
+//{
+//    MyAssert( m_pPressedBGSprite == 0 );
+//
+//    m_UsePressedState = true;
+//    m_PressedTextColor = textcolor;
+//    m_PressedBGColor = bgcolor;
+//    if( sprite )
+//        m_pPressedBGSprite = MyNew MySprite( sprite, "SetPressedState" );
+//    m_PressedBGSpriteUVs = uvs;
+//}
+//
+//void MenuButton::SetOverlay(const Vector2& size, const Vector2& offset, const ColorByte& bgcolor, MySprite* sprite, const Vector4& uvs)
+//{
+//    //MyAssert( m_pOverlayBGSprite == 0 );
+//
+//    m_HasOverlay = true;
+//    m_OverlaySize = size;
+//    m_OverlayOffset = offset;
+//    m_OverlayBGColor = bgcolor;
+//    if( m_pOverlayBGSprite )
+//    {
+//        m_pOverlayBGSprite->GetMaterial()->SetTextureColor( sprite->GetMaterial()->GetTextureColor() );
+//    }
+//    else
+//    {
+//        m_pOverlayBGSprite = MyNew MySprite( sprite, "MenuButton::SetOverlay" );
+//    }
+//    m_OverlayBGSpriteUVs = uvs;
+//}
+//
+//void MenuButton::SetSprites(MySprite* bg, MySprite* disabled, MySprite* pressed, MySprite* overlay, MySprite* shadow)
+//{
+//    MyAssert( m_pBGSprite == 0 );
+//    MyAssert( m_pDisabledBGSprite == 0 );
+//    MyAssert( m_pPressedBGSprite == 0 );
+//    MyAssert( m_pOverlayBGSprite == 0 );
+//    MyAssert( m_pShadowSprite == 0 );
+//
+//    if( bg )
+//    {
+//        m_pBGSprite = bg;
+//        m_pBGSprite->AddRef();
+//    }
+//
+//    if( disabled )
+//    {
+//        m_pDisabledBGSprite = disabled;
+//        m_pDisabledBGSprite->AddRef();
+//    }
+//
+//    if( pressed )
+//    {
+//        m_pPressedBGSprite = pressed;
+//        m_pPressedBGSprite->AddRef();
+//    }
+//
+//    if( overlay )
+//    {
+//        m_pOverlayBGSprite = overlay;
+//        m_pOverlayBGSprite->AddRef();
+//    }
+//
+//    if( shadow )
+//    {
+//        m_pShadowSprite = shadow;
+//        m_pShadowSprite->AddRef();
+//    }
+//}
+//
+//void MenuButton::SetSpritesCopy(MySprite* bg, MySprite* disabled, MySprite* pressed, MySprite* overlay, MySprite* shadow)
+//{
+//    MyAssert( m_pBGSprite == 0 );
+//    MyAssert( m_pDisabledBGSprite == 0 );
+//    MyAssert( m_pPressedBGSprite == 0 );
+//    MyAssert( m_pOverlayBGSprite == 0 );
+//    MyAssert( m_pShadowSprite == 0 );
+//
+//    if( bg )
+//    {
+//        m_pBGSprite = MyNew MySprite( bg, "MenuButton::SetSpritesCopy" );
+//    }
+//
+//    if( disabled )
+//    {
+//        m_pDisabledBGSprite = MyNew MySprite( disabled, "MenuButton::SetSpritesCopy" );
+//    }
+//
+//    if( pressed )
+//    {
+//        m_pPressedBGSprite = MyNew MySprite( pressed, "MenuButton::SetSpritesCopy" );
+//    }
+//
+//    if( overlay )
+//    {
+//        m_pOverlayBGSprite = MyNew MySprite( overlay, "MenuButton::SetSpritesCopy" );
+//    }
+//
+//    if( shadow )
+//    {
+//        m_pShadowSprite = MyNew MySprite( shadow, "MenuButton::SetSpritesCopy" );
+//    }
+//}
+//
+//void MenuButton::SetSpritesBGShadow(MySprite* sprite)
+//{
+//    SetSprites( sprite, 0, 0, 0, sprite );
+//}
 
-    m_UsePressedState = true;
-    m_PressedTextColor = textcolor;
-    m_PressedBGColor = bgcolor;
-    if( sprite )
-        m_pPressedBGSprite = MyNew MySprite( sprite, "SetPressedState" );
-    m_PressedBGSpriteUVs = uvs;
-}
-
-void MenuButton::SetOverlay(const Vector2& size, const Vector2& offset, const ColorByte& bgcolor, MySprite* sprite, const Vector4& uvs)
-{
-    //MyAssert( m_pOverlayBGSprite == 0 );
-
-    m_HasOverlay = true;
-    m_OverlaySize = size;
-    m_OverlayOffset = offset;
-    m_OverlayBGColor = bgcolor;
-    if( m_pOverlayBGSprite )
-    {
-        m_pOverlayBGSprite->GetMaterial()->SetTextureColor( sprite->GetMaterial()->GetTextureColor() );
-    }
-    else
-    {
-        m_pOverlayBGSprite = MyNew MySprite( sprite, "MenuButton::SetOverlay" );
-    }
-    m_OverlayBGSpriteUVs = uvs;
-}
-
-void MenuButton::SetSprites(MySprite* bg, MySprite* disabled, MySprite* pressed, MySprite* overlay, MySprite* shadow)
-{
-    MyAssert( m_pBGSprite == 0 );
-    MyAssert( m_pDisabledBGSprite == 0 );
-    MyAssert( m_pPressedBGSprite == 0 );
-    MyAssert( m_pOverlayBGSprite == 0 );
-    MyAssert( m_pShadowSprite == 0 );
-
-    if( bg )
-    {
-        m_pBGSprite = bg;
-        m_pBGSprite->AddRef();
-    }
-
-    if( disabled )
-    {
-        m_pDisabledBGSprite = disabled;
-        m_pDisabledBGSprite->AddRef();
-    }
-
-    if( pressed )
-    {
-        m_pPressedBGSprite = pressed;
-        m_pPressedBGSprite->AddRef();
-    }
-
-    if( overlay )
-    {
-        m_pOverlayBGSprite = overlay;
-        m_pOverlayBGSprite->AddRef();
-    }
-
-    if( shadow )
-    {
-        m_pShadowSprite = shadow;
-        m_pShadowSprite->AddRef();
-    }
-}
-
-void MenuButton::SetSpritesCopy(MySprite* bg, MySprite* disabled, MySprite* pressed, MySprite* overlay, MySprite* shadow)
-{
-    MyAssert( m_pBGSprite == 0 );
-    MyAssert( m_pDisabledBGSprite == 0 );
-    MyAssert( m_pPressedBGSprite == 0 );
-    MyAssert( m_pOverlayBGSprite == 0 );
-    MyAssert( m_pShadowSprite == 0 );
-
-    if( bg )
-    {
-        m_pBGSprite = MyNew MySprite( bg, "MenuButton::SetSpritesCopy" );
-    }
-
-    if( disabled )
-    {
-        m_pDisabledBGSprite = MyNew MySprite( disabled, "MenuButton::SetSpritesCopy" );
-    }
-
-    if( pressed )
-    {
-        m_pPressedBGSprite = MyNew MySprite( pressed, "MenuButton::SetSpritesCopy" );
-    }
-
-    if( overlay )
-    {
-        m_pOverlayBGSprite = MyNew MySprite( overlay, "MenuButton::SetSpritesCopy" );
-    }
-
-    if( shadow )
-    {
-        m_pShadowSprite = MyNew MySprite( shadow, "MenuButton::SetSpritesCopy" );
-    }
-}
-
-void MenuButton::SetSpritesBGShadow(MySprite* sprite)
-{
-    SetSprites( sprite, 0, 0, 0, sprite );
-}
-
-void MenuButton::SetMaterial(MaterialDefinition* pMaterial)
+void MenuButton::SetMaterial(unsigned int materialindex, MaterialDefinition* pMaterial)
 {
     if( pMaterial )
         pMaterial->AddRef();
-    SAFE_RELEASE( m_pMaterial );
-    m_pMaterial = pMaterial;
+    SAFE_RELEASE( m_pMaterials[materialindex] );
+    m_pMaterials[materialindex] = pMaterial;
 }
 
 #if MYFW_USING_WX
@@ -804,10 +835,13 @@ void MenuButton::FillPropertiesWindow()
     else
         g_pPanelWatch->AddPointerWithDescription( "Font", &m_pFont, "no font", this, MenuButton::StaticOnDropFont );
 
-    if( m_pMaterial )
-        g_pPanelWatch->AddPointerWithDescription( "Material", &m_pMaterial, m_pMaterial->GetName(), this, MenuButton::StaticOnDropMaterial );
-    else
-        g_pPanelWatch->AddPointerWithDescription( "Material", &m_pMaterial, "no material", this, MenuButton::StaticOnDropMaterial );
+    for( unsigned int i=0; i<Materials_NumTypes; i++ )
+    {
+        if( m_pMaterials[i] )
+            m_CONTROLID_Materials[i] = g_pPanelWatch->AddPointerWithDescription( m_MaterialNames[i], &m_pMaterials[i], m_pMaterials[i]->GetName(), this, MenuButton::StaticOnDropMaterial );
+        else
+            m_CONTROLID_Materials[i] = g_pPanelWatch->AddPointerWithDescription( m_MaterialNames[i], &m_pMaterials[i], "no material", this, MenuButton::StaticOnDropMaterial );
+    }
 }
 
 void MenuButton::OnDropFont(int controlid, wxCoord x, wxCoord y)
@@ -839,8 +873,14 @@ void MenuButton::OnDropMaterial(int controlid, wxCoord x, wxCoord y)
     {
         MaterialDefinition* pMaterial = (MaterialDefinition*)g_DragAndDropStruct.m_Value;
         MyAssert( pMaterial );
-
-        SetMaterial( pMaterial );
+        
+        unsigned int i;
+        for( i=0; i<Materials_NumTypes; i++ )
+        {
+            if( m_CONTROLID_Materials[i] == controlid )
+                break;
+        }
+        SetMaterial( i, pMaterial );
 
         // update the panel so new Material name shows up.
         g_pPanelWatch->m_pVariables[g_DragAndDropStruct.m_ID].m_Description = pMaterial->GetName();

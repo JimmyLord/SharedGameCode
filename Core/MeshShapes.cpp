@@ -305,7 +305,11 @@ int MyMeshText::CreateString(bool concat, float fontheight, float x, float y, fl
     //if( g_pRTQGlobals == 0 )
     //    return 0;
 
-    MyAssert( m_pFont && m_pFont->m_pFont );
+    MyAssert( m_pFont );
+    if( m_pFont->m_FullyLoaded == false )
+        return 0;
+    
+    MyAssert( m_pFont->m_pFont );
 
     if( strlen( text ) == 0 )
         return 0;

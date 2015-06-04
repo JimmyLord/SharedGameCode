@@ -109,17 +109,24 @@ cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int nu
 
                     cJSON_AddNumberToObject( menuitem, "FontHeight", pMenuButton->m_FontHeight );
 
-                    cJSON_AddNumberToObject( menuitem, "BGShadowX", pMenuButton->m_DropShadowOffsetBG_X );
-                    cJSON_AddNumberToObject( menuitem, "BGShadowY", pMenuButton->m_DropShadowOffsetBG_Y );
-
-                    cJSON_AddNumberToObject( menuitem, "TextShadowX", pMenuButton->m_DropShadowOffsetText_X );
-                    cJSON_AddNumberToObject( menuitem, "TextShadowY", pMenuButton->m_DropShadowOffsetText_Y );
+                    cJSONExt_AddFloatArrayToObject( menuitem, "BGShadow", &pMenuButton->m_DropShadowOffsetBG.x, 2 );
+                    cJSONExt_AddFloatArrayToObject( menuitem, "TextShadow", &pMenuButton->m_DropShadowOffsetText.x, 2 );
 
                     for( unsigned int i=0; i<MenuButton::Materials_NumTypes; i++ )
                     {
                         if( pMenuButton->m_pMaterials[i] )
                             cJSON_AddStringToObject( menuitem, MenuButton::m_MaterialNames[i], pMenuButton->m_pMaterials[i]->m_pFile->m_FullPath );
                     }
+
+                    if( pMenuButton->m_pFont )
+                        cJSON_AddStringToObject( menuitem, "Font", pMenuButton->m_pFont->m_pFile->m_FullPath );
+
+                    if( pMenuButton->m_Strings[0][0] != 0 )
+                        cJSON_AddStringToObject( menuitem, "String1", pMenuButton->m_Strings[0] );
+                    if( pMenuButton->m_Strings[1][0] != 0 )
+                        cJSON_AddStringToObject( menuitem, "String2", pMenuButton->m_Strings[1] );
+                    if( pMenuButton->m_Strings[2][0] != 0 )
+                        cJSON_AddStringToObject( menuitem, "String3", pMenuButton->m_Strings[2] );
                 }
                 break;
 
@@ -228,10 +235,14 @@ unsigned int Menu_ImportExport::ImportMenuLayout(const char* layout, MenuItem** 
                         MenuButton* pMenuButton = (MenuButton*)pMenuItem;
 
                         cJSONExt_GetFloat( jMenuItem, "FontHeight", &pMenuButton->m_FontHeight );
-                        cJSONExt_GetFloat( jMenuItem, "BGShadowX", &pMenuButton->m_DropShadowOffsetBG_X );
-                        cJSONExt_GetFloat( jMenuItem, "BGShadowY", &pMenuButton->m_DropShadowOffsetBG_Y );
-                        cJSONExt_GetFloat( jMenuItem, "TextShadowX", &pMenuButton->m_DropShadowOffsetText_X );
-                        cJSONExt_GetFloat( jMenuItem, "TextShadowY", &pMenuButton->m_DropShadowOffsetText_Y );
+                        cJSONExt_GetFloatArray( jMenuItem, "BGShadow", &pMenuButton->m_DropShadowOffsetBG.x, 2 );
+                        cJSONExt_GetFloatArray( jMenuItem, "TextShadow", &pMenuButton->m_DropShadowOffsetText.x, 2 );
+
+                        // Legacy
+                        cJSONExt_GetFloat( jMenuItem, "BGShadowX", &pMenuButton->m_DropShadowOffsetBG.x );
+                        cJSONExt_GetFloat( jMenuItem, "BGShadowY", &pMenuButton->m_DropShadowOffsetBG.y );
+                        cJSONExt_GetFloat( jMenuItem, "TextShadowX", &pMenuButton->m_DropShadowOffsetText.x );
+                        cJSONExt_GetFloat( jMenuItem, "TextShadowY", &pMenuButton->m_DropShadowOffsetText.y );
 
                         for( unsigned int i=0; i<MenuButton::Materials_NumTypes; i++ )
                         {
@@ -246,6 +257,14 @@ unsigned int Menu_ImportExport::ImportMenuLayout(const char* layout, MenuItem** 
                                 }
                             }
                         }
+
+                        cJSON* jFont = cJSON_GetObjectItem( jMenuItem, "Font" );
+                        if( jFont )
+                            pMenuButton->m_pFont = g_pFontManager->CreateFont( jFont->valuestring );
+
+                        cJSONExt_GetString( jMenuItem, "String1", pMenuButton->m_Strings[0], MenuButton::MAX_STRING_LENGTH );
+                        cJSONExt_GetString( jMenuItem, "String2", pMenuButton->m_Strings[1], MenuButton::MAX_STRING_LENGTH );
+                        cJSONExt_GetString( jMenuItem, "String3", pMenuButton->m_Strings[2], MenuButton::MAX_STRING_LENGTH );
                     }
                     break;
 

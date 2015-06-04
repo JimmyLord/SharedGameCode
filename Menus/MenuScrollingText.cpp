@@ -95,12 +95,12 @@ void MenuScrollingText::Draw(MyMatrix* matviewproj)
 
                 if( m_peTextMesh )
                 {
-                    m_peTextMesh->CreateString( true, m_FontHeight, x+m_DropShadowOffsetText_X, ny+m_DropShadowOffsetText_Y, 0, 0, Justify_Left|Justify_CenterY, shadowcolor, m_Size, line );
+                    m_peTextMesh->CreateString( true, m_FontHeight, x+m_DropShadowOffsetText.x, ny+m_DropShadowOffsetText.y, 0, 0, Justify_Left|Justify_CenterY, shadowcolor, m_Size, line );
                     m_peTextMesh->CreateString( true, m_FontHeight, x, ny, 0, 0, Justify_Left|Justify_CenterY, color, m_Size, line );
                 }
                 else
                 {
-                    RenderTextQuickWithColorAndShadow( m_pFont, m_FontHeight, x, ny, Justify_Left|Justify_CenterY, color, shadowcolor, m_DropShadowOffsetText_X, m_DropShadowOffsetText_Y, line );
+                    RenderTextQuickWithColorAndShadow( m_pFont, m_FontHeight, x, ny, Justify_Left|Justify_CenterY, color, shadowcolor, m_DropShadowOffsetText.x, m_DropShadowOffsetText.y, line );
                 }
             }
             line[0] = 0;

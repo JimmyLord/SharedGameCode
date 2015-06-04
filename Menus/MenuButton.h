@@ -14,8 +14,6 @@
 
 class MyMeshText;
 
-#define MAX_MENUBUTTON_STRING 64
-
 //MenuButtonColorSelectable = ColorByte(255,81,205,255);
 
 enum MenuButtonColorTypes
@@ -53,6 +51,8 @@ enum MenuButtonTextStyle
 
 class MenuButton : public MenuItem
 {
+    static const int MAX_STRING_LENGTH = 64;
+
     enum MaterialTypes
     {
         Material_BG,
@@ -75,16 +75,13 @@ protected:
 
     unsigned char m_Justification; // not really supported.
 
-    float m_DropShadowOffsetText_X;
-    float m_DropShadowOffsetText_Y;
-
-    float m_DropShadowOffsetBG_X;
-    float m_DropShadowOffsetBG_Y;
+    Vector2 m_DropShadowOffsetText;
+    Vector2 m_DropShadowOffsetBG;
 
 public:
     MenuButtonTextStyle m_Style;
-    char m_Strings[3][MAX_MENUBUTTON_STRING];
-    char m_ToolTipString[MAX_MENUBUTTON_STRING];
+    char m_Strings[3][MAX_STRING_LENGTH];
+    char m_ToolTipString[MAX_STRING_LENGTH];
 
     //MaterialDefinition* m_pMaterial;
     MyMeshText* m_pMeshText;
@@ -184,8 +181,8 @@ public:
     //void SetSpritesCopy(MySprite* bg, MySprite* disabled, MySprite* pressed, MySprite* overlay, MySprite* shadow);
     //void SetSpritesBGShadow(MySprite* sprite);
 
-    void SetTextShadow(float offsetx, float offsety) { m_DropShadowOffsetText_X = offsetx; m_DropShadowOffsetText_Y = offsety; }
-    void SetBGShadow(float offsetx, float offsety) { m_DropShadowOffsetBG_X = offsetx; m_DropShadowOffsetBG_Y = offsety; }
+    void SetTextShadow(float offsetx, float offsety) { m_DropShadowOffsetText.x = offsetx; m_DropShadowOffsetText.y = offsety; }
+    void SetBGShadow(float offsetx, float offsety) { m_DropShadowOffsetBG.x = offsetx; m_DropShadowOffsetBG.y = offsety; }
     //MySprite* GetBGSprite() { return m_pBGSprite; }
 
     //virtual MaterialDefinition* GetMaterial() { return m_pMaterial; }

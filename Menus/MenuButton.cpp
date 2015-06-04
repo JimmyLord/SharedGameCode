@@ -71,7 +71,7 @@ MenuButton::MenuButton(int maxletters)
     //m_pMaterial = 0; //g_pMaterialManager->CreateMaterial();
 
     if( maxletters == -1 )
-        m_pMeshText = MyNew MyMeshText( 3*MAX_MENUBUTTON_STRING, 0 );
+        m_pMeshText = MyNew MyMeshText( 3*MAX_STRING_LENGTH, 0 );
     else if( maxletters > 0 )
         m_pMeshText = MyNew MyMeshText( maxletters, 0 );
     else
@@ -88,10 +88,10 @@ MenuButton::MenuButton(int maxletters)
     m_InputWidth = 50;
     m_InputHeight = 50;
 
-    m_DropShadowOffsetText_X = 0;
-    m_DropShadowOffsetText_Y = 0;
-    m_DropShadowOffsetBG_X = 0;
-    m_DropShadowOffsetBG_Y = 0;
+    m_DropShadowOffsetText.x = 0;
+    m_DropShadowOffsetText.y = 0;
+    m_DropShadowOffsetBG.x = 0;
+    m_DropShadowOffsetBG.y = 0;
 
     m_pBGMesh = 0;
     m_pBGMeshCamera = 0;
@@ -177,14 +177,14 @@ void MenuButton::Draw(MyMatrix* matviewproj)
     //float scrh = g_pGame->m_GameHeight;
 
     TextShadowStyles textshadowstyle = m_TextShadowStyle;
-    if( m_DropShadowOffsetText_X == 0 && m_DropShadowOffsetText_Y == 0 )
+    if( m_DropShadowOffsetText.x == 0 && m_DropShadowOffsetText.y == 0 )
         textshadowstyle = TextShadowStyle_None;
 
     float lineheight = m_LineHeight;
-    float shadowoffx = m_DropShadowOffsetText_X;
-    float shadowoffy = m_DropShadowOffsetText_Y;
-    float buttonshadowoffx = m_DropShadowOffsetBG_X;
-    float buttonshadowoffy = m_DropShadowOffsetBG_Y;
+    float shadowoffx = m_DropShadowOffsetText.x;
+    float shadowoffy = m_DropShadowOffsetText.y;
+    float buttonshadowoffx = m_DropShadowOffsetBG.x;
+    float buttonshadowoffy = m_DropShadowOffsetBG.y;
 
     //float posx = m_Transform.m41;
     //float posy = m_Transform.m42;
@@ -256,7 +256,7 @@ void MenuButton::Draw(MyMatrix* matviewproj)
 
             if( pMaterial )
                 m_pSprite->SetMaterial( pMaterial );
-            m_pSprite->SetTint( bgcolor );
+            //m_pSprite->SetTint( bgcolor );
 
             m_pSprite->SetTransform( transform );
             m_pSprite->Draw( matviewproj ); //&g_pGame->m_OrthoMatrixGameSize );
@@ -416,13 +416,16 @@ void MenuButton::Draw(MyMatrix* matviewproj)
         m_pMeshText->m_MeshReady = true;
 
         // create a material for the fond on the stack and set it. TODO: do better...
-        MaterialDefinition pMaterial;
+        MaterialDefinition pTempMaterial;
         //m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
-        pMaterial.SetShader( g_pShaderGroupManager->FindShaderGroupByName( "Shader_Texture" ) );
-        pMaterial.SetTextureColor( m_pFont->m_pTextureDef );
-        m_pMeshText->SetMaterial( &pMaterial, 0 );
+        pTempMaterial.SetShader( g_pShaderGroupManager->FindShaderGroupByName( "Shader_Texture" ) );
+        pTempMaterial.SetTextureColor( m_pFont->m_pTextureDef );
+        m_pMeshText->SetMaterial( &pTempMaterial, 0 );
         m_pMeshText->Draw( matviewproj, 0, 0, 0, 0, 0, 0, 0 );
         m_pMeshText->SetMaterial( 0, 0 );
+#if _DEBUG
+        pTempMaterial.RemoveFinalRefIfCreatedOnStackToAvoidAssertInDestructor();
+#endif
     }
 }
 
@@ -640,7 +643,7 @@ void MenuButton::SetString(const char* str1, const char* str2, const char* str3)
             totallen += strlen( g_pLanguageTable->LookUp( str1 ) );
         else
             totallen += strlen( str1 );
-        sprintf_s( m_Strings[0], MAX_MENUBUTTON_STRING, "%s", str1 );
+        sprintf_s( m_Strings[0], MAX_STRING_LENGTH, "%s", str1 );
         m_Style = MBTS_SingleLine;
     }
 
@@ -650,7 +653,7 @@ void MenuButton::SetString(const char* str1, const char* str2, const char* str3)
             totallen += strlen( g_pLanguageTable->LookUp( str2 ) );
         else
             totallen += strlen( str2 );
-        sprintf_s( m_Strings[1], MAX_MENUBUTTON_STRING, "%s", str2 );
+        sprintf_s( m_Strings[1], MAX_STRING_LENGTH, "%s", str2 );
         m_Style = MBTS_DoubleLine;
     }
 
@@ -660,7 +663,7 @@ void MenuButton::SetString(const char* str1, const char* str2, const char* str3)
             totallen += strlen( g_pLanguageTable->LookUp( str3 ) );
         else
             totallen += strlen( str3 );
-        sprintf_s( m_Strings[2], MAX_MENUBUTTON_STRING, "%s", str3 );
+        sprintf_s( m_Strings[2], MAX_STRING_LENGTH, "%s", str3 );
         m_Style = MBTS_TripleLine;
     }
 
@@ -679,10 +682,10 @@ void MenuButton::SetStringNumber(int stringnumber, const char* str1, ...)
 
     va_list arg;
     va_start(arg, str1);
-    vsnprintf_s( m_Strings[stringnumber], MAX_MENUBUTTON_STRING, _TRUNCATE, str1, arg );
+    vsnprintf_s( m_Strings[stringnumber], MAX_STRING_LENGTH, _TRUNCATE, str1, arg );
     va_end(arg);
 
-    m_Strings[stringnumber][MAX_MENUBUTTON_STRING-1] = 0; // vsnprintf_s might do this, but docs are unclear
+    m_Strings[stringnumber][MAX_STRING_LENGTH-1] = 0; // vsnprintf_s might do this, but docs are unclear
 
     if( m_pMeshText == 0 )
     {
@@ -696,7 +699,7 @@ void MenuButton::SetStringNumber(int stringnumber, const char* str1, ...)
 
 void MenuButton::SetToolTipString(const char* str)
 {
-    sprintf_s( m_ToolTipString, MAX_MENUBUTTON_STRING, "%s", str );
+    sprintf_s( m_ToolTipString, MAX_STRING_LENGTH, "%s", str );
 }
 
 //void MenuButton::SetPressedState(const ColorByte& textcolor, const ColorByte& bgcolor, MySprite* sprite, const Vector4& uvs)
@@ -825,10 +828,8 @@ void MenuButton::FillPropertiesWindow()
     g_pPanelWatch->AddFloat( "Height", &m_Transform.m22, 0, 1000 );
     g_pPanelWatch->AddFloat( "InputWidth", &m_InputWidth, 0, 1000 );
     g_pPanelWatch->AddFloat( "InputHeight", &m_InputHeight, 0, 1000 );
-    g_pPanelWatch->AddFloat( "BGShadowOffsetX", &m_DropShadowOffsetBG_X, -10, 10 );
-    g_pPanelWatch->AddFloat( "BGShadowOffsetY", &m_DropShadowOffsetBG_Y, -10, 10 );
-    g_pPanelWatch->AddFloat( "TextShadowOffsetX", &m_DropShadowOffsetText_X, -10, 10 );
-    g_pPanelWatch->AddFloat( "TextShadowOffsetY", &m_DropShadowOffsetText_Y, -10, 10 );
+    g_pPanelWatch->AddVector2( "BGShadowOffset", &m_DropShadowOffsetBG, -10, 10 );
+    g_pPanelWatch->AddVector2( "TextShadowOffset", &m_DropShadowOffsetText, -10, 10 );
 
     if( m_pFont && m_pFont->m_pFile )
         g_pPanelWatch->AddPointerWithDescription( "Font", &m_pFont, m_pFont->m_pFile->m_FullPath, this, MenuButton::StaticOnDropFont );
@@ -842,6 +843,10 @@ void MenuButton::FillPropertiesWindow()
         else
             m_CONTROLID_Materials[i] = g_pPanelWatch->AddPointerWithDescription( m_MaterialNames[i], &m_pMaterials[i], "no material", this, MenuButton::StaticOnDropMaterial );
     }
+
+    g_pPanelWatch->AddString( "String1", &m_Strings[0][0], MAX_STRING_LENGTH );
+    g_pPanelWatch->AddString( "String2", &m_Strings[1][0], MAX_STRING_LENGTH );
+    g_pPanelWatch->AddString( "String3", &m_Strings[2][0], MAX_STRING_LENGTH );
 }
 
 void MenuButton::OnDropFont(int controlid, wxCoord x, wxCoord y)

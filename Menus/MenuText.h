@@ -54,7 +54,7 @@ public:
     //virtual float TestCollision(int fingerid, float x, float y, bool fingerwentdown = true);
     //virtual bool HoldOnCollision(int fingerid, float x, float y, bool releaseifnottouching, bool fingerwentdown = true);
     //virtual bool ReleaseOnNoCollision(int fingerid, float x, float y);
-    //virtual int TriggerOnCollision(int fingerid, float x, float y, bool careifheld, bool releaseifnocollision = true); // returns the action triggered, -1 is no action.
+    //virtual const char* TriggerOnCollision(int fingerid, float x, float y, bool careifheld, bool releaseifnocollision = true); // returns the action triggered, -1 is no action.
     virtual MyRect GetBoundingRect();
 
     virtual void SetPositionAndSize(float x, float y, float w, float h, float inputw = -1, float inputh = -1);

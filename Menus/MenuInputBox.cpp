@@ -47,11 +47,11 @@ void MenuInputBox::Draw(MyMatrix* matviewproj)
     MenuButton::Draw( matviewproj );
 }
 
-int MenuInputBox::TriggerOnCollision(int fingerid, float x, float y, bool careifheld, bool releaseifnocollision)
+const char* MenuInputBox::TriggerOnCollision(int fingerid, float x, float y, bool careifheld, bool releaseifnocollision)
 {
-    int action = MenuButton::TriggerOnCollision( fingerid, x, y, careifheld, releaseifnocollision );
+    const char* action = MenuButton::TriggerOnCollision( fingerid, x, y, careifheld, releaseifnocollision );
 
-    if( action != -1 )
+    if( action != 0 )
     {
         g_pGameCore->m_KeyboardOpenRequested = true;
         return m_ButtonAction;

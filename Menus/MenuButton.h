@@ -52,6 +52,7 @@ enum MenuButtonTextStyle
 class MenuButton : public MenuItem
 {
     static const int MAX_STRING_LENGTH = 64;
+    static const int MAX_BUTTON_ACTION_LENGTH = 32;
 
     enum MaterialTypes
     {
@@ -87,7 +88,8 @@ public:
     MyMeshText* m_pMeshText;
 
     // behaviour
-    int m_ButtonAction;
+    //int m_ButtonAction;
+    char m_ButtonAction[MAX_BUTTON_ACTION_LENGTH];
     bool m_AllowPressWhenDraggedOver;
 
     // visuals
@@ -160,7 +162,7 @@ public:
     virtual float TestCollision(int fingerid, float x, float y, bool fingerwentdown = true);
     virtual bool HoldOnCollision(int fingerid, float x, float y, bool releaseifnottouching, bool fingerwentdown = true);
     virtual bool ReleaseOnNoCollision(int fingerid, float x, float y);
-    virtual int TriggerOnCollision(int fingerid, float x, float y, bool careifheld, bool releaseifnocollision = true); // returns the action triggered, -1 is no action.
+    virtual const char* TriggerOnCollision(int fingerid, float x, float y, bool careifheld, bool releaseifnocollision = true); // returns the action triggered, -1 is no action.
     virtual bool ClearHeldState();
 
     virtual MyRect GetBoundingRect();

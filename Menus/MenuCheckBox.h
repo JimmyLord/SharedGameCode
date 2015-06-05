@@ -36,6 +36,8 @@ enum MenuCheckBoxState
 
 class MenuCheckBox : public MenuItem
 {
+    static const int MAX_BUTTON_ACTION_LENGTH = 32;
+
 protected:
     MenuCheckBoxState m_State;
 
@@ -43,7 +45,7 @@ protected:
 
 public:
     bool m_Checked;
-    int m_Action;
+    char m_Action[MAX_BUTTON_ACTION_LENGTH];
 
     float m_PosX;
     float m_PosY;
@@ -89,7 +91,7 @@ public:
     virtual float TestCollision(int fingerid, float x, float y, bool fingerwentdown = true);
     virtual bool HoldOnCollision(int fingerid, float x, float y, bool releaseifnottouching, bool fingerwentdown = true);
     virtual bool ReleaseOnNoCollision(int fingerid, float x, float y);
-    virtual int TriggerOnCollision(int fingerid, float x, float y, bool careifheld, bool releaseifnocollision = true); // returns the action triggered, -1 is no action.
+    virtual const char* TriggerOnCollision(int fingerid, float x, float y, bool careifheld, bool releaseifnocollision = true); // returns the action triggered, -1 is no action.
 
     //void SetDisabled(bool settodisabled);
     //bool IsDisabled();

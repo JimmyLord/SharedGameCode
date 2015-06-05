@@ -29,7 +29,7 @@ MenuCheckBox::MenuCheckBox()
     m_FingerHolding = -1;
 
     m_Checked = false;
-    m_Action = 0;
+    m_Action[0] = 0;
 
     m_PosX = 0;
     m_PosY = 0;
@@ -239,10 +239,10 @@ bool MenuCheckBox::ReleaseOnNoCollision(int fingerid, float x, float y)
     return false;
 }
 
-int MenuCheckBox::TriggerOnCollision(int fingerid, float x, float y, bool careifheld, bool releaseifnocollision)
+const char* MenuCheckBox::TriggerOnCollision(int fingerid, float x, float y, bool careifheld, bool releaseifnocollision)
 {
     if( careifheld && m_FingerHolding != fingerid )
-        return -1;
+        return 0;
 
     if( CheckForCollision( x, y ) )
     {
@@ -253,7 +253,7 @@ int MenuCheckBox::TriggerOnCollision(int fingerid, float x, float y, bool careif
         return m_Action;
     }
 
-    return -1;
+    return 0;
 }
 
 //void MenuCheckBox::SetDisabled(bool settodisabled)

@@ -106,9 +106,9 @@ bool MenuItem::ReleaseOnNoCollision(int fingerid, float x, float y)
     return false;
 }
 
-int MenuItem::TriggerOnCollision(int fingerid, float x, float y, bool careifheld, bool releaseifnocollision) // returns the action triggered, -1 is no action.
+const char* MenuItem::TriggerOnCollision(int fingerid, float x, float y, bool careifheld, bool releaseifnocollision) // returns the action triggered, -1 is no action.
 {
-    return -1;
+    return 0;
 }
 
 #if MYFW_USING_WX

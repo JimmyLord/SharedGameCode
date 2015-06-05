@@ -112,9 +112,9 @@ bool MenuScrollBox::ReleaseOnNoCollision(int fingerid, float x, float y)
     //return MenuButton::ReleaseOnNoCollision( fingerid, x, y );
 }
 
-int MenuScrollBox::TriggerOnCollision(int fingerid, float x, float y, bool careifheld, bool releaseifnocollision) // returns the action triggered, -1 is no action.
+const char* MenuScrollBox::TriggerOnCollision(int fingerid, float x, float y, bool careifheld, bool releaseifnocollision) // returns the action triggered, -1 is no action.
 {
-    return -1;
+    return 0;
     //return MenuButton::TriggerOnCollision( fingerid, x, y, careifheld, releaseifnocollision );
 }
 

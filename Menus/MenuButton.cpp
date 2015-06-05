@@ -77,7 +77,7 @@ MenuButton::MenuButton(int maxletters)
     else
         m_pMeshText = 0;
 
-    m_ButtonAction = 0;
+    m_ButtonAction[0] = 0;
     m_AllowPressWhenDraggedOver = false;
 
     m_pFont = 0;
@@ -531,10 +531,10 @@ bool MenuButton::ReleaseOnNoCollision(int fingerid, float x, float y)
     return false;
 }
 
-int MenuButton::TriggerOnCollision(int fingerid, float x, float y, bool careifheld, bool releaseifnocollision)
+const char* MenuButton::TriggerOnCollision(int fingerid, float x, float y, bool careifheld, bool releaseifnocollision)
 {
     if( careifheld && m_FingerHolding != fingerid )
-        return -1;
+        return 0;
 
     if( CheckForCollision( x, y ) )
     {
@@ -549,7 +549,7 @@ int MenuButton::TriggerOnCollision(int fingerid, float x, float y, bool careifhe
         ClearHeldState();
     }
 
-    return -1;
+    return 0;
 }
 
 bool MenuButton::ClearHeldState()
@@ -847,6 +847,8 @@ void MenuButton::FillPropertiesWindow()
     g_pPanelWatch->AddString( "String1", &m_Strings[0][0], MAX_STRING_LENGTH );
     g_pPanelWatch->AddString( "String2", &m_Strings[1][0], MAX_STRING_LENGTH );
     g_pPanelWatch->AddString( "String3", &m_Strings[2][0], MAX_STRING_LENGTH );
+
+    g_pPanelWatch->AddString( "Action", &m_ButtonAction[0], MAX_BUTTON_ACTION_LENGTH );
 }
 
 void MenuButton::OnDropFont(int controlid, wxCoord x, wxCoord y)

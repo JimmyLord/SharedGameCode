@@ -127,6 +127,9 @@ cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int nu
                         cJSON_AddStringToObject( menuitem, "String2", pMenuButton->m_Strings[1] );
                     if( pMenuButton->m_Strings[2][0] != 0 )
                         cJSON_AddStringToObject( menuitem, "String3", pMenuButton->m_Strings[2] );
+
+                    if( pMenuButton->m_ButtonAction[0] != 0 )
+                        cJSON_AddStringToObject( menuitem, "Action", pMenuButton->m_ButtonAction );
                 }
                 break;
 
@@ -265,6 +268,8 @@ unsigned int Menu_ImportExport::ImportMenuLayout(const char* layout, MenuItem** 
                         cJSONExt_GetString( jMenuItem, "String1", pMenuButton->m_Strings[0], MenuButton::MAX_STRING_LENGTH );
                         cJSONExt_GetString( jMenuItem, "String2", pMenuButton->m_Strings[1], MenuButton::MAX_STRING_LENGTH );
                         cJSONExt_GetString( jMenuItem, "String3", pMenuButton->m_Strings[2], MenuButton::MAX_STRING_LENGTH );
+
+                        cJSONExt_GetString( jMenuItem, "Action", pMenuButton->m_ButtonAction, MenuButton::MAX_BUTTON_ACTION_LENGTH );
                     }
                     break;
 

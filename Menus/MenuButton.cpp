@@ -419,6 +419,7 @@ void MenuButton::Draw(MyMatrix* matviewproj)
         MaterialDefinition pTempMaterial;
         //m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
         pTempMaterial.SetShader( g_pShaderGroupManager->FindShaderGroupByName( "Shader_TextureVertexColor" ) );
+        pTempMaterial.SetBlendType( MaterialBlendType_On );
         pTempMaterial.SetTextureColor( m_pFont->m_pTextureDef );
         m_pMeshText->SetMaterial( &pTempMaterial, 0 );
         m_pMeshText->Draw( matviewproj, 0, 0, 0, 0, 0, 0, 0 );

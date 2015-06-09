@@ -14,24 +14,34 @@
 
 class MenuSprite : public MenuItem
 {
+    enum MaterialTypes
+    {
+        Material_Sprite,
+        Material_Shadow,
+        Materials_NumTypes,
+    };
+    static const char* m_MaterialNames[Materials_NumTypes];
+
+    friend class Menu_ImportExport; // for import/export of menu page layout
+
 public:
     unsigned char m_Justification;
 
 public:
-    float m_BGWidth;
-    float m_BGHeight;
+    Vector2 m_BGSize;
 
     Vector4 m_BGSpriteUVs;
     ColorByte m_BGColor;
 
-    bool m_HasShadow;
-    float m_DropShadowOffsetBG_X;
-    float m_DropShadowOffsetBG_Y;
+    Vector2 m_DropShadowOffset;
     Vector4 m_ShadowSpriteUVs;
 
 protected:
-    MySprite* m_pBGSprite;
-    MySprite* m_pShadowSprite;
+    //MySprite* m_pBGSprite;
+    //MySprite* m_pShadowSprite;
+
+    MySprite* m_pSprite;
+    MaterialDefinition* m_pMaterials[Materials_NumTypes];
 
 public:
     MenuSprite();
@@ -51,13 +61,19 @@ public:
     void SetSprites(MySprite* bgsprite, MySprite* shadowsprite);
     void SetSpritesCopy(MySprite* bgsprite, MySprite* shadowsprite);
 
-    void SetBGShadow(float offsetx, float offsety) { m_DropShadowOffsetBG_X = offsetx; m_DropShadowOffsetBG_Y = offsety; }
+    void SetBGShadow(float offsetx, float offsety) { m_DropShadowOffset.x = offsetx; m_DropShadowOffset.y = offsety; }
 
-    MySprite* GetBGSprite() { return m_pBGSprite; }
+    MySprite* GetSprite() { return m_pSprite; }
+    virtual void SetMaterial(unsigned int materialindex, MaterialDefinition* pMaterial);
 
 #if MYFW_USING_WX
+    int m_CONTROLID_Materials[Materials_NumTypes];
+
     static void StaticFillPropertiesWindow(void* pObjectPtr, unsigned int count) { ((MenuSprite*)pObjectPtr)->FillPropertiesWindow(); }
     void FillPropertiesWindow();
+
+    static void StaticOnDropMaterial(void* pObjectPtr, int controlid, wxCoord x, wxCoord y) { ((MenuSprite*)pObjectPtr)->OnDropMaterial(controlid, x, y); }
+    void OnDropMaterial(int controlid, wxCoord x, wxCoord y);
 #endif //MYFW_USING_WX
 };
 

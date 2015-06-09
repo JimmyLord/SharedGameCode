@@ -10,31 +10,39 @@
 #include PCHFILE
 #include "MenuSprite.h"
 
+const char* MenuSprite::m_MaterialNames[Materials_NumTypes] =
+{
+    "MatSprite", "MatShadow",
+};
+
 MenuSprite::MenuSprite()
 : m_BGColor(50,50,50,255)
 {
     m_MenuItemType = MIT_Sprite;
 
     m_Justification = Justify_CenterX|Justify_CenterY;
-    m_BGWidth = 50;
-    m_BGHeight = 50;
-    m_DropShadowOffsetBG_X = 0;
-    m_DropShadowOffsetBG_Y = 0;
+    m_BGSize.Set( 50, 50 );
+    m_DropShadowOffset.Set( 0, 0 );
 
-    m_pBGSprite = 0;
+    m_pSprite = 0;
     m_BGSpriteUVs = Vector4( 0, 1, 0, 1 );
-
-    m_HasShadow = true;
-    m_DropShadowOffsetBG_X = 0;
-    m_DropShadowOffsetBG_Y = 0;
-    m_pShadowSprite = 0;
     m_ShadowSpriteUVs = Vector4( 0, 1, 0, 1 );
+
+    m_Transform.m11 = 200;
+    m_Transform.m22 = 200;
+    m_Transform.m41 = 400;
+    m_Transform.m42 = 500;
+
+    for( unsigned int i=0; i<Materials_NumTypes; i++ )
+        m_pMaterials[i] = 0;
 }
 
 MenuSprite::~MenuSprite()
 {
-    SAFE_RELEASE( m_pBGSprite );
-    SAFE_RELEASE( m_pShadowSprite );
+    SAFE_RELEASE( m_pSprite );
+
+    for( unsigned int i=0; i<Materials_NumTypes; i++ )
+        SAFE_RELEASE( m_pMaterials[i] );
 }
 
 void MenuSprite::Draw(MyMatrix* matviewproj)
@@ -42,18 +50,26 @@ void MenuSprite::Draw(MyMatrix* matviewproj)
     if( m_Visible == false )
         return;
 
+    if( m_pSprite == 0 )
+    {
+        m_pSprite = MyNew MySprite();
+        m_pSprite->Create( "MenuSprite Sprite", 1, 1, 0, 1, 0, 1, Justify_Center, false );
+    }
+
     //float scrw = g_pGame->m_GameWidth;
     //float scrh = g_pGame->m_GameHeight;
 
-    float bgshadowoffx = m_DropShadowOffsetBG_X;
-    float bgshadowoffy = m_DropShadowOffsetBG_Y;
+    float bgshadowoffx = m_DropShadowOffset.x;
+    float bgshadowoffy = m_DropShadowOffset.y;
 
     //float posx = (m_PositionOffset.x + m_Transform.m41) / scrw;
     //float posy = (m_PositionOffset.y + m_Transform.m42) / scrh;
     //float bgwidth = m_BGWidth / scrw * m_Scale.x;
     //float bgheight = m_BGHeight / scrh * m_Scale.y;
 
-    MySprite* pSprite = m_pBGSprite;
+    //MySprite* pSprite = m_pSprite;
+    MaterialDefinition* pMaterial = m_pMaterials[Material_Sprite];
+
     //Vector4 uvs = m_BGSpriteUVs;
     ColorByte bgcolor = m_BGColor;
 
@@ -66,7 +82,8 @@ void MenuSprite::Draw(MyMatrix* matviewproj)
     //    //pSprite->SetTint( bgcolor );
     //}
 
-    MySprite* pShadowSprite = m_pShadowSprite;
+    //MySprite* pShadowSprite = m_pShadowSprite;
+    MaterialDefinition* pShadowMaterial = m_pMaterials[Material_Shadow];
     //Vector4 shuvs = m_ShadowSpriteUVs;
     //if( pShadowSprite == 0 )
     //{
@@ -74,29 +91,34 @@ void MenuSprite::Draw(MyMatrix* matviewproj)
     //    shuvs = Vector4( 0, 1, 0, 1 );
     //}
 
-    if( pSprite )
+    //if( pSprite )
     {
-        if( pShadowSprite && m_HasShadow )
+        if( pShadowMaterial && m_DropShadowOffset.x != 0 && m_DropShadowOffset.y != 0 )
         {
             //pShadowSprite->Create( bgwidth, bgheight, shuvs.x, shuvs.y, shuvs.z, shuvs.w, m_Justification );
 
-            ColorByte shadowcolor = ColorByte(0,0,0,bgcolor.a/4);
-            pShadowSprite->SetTint( shadowcolor );
-            //pShadowSprite->SetPosition( posx+bgshadowoffx, posy-bgshadowoffy, 0.1f );
-            pShadowSprite->SetTransform( m_Transform );
-            pShadowSprite->m_Position.m41 += bgshadowoffx;
-            pShadowSprite->m_Position.m42 += bgshadowoffy;
+            //ColorByte shadowcolor = ColorByte(0,0,0,bgcolor.a/4);
+            //pShadowSprite->SetTint( shadowcolor );
+            ////pShadowSprite->SetPosition( posx+bgshadowoffx, posy-bgshadowoffy, 0.1f );
+            m_pSprite->SetMaterial( pShadowMaterial );
+            m_pSprite->SetTransform( m_Transform );
+            m_pSprite->m_Position.m41 += bgshadowoffx;
+            m_pSprite->m_Position.m42 += bgshadowoffy;
 
-            pShadowSprite->Draw( matviewproj );//&g_pGame->m_OrthoMatrixGameSize );
+            m_pSprite->Draw( matviewproj );//&g_pGame->m_OrthoMatrixGameSize );
         }
 
         //pSprite->Create( bgwidth, bgheight, uvs.x, uvs.y, uvs.z, uvs.w, m_Justification );
 
-        pSprite->SetTint( bgcolor );
-        //pSprite->SetPosition( posx, posy, 0 );
-        pSprite->SetTransform( m_Transform );
+        if( pMaterial )
+        {
+            m_pSprite->SetMaterial( pMaterial );
+            //m_pSprite->SetTint( bgcolor );
+            //pSprite->SetPosition( posx, posy, 0 );
+            m_pSprite->SetTransform( m_Transform );
 
-        pSprite->Draw( matviewproj );//&g_pGame->m_OrthoMatrixGameSize );
+            m_pSprite->Draw( matviewproj );//&g_pGame->m_OrthoMatrixGameSize );
+        }
     }
 
 }
@@ -106,19 +128,19 @@ MyRect MenuSprite::GetBoundingRect()
     MyRect rect;
 
     rect.x = (int)(m_Transform.m41 + m_PositionOffset.x);
-    rect.w = (int)m_BGWidth;
+    rect.w = (int)m_Transform.m11;
     rect.y = (int)(m_Transform.m42 + m_PositionOffset.y);
-    rect.h = (int)m_BGHeight;
+    rect.h = (int)m_Transform.m22;
 
     if( m_Justification & Justify_CenterX )
-        rect.x -= (int)(m_BGWidth/2);
+        rect.x -= (int)(m_Transform.m11/2);
     if( m_Justification & Justify_Right )
-        rect.x -= (int)m_BGWidth;
+        rect.x -= (int)m_Transform.m11;
 
     if( m_Justification & Justify_CenterY )
-        rect.y -= (int)(m_BGHeight/2);
+        rect.y -= (int)(m_Transform.m22/2);
     if( m_Justification & Justify_Top )
-        rect.y -= (int)m_BGHeight;
+        rect.y -= (int)m_Transform.m22;
 
     return rect;
 }
@@ -128,53 +150,86 @@ void MenuSprite::SetPositionAndSize(float x, float y, float w, float h, float in
     m_Transform.SetIdentity();
     m_Transform.Scale( w, h, 1 );
     m_Transform.SetTranslation( x, y, 0 );
-
-    m_BGWidth = w;
-    m_BGHeight = h;
 }
 
 void MenuSprite::SetSprites(MySprite* bgsprite, MySprite* shadowsprite)
 {
-    MyAssert( m_pBGSprite == 0 );
-    MyAssert( m_pShadowSprite == 0 );
+    MyAssert( false );
+    //MyAssert( m_pBGSprite == 0 );
+    //MyAssert( m_pShadowSprite == 0 );
 
-    if( bgsprite )
-    {
-        m_pBGSprite = bgsprite;
-        m_pBGSprite->AddRef();
-    }
+    //if( bgsprite )
+    //{
+    //    m_pBGSprite = bgsprite;
+    //    m_pBGSprite->AddRef();
+    //}
 
-    if( shadowsprite )
-    {
-        m_pShadowSprite = shadowsprite;
-        m_pShadowSprite->AddRef();
-    }
+    //if( shadowsprite )
+    //{
+    //    m_pShadowSprite = shadowsprite;
+    //    m_pShadowSprite->AddRef();
+    //}
 }
 
 void MenuSprite::SetSpritesCopy(MySprite* bgsprite, MySprite* shadowsprite)
 {
-    MyAssert( m_pBGSprite == 0 );
-    MyAssert( m_pShadowSprite == 0 );
+    MyAssert( false );
+    //MyAssert( m_pBGSprite == 0 );
+    //MyAssert( m_pShadowSprite == 0 );
 
-    if( bgsprite )
-    {
-        m_pBGSprite = MyNew MySprite( bgsprite, "SetSpritesCopy" );
-    }
+    //if( bgsprite )
+    //{
+    //    m_pBGSprite = MyNew MySprite( bgsprite, "SetSpritesCopy" );
+    //}
 
-    if( shadowsprite )
-    {
-        m_pShadowSprite = MyNew MySprite( shadowsprite, "SetSpritesCopy" );
-    }
+    //if( shadowsprite )
+    //{
+    //    m_pShadowSprite = MyNew MySprite( shadowsprite, "SetSpritesCopy" );
+    //}
+}
+
+void MenuSprite::SetMaterial(unsigned int materialindex, MaterialDefinition* pMaterial)
+{
+    if( pMaterial )
+        pMaterial->AddRef();
+    SAFE_RELEASE( m_pMaterials[materialindex] );
+    m_pMaterials[materialindex] = pMaterial;
 }
 
 #if MYFW_USING_WX
 void MenuSprite::FillPropertiesWindow()
 {
     MenuItem::FillPropertiesWindow();
-    g_pPanelWatch->AddBool( "HasShadow", &m_HasShadow, 0, 1 );
-    g_pPanelWatch->AddFloat( "ShadowOffsetX", &m_DropShadowOffsetBG_X, -5, 5 );
-    g_pPanelWatch->AddFloat( "ShadowOffsetY", &m_DropShadowOffsetBG_Y, -5, 5 );
-    g_pPanelWatch->AddFloat( "BG Shadow Offset X", &m_DropShadowOffsetBG_X, -10, 10 );
-    g_pPanelWatch->AddFloat( "BG Shadow Offset Y", &m_DropShadowOffsetBG_Y, -10, 10 );
+
+    g_pPanelWatch->Add2Floats( "Size", "w", "h", &m_Transform.m11, &m_Transform.m22, 0, 1000 );
+    g_pPanelWatch->AddVector2( "Shadow Offset", &m_DropShadowOffset, -10, 10 );
+
+    for( unsigned int i=0; i<Materials_NumTypes; i++ )
+    {
+        if( m_pMaterials[i] )
+            m_CONTROLID_Materials[i] = g_pPanelWatch->AddPointerWithDescription( m_MaterialNames[i], &m_pMaterials[i], m_pMaterials[i]->GetName(), this, MenuSprite::StaticOnDropMaterial );
+        else
+            m_CONTROLID_Materials[i] = g_pPanelWatch->AddPointerWithDescription( m_MaterialNames[i], &m_pMaterials[i], "no material", this, MenuSprite::StaticOnDropMaterial );
+    }
+}
+
+void MenuSprite::OnDropMaterial(int controlid, wxCoord x, wxCoord y)
+{
+    if( g_DragAndDropStruct.m_Type == DragAndDropType_MaterialDefinitionPointer )
+    {
+        MaterialDefinition* pMaterial = (MaterialDefinition*)g_DragAndDropStruct.m_Value;
+        MyAssert( pMaterial );
+        
+        unsigned int i;
+        for( i=0; i<Materials_NumTypes; i++ )
+        {
+            if( m_CONTROLID_Materials[i] == controlid )
+                break;
+        }
+        SetMaterial( i, pMaterial );
+
+        // update the panel so new Material name shows up.
+        g_pPanelWatch->m_pVariables[g_DragAndDropStruct.m_ID].m_Description = pMaterial->GetName();
+    }
 }
 #endif //MYFW_USING_WX

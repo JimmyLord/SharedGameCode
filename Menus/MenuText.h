@@ -14,11 +14,10 @@
 
 class MyMeshText;
 
-#define MAX_MenuText_STRING 128
-
 class MenuText : public MenuItem
 {
-protected:
+public:
+    static const int MAX_MenuText_STRING = 128;
 
 public:
     char m_String[MAX_MenuText_STRING];
@@ -63,6 +62,9 @@ public:
 #if MYFW_USING_WX
     static void StaticFillPropertiesWindow(void* pObjectPtr, unsigned int count) { ((MenuText*)pObjectPtr)->FillPropertiesWindow(); }
     void FillPropertiesWindow();
+
+    static void StaticOnDropFont(void* pObjectPtr, int controlid, wxCoord x, wxCoord y) { ((MenuText*)pObjectPtr)->OnDropFont(controlid, x, y); }
+    void OnDropFont(int controlid, wxCoord x, wxCoord y);
 #endif //MYFW_USING_WX
 };
 

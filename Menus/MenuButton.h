@@ -80,7 +80,7 @@ protected:
     Vector2 m_DropShadowOffsetBG;
 
 public:
-    MenuButtonTextStyle m_Style;
+    //MenuButtonTextStyle m_Style;
     char m_Strings[3][MAX_STRING_LENGTH];
     char m_ToolTipString[MAX_STRING_LENGTH];
 

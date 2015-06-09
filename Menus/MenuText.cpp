@@ -29,6 +29,14 @@ MenuText::MenuText()
     m_FontHeight = 30;
     m_LineHeight = 30*0.8f;
 
+    // set some reasonable defaults.
+    m_Transform.m41 = 100;
+    m_Transform.m42 = 400;
+
+    strcpy_s( m_String, MAX_MenuText_STRING, "Text Item" );
+    if( g_pFontManager )
+        m_pFont = g_pFontManager->GetFirstFont();
+
     m_Justification = Justify_CenterX|Justify_CenterY;
     m_DropShadowOffsetX = 3;
     m_DropShadowOffsetY = -3;
@@ -134,8 +142,20 @@ void MenuText::Draw(MyMatrix* matviewproj)
         //m_pMaterial->SetTextureColor( m_pFont->m_pTextureDef );
         //m_pMeshText->SetMaterial( m_pMaterial, 0 );
 
-        //if( m_DrawAsPartOfBatch == false )
-        //    m_pMeshText->Draw( &g_pGame->m_OrthoMatrixGameSize, 0, 0, 0, 0, 0, 0, 0 );
+        if( m_DrawAsPartOfBatch == false )
+        {
+            // create a material for the font on the stack and set it. TODO: do better...
+            MaterialDefinition pTempMaterial;
+            pTempMaterial.SetShader( g_pShaderGroupManager->FindShaderGroupByName( "Shader_TextureVertexColor" ) );
+            pTempMaterial.SetBlendType( MaterialBlendType_On );
+            pTempMaterial.SetTextureColor( m_pFont->m_pTextureDef );
+            m_pMeshText->SetMaterial( &pTempMaterial, 0 );
+            m_pMeshText->Draw( matviewproj, 0, 0, 0, 0, 0, 0, 0 );
+            m_pMeshText->SetMaterial( 0, 0 );
+#if _DEBUG
+            pTempMaterial.RemoveFinalRefIfCreatedOnStackToAvoidAssertInDestructor();
+#endif
+        }
     }
 }
 
@@ -191,9 +211,39 @@ void MenuText::FillPropertiesWindow()
 {
     // Search for MenuText_SaveLoad
     MenuItem::FillPropertiesWindow();
-    g_pPanelWatch->AddFloat( "FontHeight", &m_FontHeight, 0, 200 );
-    g_pPanelWatch->AddFloat( "ShadowOffsetX", &m_DropShadowOffsetX, -5, 5 );
-    g_pPanelWatch->AddFloat( "ShadowOffsetY", &m_DropShadowOffsetY, -5, 5 );
+
+    g_pPanelWatch->Add2Floats( "Height", "Font", "Line", &m_FontHeight, &m_LineHeight, 0, 200 );
+    g_pPanelWatch->Add2Floats( "Shadow Offset", "x", "y", &m_DropShadowOffsetX, &m_DropShadowOffsetY, -10, 10 );
     g_pPanelWatch->AddUnsignedChar( "Justify", &m_Justification, -5, 5 );    
+
+    if( m_pFont && m_pFont->m_pFile )
+        g_pPanelWatch->AddPointerWithDescription( "Font", &m_pFont, m_pFont->m_pFile->m_FullPath, this, MenuText::StaticOnDropFont );
+    else
+        g_pPanelWatch->AddPointerWithDescription( "Font", &m_pFont, "no font", this, MenuText::StaticOnDropFont );
+
+    g_pPanelWatch->AddString( "String", &m_String[0], MAX_MenuText_STRING );
+}
+
+void MenuText::OnDropFont(int controlid, wxCoord x, wxCoord y)
+{
+    if( g_DragAndDropStruct.m_Type == DragAndDropType_FileObjectPointer )
+    {
+        MyFileObject* pFile = (MyFileObject*)g_DragAndDropStruct.m_Value;
+        MyAssert( pFile );
+
+        size_t len = strlen( pFile->m_FullPath );
+        const char* filenameext = &pFile->m_FullPath[len-4];
+
+        if( strcmp( filenameext, ".fnt" ) == 0 )
+        {
+            FontDefinition* pFontDef = g_pFontManager->FindFont( pFile );
+            if( pFontDef == 0 )
+                pFontDef = g_pFontManager->CreateFont( pFile );
+            m_pFont = pFontDef;
+        }
+
+        // update the panel so new Shader name shows up.
+        g_pPanelWatch->m_pVariables[g_DragAndDropStruct.m_ID].m_Description = pFile->m_FullPath;
+    }
 }
 #endif //MYFW_USING_WX

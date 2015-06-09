@@ -337,7 +337,7 @@ int MyMeshText::CreateString(bool concat, float fontheight, float x, float y, fl
         char* singlelinebufferpos = singlelinebuffer;
 
         // word wrap if width of text is not 0.
-        if( size.x != 0 )
+        if( size.x > 0 )
         {
             float linewidth = -1;// = GetStringSize( fontheight, Vector2(0,0), singlelinebuffer ).x;
             while( linewidth < size.x &&

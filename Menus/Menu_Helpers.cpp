@@ -77,8 +77,13 @@ cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int nu
                     cJSON_AddNumberToObject( menuitem, "W", pMenuItem->m_Transform.m11 );
                     cJSON_AddNumberToObject( menuitem, "H", pMenuItem->m_Transform.m22 );
 
-                    cJSON_AddNumberToObject( menuitem, "BGShadowX", pMenuSprite->m_DropShadowOffsetBG_X );
-                    cJSON_AddNumberToObject( menuitem, "BGShadowY", pMenuSprite->m_DropShadowOffsetBG_Y );
+                    cJSONExt_AddFloatArrayToObject( menuitem, "Shadow", &pMenuSprite->m_DropShadowOffset.x, 2 );
+
+                    for( unsigned int i=0; i<MenuSprite::Materials_NumTypes; i++ )
+                    {
+                        if( pMenuSprite->m_pMaterials[i] )
+                            cJSON_AddStringToObject( menuitem, MenuSprite::m_MaterialNames[i], pMenuSprite->m_pMaterials[i]->m_pFile->m_FullPath );
+                    }
                 }
                 break;
 
@@ -89,11 +94,18 @@ cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int nu
                     //cJSON_AddNumberToObject( menuitem, "LettersNeeded", pMenuText->m_String );
 
                     cJSON_AddNumberToObject( menuitem, "FontHeight", pMenuText->m_FontHeight );
+                    cJSON_AddNumberToObject( menuitem, "LineHeight", pMenuText->m_LineHeight );
 
                     cJSON_AddNumberToObject( menuitem, "TextShadowX", pMenuText->m_DropShadowOffsetX );
                     cJSON_AddNumberToObject( menuitem, "TextShadowY", pMenuText->m_DropShadowOffsetY );
 
                     cJSON_AddNumberToObject( menuitem, "Justify", pMenuText->m_Justification );
+
+                    if( pMenuText->m_pFont )
+                        cJSON_AddStringToObject( menuitem, "Font", pMenuText->m_pFont->m_pFile->m_FullPath );
+
+                    if( pMenuText->m_String[0] != 0 )
+                        cJSON_AddStringToObject( menuitem, "String", pMenuText->m_String );
                 }
                 break;
 
@@ -108,6 +120,7 @@ cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int nu
                     cJSON_AddNumberToObject( menuitem, "IH", pMenuButton->m_InputHeight );
 
                     cJSON_AddNumberToObject( menuitem, "FontHeight", pMenuButton->m_FontHeight );
+                    cJSON_AddNumberToObject( menuitem, "LineHeight", pMenuButton->m_LineHeight );
 
                     cJSONExt_AddFloatArrayToObject( menuitem, "BGShadow", &pMenuButton->m_DropShadowOffsetBG.x, 2 );
                     cJSONExt_AddFloatArrayToObject( menuitem, "TextShadow", &pMenuButton->m_DropShadowOffsetText.x, 2 );
@@ -164,30 +177,28 @@ unsigned int Menu_ImportExport::ImportMenuLayout(const char* layout, MenuItem** 
 
         for( unsigned int i=0; i<numitems; i++ )
         {
-            cJSON* jMenuItem = cJSON_GetArrayItem( jMenuItemArray, i );
-
-            cJSON* jMIT = cJSON_GetObjectItem( jMenuItem, "MIT" );
-            
-            int lettersneeded = -1;
-            cJSONExt_GetInt( jMenuItem, "LettersNeeded", &lettersneeded );
-
-            MenuItem* pMenuItem = 0;
-            if( jMIT->valueint == MIT_Sprite )   pMenuItem = CreateMenuSprite( itemarray, i );
-            if( jMIT->valueint == MIT_Text )     pMenuItem = CreateMenuText( itemarray, i, lettersneeded );
-            if( jMIT->valueint == MIT_Button )   pMenuItem = CreateMenuButton( itemarray, i, lettersneeded );
-
-            cJSONExt_GetString( jMenuItem, "Name", pMenuItem->m_Name, MenuItem::MAX_MENUITEM_NAME_LENGTH );
-
             if( i < maxitems )
             {
+                cJSON* jMenuItem = cJSON_GetArrayItem( jMenuItemArray, i );
+
+                cJSON* jMIT = cJSON_GetObjectItem( jMenuItem, "MIT" );
+            
+                int lettersneeded = -1;
+                cJSONExt_GetInt( jMenuItem, "LettersNeeded", &lettersneeded );
+
+                MenuItem* pMenuItem = 0;
+                if( jMIT->valueint == MIT_Sprite )   pMenuItem = CreateMenuSprite( itemarray, i );
+                if( jMIT->valueint == MIT_Text )     pMenuItem = CreateMenuText( itemarray, i, lettersneeded );
+                if( jMIT->valueint == MIT_Button )   pMenuItem = CreateMenuButton( itemarray, i, lettersneeded );
+
+                cJSONExt_GetString( jMenuItem, "Name", pMenuItem->m_Name, MenuItem::MAX_MENUITEM_NAME_LENGTH );
+
                 float x = 0;
                 float y = 0;
                 float w = 0;
                 float h = 0;
                 float iw = -1;
                 float ih = -1;
-
-                MenuItem* pMenuItem = itemarray[i];
 
                 cJSONExt_GetFloat( jMenuItem, "X", &x );
                 cJSONExt_GetFloat( jMenuItem, "Y", &y );
@@ -216,8 +227,21 @@ unsigned int Menu_ImportExport::ImportMenuLayout(const char* layout, MenuItem** 
                     {
                         MenuSprite* pMenuSprite = (MenuSprite*)pMenuItem;
 
-                        cJSONExt_GetFloat( jMenuItem, "BGShadowX", &pMenuSprite->m_DropShadowOffsetBG_X );
-                        cJSONExt_GetFloat( jMenuItem, "BGShadowY", &pMenuSprite->m_DropShadowOffsetBG_Y );
+                        cJSONExt_GetFloatArray( jMenuItem, "Shadow", &pMenuSprite->m_DropShadowOffset.x, 2 );
+
+                        for( unsigned int i=0; i<MenuSprite::Materials_NumTypes; i++ )
+                        {
+                            cJSON* jMaterial = cJSON_GetObjectItem( jMenuItem, MenuSprite::m_MaterialNames[i] );
+                            if( jMaterial )
+                            {
+                                MaterialDefinition* pMaterial = g_pMaterialManager->LoadMaterial( jMaterial->valuestring );
+                                if( pMaterial )
+                                {
+                                    pMenuSprite->SetMaterial( i, pMaterial );
+                                    pMaterial->Release();
+                                }
+                            }
+                        }
                     }
                     break;
 
@@ -226,10 +250,17 @@ unsigned int Menu_ImportExport::ImportMenuLayout(const char* layout, MenuItem** 
                         MenuText* pMenuText = (MenuText*)pMenuItem;
 
                         cJSONExt_GetFloat( jMenuItem, "FontHeight", &pMenuText->m_FontHeight );
+                        cJSONExt_GetFloat( jMenuItem, "LineHeight", &pMenuText->m_LineHeight );
                         cJSONExt_GetFloat( jMenuItem, "TextShadowX", &pMenuText->m_DropShadowOffsetX );
                         cJSONExt_GetFloat( jMenuItem, "TextShadowY", &pMenuText->m_DropShadowOffsetY );
 
                         cJSONExt_GetUnsignedChar( jMenuItem, "Justify", &pMenuText->m_Justification );
+
+                        cJSON* jFont = cJSON_GetObjectItem( jMenuItem, "Font" );
+                        if( jFont )
+                            pMenuText->m_pFont = g_pFontManager->CreateFont( jFont->valuestring );
+
+                        cJSONExt_GetString( jMenuItem, "String", pMenuText->m_String, MenuText::MAX_MenuText_STRING );
                     }
                     break;
 
@@ -238,6 +269,7 @@ unsigned int Menu_ImportExport::ImportMenuLayout(const char* layout, MenuItem** 
                         MenuButton* pMenuButton = (MenuButton*)pMenuItem;
 
                         cJSONExt_GetFloat( jMenuItem, "FontHeight", &pMenuButton->m_FontHeight );
+                        cJSONExt_GetFloat( jMenuItem, "LineHeight", &pMenuButton->m_LineHeight );
                         cJSONExt_GetFloatArray( jMenuItem, "BGShadow", &pMenuButton->m_DropShadowOffsetBG.x, 2 );
                         cJSONExt_GetFloatArray( jMenuItem, "TextShadow", &pMenuButton->m_DropShadowOffsetText.x, 2 );
 

@@ -80,13 +80,19 @@ MenuButton::MenuButton(int maxletters)
     m_ButtonAction[0] = 0;
     m_AllowPressWhenDraggedOver = false;
 
+    // setup a decently sized button
+    m_Transform.m11 = 300;
+    m_Transform.m22 = 200;
+    m_Transform.m41 = 300;
+    m_Transform.m42 = 300;
+
     m_pFont = 0;
     m_FontHeight = 30;
     m_LineHeight = 30*0.8f;
 
     m_Justification = Justify_CenterX|Justify_CenterY;
-    m_InputWidth = 50;
-    m_InputHeight = 50;
+    m_InputWidth = -1;
+    m_InputHeight = -1;
 
     m_DropShadowOffsetText.x = 0;
     m_DropShadowOffsetText.y = 0;
@@ -112,7 +118,7 @@ MenuButton::MenuButton(int maxletters)
     m_SoundPressed = GameAudioCue_Click;
 #endif
 
-    m_Style = MBTS_SingleLine;
+    //m_Style = MBTS_SingleLine;
 
     //m_pBGSprite = 0;
     //m_pDisabledBGSprite = 0;
@@ -185,6 +191,9 @@ void MenuButton::Draw(MyMatrix* matviewproj)
     float shadowoffy = m_DropShadowOffsetText.y;
     float buttonshadowoffx = m_DropShadowOffsetBG.x;
     float buttonshadowoffy = m_DropShadowOffsetBG.y;
+
+    if( lineheight == -1 )
+        lineheight = m_FontHeight*0.8f;
 
     //float posx = m_Transform.m41;
     //float posy = m_Transform.m42;
@@ -351,15 +360,27 @@ void MenuButton::Draw(MyMatrix* matviewproj)
         //if( m_Strings[0][0] != 0 )
         if( m_pMeshText )
         {
-            if( m_Style == MBTS_SingleLine )
+            if( m_Strings[2][0] != 0 ) //m_Style == MBTS_TripleLine )
             {
-                y = posy;
+                y = posy + lineheight*1;
                 if( m_Strings[0][0] != 0 )
                 {
-                    m_pMeshText->CreateStringColorAndShadowStyle( false, m_FontHeight*m_Scale.y, posx, y, m_Justification, textcolor, textshadowstyle, textshadowcolor, shadowoffx, shadowoffy, m_Size, m_Strings[0] );
+                    m_pMeshText->CreateStringColorAndShadowStyle( true, m_FontHeight*m_Scale.y, posx, y, m_Justification, textcolor, textshadowstyle, textshadowcolor, shadowoffx, shadowoffy, m_Size, m_Strings[0] );
+                }
+
+                y = posy - lineheight*0;
+                if( m_Strings[1][0] != 0 )
+                {
+                    m_pMeshText->CreateStringColorAndShadowStyle( true, m_FontHeight*m_Scale.y, posx, y, m_Justification, textcolor, textshadowstyle, textshadowcolor, shadowoffx, shadowoffy, m_Size, m_Strings[1] );
+                }
+
+                y = posy - lineheight*1;
+                if( m_Strings[2][0] != 0 )
+                {
+                    m_pMeshText->CreateStringColorAndShadowStyle( true, m_FontHeight*m_Scale.y, posx, y, m_Justification, textcolor, textshadowstyle, textshadowcolor, shadowoffx, shadowoffy, m_Size, m_Strings[2] );
                 }
             }
-            else if( m_Style == MBTS_DoubleLine )
+            else if( m_Strings[1][0] != 0 ) //m_Style == MBTS_DoubleLine )
             {
                 y = posy + lineheight/2;
                 if( m_Strings[0][0] != 0 )
@@ -387,24 +408,12 @@ void MenuButton::Draw(MyMatrix* matviewproj)
                     }
                 }
             }
-            else if( m_Style == MBTS_TripleLine )
+            else //if( m_Style == MBTS_SingleLine )
             {
-                y = posy + lineheight*1;
+                y = posy;
                 if( m_Strings[0][0] != 0 )
                 {
-                    m_pMeshText->CreateStringColorAndShadowStyle( true, m_FontHeight*m_Scale.y, posx, y, m_Justification, textcolor, textshadowstyle, textshadowcolor, shadowoffx, shadowoffy, m_Size, m_Strings[0] );
-                }
-
-                y = posy - lineheight*0;
-                if( m_Strings[1][0] != 0 )
-                {
-                    m_pMeshText->CreateStringColorAndShadowStyle( true, m_FontHeight*m_Scale.y, posx, y, m_Justification, textcolor, textshadowstyle, textshadowcolor, shadowoffx, shadowoffy, m_Size, m_Strings[1] );
-                }
-
-                y = posy - lineheight*1;
-                if( m_Strings[2][0] != 0 )
-                {
-                    m_pMeshText->CreateStringColorAndShadowStyle( true, m_FontHeight*m_Scale.y, posx, y, m_Justification, textcolor, textshadowstyle, textshadowcolor, shadowoffx, shadowoffy, m_Size, m_Strings[2] );
+                    m_pMeshText->CreateStringColorAndShadowStyle( false, m_FontHeight*m_Scale.y, posx, y, m_Justification, textcolor, textshadowstyle, textshadowcolor, shadowoffx, shadowoffy, m_Size, m_Strings[0] );
                 }
             }
         }
@@ -415,7 +424,7 @@ void MenuButton::Draw(MyMatrix* matviewproj)
     {
         m_pMeshText->m_MeshReady = true;
 
-        // create a material for the fond on the stack and set it. TODO: do better...
+        // create a material for the font on the stack and set it. TODO: do better...
         MaterialDefinition pTempMaterial;
         //m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
         pTempMaterial.SetShader( g_pShaderGroupManager->FindShaderGroupByName( "Shader_TextureVertexColor" ) );
@@ -449,8 +458,11 @@ bool MenuButton::CheckForCollision(float x, float y)
     if( m_State == MBS_HeldDown && m_TimeHeld > 0 && m_TimeHeld < 0.2001f ) // FINGER_STABILITY_TIME
         sizemultiplier = 3.0f;
 
-    if( fabs( posx - x ) < (m_InputWidth / 2.0f)*sizemultiplier &&
-        fabs( posy - y ) < (m_InputHeight / 2.0f)*sizemultiplier )
+    float inputwidth = m_InputWidth == -1 ? m_Transform.m11 : m_InputWidth;
+    float inputheight = m_InputHeight == -1 ? m_Transform.m22 : m_InputHeight;
+
+    if( fabs( posx - x ) < (inputwidth / 2.0f)*sizemultiplier &&
+        fabs( posy - y ) < (inputheight / 2.0f)*sizemultiplier )
     {
         return true;
     }
@@ -566,20 +578,23 @@ MyRect MenuButton::GetBoundingRect()
 {
     MyRect rect;
 
+    float inputwidth = m_InputWidth == -1 ? m_Transform.m11 : m_InputWidth;
+    float inputheight = m_InputHeight == -1 ? m_Transform.m22 : m_InputHeight;
+
     rect.x = (int)(m_Transform.m41 + m_PositionOffset.x);
-    rect.w = (int)m_InputWidth;
+    rect.w = (int)inputwidth;
     rect.y = (int)(m_Transform.m42 + m_PositionOffset.y);
-    rect.h = (int)m_InputHeight;
+    rect.h = (int)inputheight;
 
     if( m_Justification & Justify_CenterX )
-        rect.x -= (int)(m_InputWidth/2);
+        rect.x -= (int)(inputwidth/2);
     if( m_Justification & Justify_Right )
-        rect.x -= (int)m_InputWidth;
+        rect.x -= (int)inputwidth;
 
     if( m_Justification & Justify_CenterY )
-        rect.y -= (int)(m_InputHeight/2);
+        rect.y -= (int)(inputheight/2);
     if( m_Justification & Justify_Top )
-        rect.y -= (int)m_InputHeight;
+        rect.y -= (int)inputheight;
 
     return rect;
 }
@@ -645,7 +660,7 @@ void MenuButton::SetString(const char* str1, const char* str2, const char* str3)
         else
             totallen += strlen( str1 );
         sprintf_s( m_Strings[0], MAX_STRING_LENGTH, "%s", str1 );
-        m_Style = MBTS_SingleLine;
+        //m_Style = MBTS_SingleLine;
     }
 
     if( str2 != 0 )
@@ -655,7 +670,7 @@ void MenuButton::SetString(const char* str1, const char* str2, const char* str3)
         else
             totallen += strlen( str2 );
         sprintf_s( m_Strings[1], MAX_STRING_LENGTH, "%s", str2 );
-        m_Style = MBTS_DoubleLine;
+        //m_Style = MBTS_DoubleLine;
     }
 
     if( str3 != 0 )
@@ -665,7 +680,7 @@ void MenuButton::SetString(const char* str1, const char* str2, const char* str3)
         else
             totallen += strlen( str3 );
         sprintf_s( m_Strings[2], MAX_STRING_LENGTH, "%s", str3 );
-        m_Style = MBTS_TripleLine;
+        //m_Style = MBTS_TripleLine;
     }
 
     if( m_pMeshText == 0 )
@@ -824,11 +839,10 @@ void MenuButton::SetMaterial(unsigned int materialindex, MaterialDefinition* pMa
 void MenuButton::FillPropertiesWindow()
 {
     MenuItem::FillPropertiesWindow();
-    g_pPanelWatch->AddFloat( "FontHeight", &m_FontHeight, 0, 200 );
-    g_pPanelWatch->AddFloat( "Width", &m_Transform.m11, 0, 1000 );
-    g_pPanelWatch->AddFloat( "Height", &m_Transform.m22, 0, 1000 );
-    g_pPanelWatch->AddFloat( "InputWidth", &m_InputWidth, 0, 1000 );
-    g_pPanelWatch->AddFloat( "InputHeight", &m_InputHeight, 0, 1000 );
+
+    g_pPanelWatch->Add2Floats( "Height", "Font", "Line", &m_FontHeight, &m_LineHeight, 0, 200 );
+    g_pPanelWatch->Add2Floats( "Size", "w", "h", &m_Transform.m11, &m_Transform.m22, 0, 1000 );
+    g_pPanelWatch->Add2Floats( "InputSize", "w", "h", &m_InputWidth, &m_InputHeight, 0, 1000 );
     g_pPanelWatch->AddVector2( "BGShadowOffset", &m_DropShadowOffsetBG, -10, 10 );
     g_pPanelWatch->AddVector2( "TextShadowOffset", &m_DropShadowOffsetText, -10, 10 );
 

@@ -105,6 +105,8 @@ MenuText::~MenuText()
     if( m_MeshAllocatedLocally )
         SAFE_RELEASE( m_pMeshText );
 
+    SAFE_RELEASE( m_pFont );
+
     SAFE_RELEASE( m_pMaterial );
 }
 
@@ -237,9 +239,13 @@ void MenuText::OnDropFont(int controlid, wxCoord x, wxCoord y)
         if( strcmp( filenameext, ".fnt" ) == 0 )
         {
             FontDefinition* pFontDef = g_pFontManager->FindFont( pFile );
-            if( pFontDef == 0 )
-                pFontDef = g_pFontManager->CreateFont( pFile );
-            m_pFont = pFontDef;
+            if( pFontDef != m_pFont )
+            {
+                SAFE_RELEASE( m_pFont );
+                if( pFontDef == 0 )
+                    pFontDef = g_pFontManager->CreateFont( pFile );
+                m_pFont = pFontDef;
+            }
         }
 
         // update the panel so new Shader name shows up.

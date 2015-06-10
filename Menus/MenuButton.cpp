@@ -137,6 +137,8 @@ MenuButton::~MenuButton()
     //SAFE_RELEASE( m_pMaterial );
     SAFE_RELEASE( m_pMeshText );
 
+    SAFE_RELEASE( m_pFont );
+
     //SAFE_RELEASE( m_pBGSprite );
     //SAFE_RELEASE( m_pDisabledBGSprite );
     //SAFE_RELEASE( m_pPressedBGSprite );
@@ -879,9 +881,13 @@ void MenuButton::OnDropFont(int controlid, wxCoord x, wxCoord y)
         if( strcmp( filenameext, ".fnt" ) == 0 )
         {
             FontDefinition* pFontDef = g_pFontManager->FindFont( pFile );
-            if( pFontDef == 0 )
-                pFontDef = g_pFontManager->CreateFont( pFile );
-            m_pFont = pFontDef;
+            if( pFontDef != m_pFont )
+            {
+                SAFE_RELEASE( m_pFont );
+                if( pFontDef == 0 )
+                    pFontDef = g_pFontManager->CreateFont( pFile );
+                m_pFont = pFontDef;
+            }
         }
 
         // update the panel so new Shader name shows up.

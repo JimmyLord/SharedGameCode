@@ -60,9 +60,11 @@ public:
     void SetString(const char* str, ...);
 
 #if MYFW_USING_WX
-    static void StaticFillPropertiesWindow(void* pObjectPtr, unsigned int count) { ((MenuText*)pObjectPtr)->FillPropertiesWindow(); }
+    // Object panel callbacks.
+    static void StaticFillPropertiesWindow(void* pObjectPtr, wxTreeItemId id, unsigned int count) { ((MenuText*)pObjectPtr)->FillPropertiesWindow(); }
     void FillPropertiesWindow();
 
+    // Watch panel callbacks.
     static void StaticOnDropFont(void* pObjectPtr, int controlid, wxCoord x, wxCoord y) { ((MenuText*)pObjectPtr)->OnDropFont(controlid, x, y); }
     void OnDropFont(int controlid, wxCoord x, wxCoord y);
 #endif //MYFW_USING_WX

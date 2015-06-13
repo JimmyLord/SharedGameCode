@@ -122,7 +122,8 @@ public:
     static void StaticFillPropertiesWindow(void* pObjectPtr, unsigned int count) { ((MenuItem*)pObjectPtr)->FillPropertiesWindow(); }
     void FillPropertiesWindow();
 
-    static void StaticOnRightClick(void* pObjectPtr) { ((MenuItem*)pObjectPtr)->OnRightClick(); }
+    // Object panel callbacks.
+    static void StaticOnRightClick(void* pObjectPtr, wxTreeItemId id) { ((MenuItem*)pObjectPtr)->OnRightClick(); }
     virtual void OnRightClick();
     void OnPopupClick(wxEvent &evt);
 

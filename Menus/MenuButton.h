@@ -193,9 +193,11 @@ public:
 #if MYFW_USING_WX
     int m_CONTROLID_Materials[Materials_NumTypes];
 
-    static void StaticFillPropertiesWindow(void* pObjectPtr, unsigned int count) { ((MenuButton*)pObjectPtr)->FillPropertiesWindow(); }
+    // Object panel callbacks.
+    static void StaticFillPropertiesWindow(void* pObjectPtr, wxTreeItemId id, unsigned int count) { ((MenuButton*)pObjectPtr)->FillPropertiesWindow(); }
     void FillPropertiesWindow();
 
+    // Watch panel callbacks.
     static void StaticOnDropFont(void* pObjectPtr, int controlid, wxCoord x, wxCoord y) { ((MenuButton*)pObjectPtr)->OnDropFont(controlid, x, y); }
     void OnDropFont(int controlid, wxCoord x, wxCoord y);
 

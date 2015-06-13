@@ -69,9 +69,11 @@ public:
 #if MYFW_USING_WX
     int m_CONTROLID_Materials[Materials_NumTypes];
 
-    static void StaticFillPropertiesWindow(void* pObjectPtr, unsigned int count) { ((MenuSprite*)pObjectPtr)->FillPropertiesWindow(); }
+    // Object panel callbacks.
+    static void StaticFillPropertiesWindow(void* pObjectPtr, wxTreeItemId id, unsigned int count) { ((MenuSprite*)pObjectPtr)->FillPropertiesWindow(); }
     void FillPropertiesWindow();
 
+    // Watch panel callbacks.
     static void StaticOnDropMaterial(void* pObjectPtr, int controlid, wxCoord x, wxCoord y) { ((MenuSprite*)pObjectPtr)->OnDropMaterial(controlid, x, y); }
     void OnDropMaterial(int controlid, wxCoord x, wxCoord y);
 #endif //MYFW_USING_WX

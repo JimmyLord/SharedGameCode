@@ -63,7 +63,7 @@ public:
     ~MenuSlider();
 
     void Draw(MyMatrix* matviewproj);
-    virtual int CheckForCollisionPosition(float x, float y, float gamewidth, float gameheight, bool held);
+    virtual int CheckForCollisionPositionSlider(float x, float y, float gamewidth, float gameheight, bool held);
 };
 
 #endif //__MenuSlider_H__

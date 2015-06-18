@@ -83,7 +83,7 @@ void MenuSlider::Draw(MyMatrix* matviewproj)
     }
 }
 
-int MenuSlider::CheckForCollisionPosition(float x, float y, float gamewidth, float gameheight, bool held)
+int MenuSlider::CheckForCollisionPositionSlider(float x, float y, float gamewidth, float gameheight, bool held)
 {
     if( m_Disabled )
         return 0;

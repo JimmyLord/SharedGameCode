@@ -19,6 +19,9 @@ class MenuText : public MenuItem
 public:
     static const int MAX_MenuText_STRING = 128;
 
+protected:
+    FontDefinition* m_pFont;
+
 public:
     char m_String[MAX_MenuText_STRING];
 
@@ -27,7 +30,6 @@ public:
     bool m_MeshAllocatedLocally;
     bool m_DrawAsPartOfBatch;
 
-    FontDefinition* m_pFont;
     float m_FontHeight;
     float m_LineHeight;
 
@@ -58,6 +60,9 @@ public:
 
     virtual void SetPositionAndSize(float x, float y, float w, float h, float inputw = -1, float inputh = -1);
     void SetString(const char* str, ...);
+
+    FontDefinition* GetFont() { return m_pFont; }
+    void SetFont(FontDefinition* pFont);
 
 #if MYFW_USING_WX
     // Object panel callbacks.

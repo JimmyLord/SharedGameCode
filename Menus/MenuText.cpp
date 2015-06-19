@@ -146,6 +146,8 @@ void MenuText::Draw(MyMatrix* matviewproj)
 
         if( m_DrawAsPartOfBatch == false )
         {
+            m_pMeshText->m_MeshReady = true;
+
             // create a material for the font on the stack and set it. TODO: do better...
             MaterialDefinition pTempMaterial;
             pTempMaterial.SetShader( g_pShaderGroupManager->FindShaderGroupByName( "Shader_TextureVertexColor" ) );
@@ -208,6 +210,14 @@ void MenuText::SetString(const char* str, ...)
     strcpy_s( m_String, MAX_MenuText_STRING, buffer );
 }
 
+void MenuText::SetFont(FontDefinition* pFont)
+{
+    if( pFont )
+        pFont->AddRef();
+    SAFE_RELEASE( m_pFont );
+    m_pFont = pFont;
+}
+
 #if MYFW_USING_WX
 void MenuText::FillPropertiesWindow()
 {
@@ -244,6 +254,8 @@ void MenuText::OnDropFont(int controlid, wxCoord x, wxCoord y)
                 SAFE_RELEASE( m_pFont );
                 if( pFontDef == 0 )
                     pFontDef = g_pFontManager->CreateFont( pFile );
+                else
+                    pFontDef->AddRef();
                 m_pFont = pFontDef;
             }
         }

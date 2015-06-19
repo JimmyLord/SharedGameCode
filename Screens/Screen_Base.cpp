@@ -114,8 +114,8 @@ char* Screen_Base::ExportMenuLayout()
                     cJSON_AddNumberToObject( menuitem, "W", pMenuItem->m_Transform.m11 );
                     cJSON_AddNumberToObject( menuitem, "H", pMenuItem->m_Transform.m22 );
 
-                    cJSON_AddNumberToObject( menuitem, "BGShadowX", pMenuSprite->m_DropShadowOffsetBG_X );
-                    cJSON_AddNumberToObject( menuitem, "BGShadowY", pMenuSprite->m_DropShadowOffsetBG_Y );
+                    cJSON_AddNumberToObject( menuitem, "BGShadowX", pMenuSprite->m_DropShadowOffset.x );
+                    cJSON_AddNumberToObject( menuitem, "BGShadowY", pMenuSprite->m_DropShadowOffset.y );
                 }
                 break;
 
@@ -144,11 +144,11 @@ char* Screen_Base::ExportMenuLayout()
 
                     cJSON_AddNumberToObject( menuitem, "FontHeight", pMenuButton->m_FontHeight );
 
-                    cJSON_AddNumberToObject( menuitem, "BGShadowX", pMenuButton->m_DropShadowOffsetBG_X );
-                    cJSON_AddNumberToObject( menuitem, "BGShadowY", pMenuButton->m_DropShadowOffsetBG_Y );
+                    cJSON_AddNumberToObject( menuitem, "BGShadowX", pMenuButton->m_DropShadowOffsetBG.x );
+                    cJSON_AddNumberToObject( menuitem, "BGShadowY", pMenuButton->m_DropShadowOffsetBG.y );
 
-                    cJSON_AddNumberToObject( menuitem, "TextShadowX", pMenuButton->m_DropShadowOffsetText_X );
-                    cJSON_AddNumberToObject( menuitem, "TextShadowY", pMenuButton->m_DropShadowOffsetText_Y );
+                    cJSON_AddNumberToObject( menuitem, "TextShadowX", pMenuButton->m_DropShadowOffsetText.x );
+                    cJSON_AddNumberToObject( menuitem, "TextShadowY", pMenuButton->m_DropShadowOffsetText.y );
                 }
                 break;
 
@@ -240,8 +240,8 @@ void Screen_Base::ImportMenuLayout(const char* layout)
                     {
                         MenuSprite* pMenuSprite = GetMenuSprite( itemindex );
 
-                        cJSONExt_GetFloat( menuitem, "BGShadowX", &pMenuSprite->m_DropShadowOffsetBG_X );
-                        cJSONExt_GetFloat( menuitem, "BGShadowY", &pMenuSprite->m_DropShadowOffsetBG_Y );
+                        cJSONExt_GetFloat( menuitem, "BGShadowX", &pMenuSprite->m_DropShadowOffset.x );
+                        cJSONExt_GetFloat( menuitem, "BGShadowY", &pMenuSprite->m_DropShadowOffset.y );
                     }
                     break;
 
@@ -262,10 +262,10 @@ void Screen_Base::ImportMenuLayout(const char* layout)
                         MenuButton* pMenuButton = GetMenuButton( itemindex );
 
                         cJSONExt_GetFloat( menuitem, "FontHeight", &pMenuButton->m_FontHeight );
-                        cJSONExt_GetFloat( menuitem, "BGShadowX", &pMenuButton->m_DropShadowOffsetBG_X );
-                        cJSONExt_GetFloat( menuitem, "BGShadowY", &pMenuButton->m_DropShadowOffsetBG_Y );
-                        cJSONExt_GetFloat( menuitem, "TextShadowX", &pMenuButton->m_DropShadowOffsetText_X );
-                        cJSONExt_GetFloat( menuitem, "TextShadowY", &pMenuButton->m_DropShadowOffsetText_Y );
+                        cJSONExt_GetFloat( menuitem, "BGShadowX", &pMenuButton->m_DropShadowOffsetBG.x );
+                        cJSONExt_GetFloat( menuitem, "BGShadowY", &pMenuButton->m_DropShadowOffsetBG.y );
+                        cJSONExt_GetFloat( menuitem, "TextShadowX", &pMenuButton->m_DropShadowOffsetText.x );
+                        cJSONExt_GetFloat( menuitem, "TextShadowY", &pMenuButton->m_DropShadowOffsetText.y );
                     }
                     break;
 
@@ -326,7 +326,7 @@ void Screen_Base::CreateMenuItems(int numitems, MenuItemDefinition* menuitems)
                 pMenuSprite->SetName( menuitems[i].name );
 
                 MySprite* pSprite = g_pGame->m_pResources->m_pSprites[menuitems[i].spriteindex];
-                pMenuSprite->SetSprites( pSprite, pSprite );
+                //pMenuSprite->SetSprites( pSprite, pSprite );
 
                 pMenuSprite->m_BGColor = menuitems[i].BGColor;
             }
@@ -338,7 +338,7 @@ void Screen_Base::CreateMenuItems(int numitems, MenuItemDefinition* menuitems)
 
                 pText->SetName( menuitems[i].name );
 
-                pText->m_pFont = menuitems[i].font;
+                pText->SetFont( menuitems[i].font );
                 if( menuitems[i].string1 )
                     pText->SetString( menuitems[i].string1 );
             }
@@ -351,7 +351,7 @@ void Screen_Base::CreateMenuItems(int numitems, MenuItemDefinition* menuitems)
                 pButton->SetName( menuitems[i].name );
 
                 MySprite* pSprite = g_pGame->m_pResources->m_pSprites[menuitems[i].spriteindex];
-                pButton->SetSprites( pSprite, pSprite, pSprite, 0, pSprite );
+                //pButton->SetSprites( pSprite, pSprite, pSprite, 0, pSprite );
 
                 pButton->m_BGColor = menuitems[i].BGColor;
 
@@ -359,7 +359,7 @@ void Screen_Base::CreateMenuItems(int numitems, MenuItemDefinition* menuitems)
                 if( menuitems[i].string1 || menuitems[i].string2 || menuitems[i].string3 )
                     pButton->SetString( menuitems[i].string1, menuitems[i].string2, menuitems[i].string3 );
 
-                pButton->m_ButtonAction = menuitems[i].buttonaction;
+                pButton->m_ButtonAction[0] = (char)menuitems[i].buttonaction;
             }
             break;
 
@@ -611,10 +611,14 @@ bool Screen_Base::BasicMenuTouchFunc(int action, int id, float x, float y, float
             {
                 if( GetMenuItem(i) )
                 {
-                    int action = GetMenuItem(i)->TriggerOnCollision( id, x, y, true );
+                    const char* actionstring = GetMenuItem(i)->TriggerOnCollision( id, x, y, true );
+                    if( actionstring )
+                    {
+                        int action = actionstring[0];
 
-                    if( action != -1 && OnMenuAction( action ) )
-                        return true;
+                        if( action != -1 && OnMenuAction( action ) )
+                            return true;
+                    }
                 }
             }
         }
@@ -766,20 +770,20 @@ void Screen_Base::SwitchScreenOverlay()
     m_ScreenToShowParam2 = 0;
 }
 
-void Screen_Base::DrawAllMenuItems()
+void Screen_Base::DrawAllMenuItems(MyMatrix* matviewproj)
 {
     for( int i=0; i<m_MenuItemsNeeded; i++ )
     {
         if( m_pMenuItems[i] )
         {
-            m_pMenuItems[i]->Draw();
+            m_pMenuItems[i]->Draw( matviewproj );
         }
     }
 }
 
 void Screen_Base::DrawMenuItem(int index)
 {
-    m_pMenuItems[index]->Draw();
+    m_pMenuItems[index]->Draw( 0 );
 }
 
 MenuItem* Screen_Base::GetMenuItem(int index)

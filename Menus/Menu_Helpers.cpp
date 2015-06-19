@@ -101,8 +101,8 @@ cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int nu
 
                     cJSON_AddNumberToObject( menuitem, "Justify", pMenuText->m_Justification );
 
-                    if( pMenuText->m_pFont )
-                        cJSON_AddStringToObject( menuitem, "Font", pMenuText->m_pFont->m_pFile->m_FullPath );
+                    if( pMenuText->GetFont() )
+                        cJSON_AddStringToObject( menuitem, "Font", pMenuText->GetFont()->m_pFile->m_FullPath );
 
                     if( pMenuText->m_String[0] != 0 )
                         cJSON_AddStringToObject( menuitem, "String", pMenuText->m_String );
@@ -258,7 +258,7 @@ unsigned int Menu_ImportExport::ImportMenuLayout(const char* layout, MenuItem** 
 
                         cJSON* jFont = cJSON_GetObjectItem( jMenuItem, "Font" );
                         if( jFont )
-                            pMenuText->m_pFont = g_pFontManager->CreateFont( jFont->valuestring );
+                            pMenuText->SetFont( g_pFontManager->CreateFont( jFont->valuestring ) );
 
                         cJSONExt_GetString( jMenuItem, "String", pMenuText->m_String, MenuText::MAX_MenuText_STRING );
                     }

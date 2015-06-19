@@ -1,18 +1,10 @@
 //
-// Copyright (c) 2014 Jimmy Lord http://www.flatheadgames.com
+// Copyright (c) 2014-2015 Jimmy Lord http://www.flatheadgames.com
 //
-// This software is provided 'as-is', without any express or implied
-// warranty.  In no event will the authors be held liable for any damages
-// arising from the use of this software.
-// Permission is granted to anyone to use this software for any purpose,
-// including commercial applications, and to alter it and redistribute it
-// freely, subject to the following restrictions:
-// 1. The origin of this software must not be misrepresented; you must not
-// claim that you wrote the original software. If you use this software
-// in a product, an acknowledgment in the product documentation would be
-// appreciated but is not required.
-// 2. Altered source versions must be plainly marked as such, and must not be
-// misrepresented as being the original software.
+// This software is provided 'as-is', without any express or implied warranty.  In no event will the authors be held liable for any damages arising from the use of this software.
+// Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
+// 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+// 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
 #include "GameCommonHeader.h"
@@ -22,7 +14,7 @@
 SpeechBubble::SpeechBubble()
 {
     m_pBubble = MyNew MySprite9();
-    m_pPoint = MyNew MySprite();
+    m_pPoint = MyNew MySprite( false );
     m_String = 0;
 
     //m_CurrentPos;
@@ -36,12 +28,12 @@ SpeechBubble::SpeechBubble()
     m_DestHeight = 20;
 
     m_pTextMesh = MyNew MyMeshText( 100, g_pGame->m_pSystemFont ); // 50 chars with shadow
-    m_pTextMesh->SetShaderAndTexture( g_pGame->m_pShader_TextureVertexColor, g_pGame->m_pSystemFont->m_pTextureDef );
+    //m_pTextMesh->SetShaderAndTexture( g_pGame->m_pShader_TextureVertexColor, g_pGame->m_pSystemFont->m_pTextureDef );
 }
 
 SpeechBubble::~SpeechBubble()
 {
-    SAFE_DELETE( m_pTextMesh );
+    SAFE_RELEASE( m_pTextMesh );
 
     SAFE_DELETE( m_pBubble );
     SAFE_RELEASE( m_pPoint );
@@ -92,8 +84,8 @@ void SpeechBubble::SetSize(float width, float height)
         m_CurrentHeight = height;
     }
 
-    m_pBubble->SetShaderAndTexture( g_pGame->m_pShader_Font, g_pGame->m_pResources->m_pTextures[TL_SpeechBubble]->m_TextureID );
-    m_pPoint->SetShaderAndTexture( g_pGame->m_pShader_Font, g_pGame->m_pResources->m_pTextures[TL_SpeechBubblePoint]->m_TextureID );
+    //m_pBubble->SetShaderAndTexture( g_pGame->m_pShader_Font, g_pGame->m_pResources->m_pTextures[TL_SpeechBubble]->m_TextureID );
+    //m_pPoint->SetShaderAndTexture( g_pGame->m_pShader_Font, g_pGame->m_pResources->m_pTextures[TL_SpeechBubblePoint]->m_TextureID );
 }
 
 void SpeechBubble::SetPosition(Vector3 pos)
@@ -143,6 +135,6 @@ void SpeechBubble::Draw(MyMatrix* matviewproj)
 
         m_pTextMesh->CreateStringColorAndShadow( false, 20, m_CurrentPos.x + 12, m_CurrentPos.y + 10 + size.y + 5, Justify_Left|Justify_Top,
             ColorByte(255,255,255,m_CurrentColor.a), ColorByte(0,0,0,m_CurrentColor.a), 2, -2, size, stringtoshow );
-        m_pTextMesh->Draw( &g_pGame->m_OrthoMatrixGameSize, 0, 0, 0, 0, 0, 0 );
+        m_pTextMesh->Draw( &g_pGame->m_OrthoMatrixGameSize, 0, 0, 0, 0, 0, 0, 0 );
     }
 }

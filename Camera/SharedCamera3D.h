@@ -7,34 +7,34 @@
 // 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
-#ifndef __Camera2D_H__
-#define __Camera2D_H__
+#ifndef __SharedCamera3D_H__
+#define __SharedCamera3D_H__
 
-class Camera2D
+class SharedCamera3D
 {
 public:
-    float m_OffsetX;
-    float m_OffsetY;
+    Vector3 m_Eye;
+    Vector3 m_Up;
+    Vector3 m_LookAtPos;
+
     float m_Width;
     float m_Height;
-    float m_Zoom;
 
     MyMatrix m_matView;
     MyMatrix m_matProj;
     MyMatrix m_matViewProj;
 
+    MyMatrix m_matViewProjInverse;
+    float m_FrustumRightEdgeZ0;
+    float m_FrustumTopEdgeZ0;
+
 public:
-    Camera2D();
-    ~Camera2D();
+    SharedCamera3D();
+    ~SharedCamera3D();
 
-    void SetViewSize(float width, float height);
-    void SetPos(float newx, float newy);
-    void SetZoom(float newzoom);
-    void MoveBy(float offx, float offy, float zoom);
+    void LookAt(Vector3& eye, Vector3& up, Vector3& lookatpos);
 
-    void ResetMatrix();
-
-    void QueryOffsetAndSize( float* offx, float* offy, float* width, float* height );
+    void ResetMatrix(bool calculateinverse = false);
 };
 
-#endif //__Camera2D_H__
+#endif //__SharedCamera3D_H__

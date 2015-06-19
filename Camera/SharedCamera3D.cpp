@@ -9,9 +9,9 @@
 
 #include "GameCommonHeader.h"
 
-#include "Camera3D.h"
+#include "SharedCamera3D.h"
 
-Camera3D::Camera3D()
+SharedCamera3D::SharedCamera3D()
 : m_Eye(0,0,10)
 , m_Up(0,1,0)
 , m_LookAtPos(0,0,0)
@@ -23,18 +23,18 @@ Camera3D::Camera3D()
     m_matViewProj.SetIdentity();
 }
 
-Camera3D::~Camera3D()
+SharedCamera3D::~SharedCamera3D()
 {
 }
 
-void Camera3D::LookAt(Vector3& eye, Vector3& up, Vector3& lookatpos)
+void SharedCamera3D::LookAt(Vector3& eye, Vector3& up, Vector3& lookatpos)
 {
     m_Eye = eye;
     m_Up = up;
     m_LookAtPos = lookatpos;
 }
 
-void Camera3D::ResetMatrix(bool calculateinverse)
+void SharedCamera3D::ResetMatrix(bool calculateinverse)
 {
     m_matView.CreateLookAt( m_Eye, m_Up, m_LookAtPos );
 

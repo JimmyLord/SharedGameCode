@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2012-2014 Jimmy Lord http://www.flatheadgames.com
+// Copyright (c) 2012-2015 Jimmy Lord http://www.flatheadgames.com
 //
 // This software is provided 'as-is', without any express or implied warranty.  In no event will the authors be held liable for any damages arising from the use of this software.
 // Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
@@ -51,9 +51,13 @@ enum MenuButtonTextStyle
 
 class MenuButton : public MenuItem
 {
+    friend class Screen_Base;
+
+public:
     static const int MAX_STRING_LENGTH = 64;
     static const int MAX_BUTTON_ACTION_LENGTH = 32;
 
+protected:
     enum MaterialTypes
     {
         Material_BG,
@@ -79,6 +83,8 @@ protected:
     Vector2 m_DropShadowOffsetText;
     Vector2 m_DropShadowOffsetBG;
 
+    FontDefinition* m_pFont;
+
 public:
     //MenuButtonTextStyle m_Style;
     char m_Strings[3][MAX_STRING_LENGTH];
@@ -93,7 +99,6 @@ public:
     bool m_AllowPressWhenDraggedOver;
 
     // visuals
-    FontDefinition* m_pFont;
     float m_FontHeight;
     float m_LineHeight;
 
@@ -189,6 +194,9 @@ public:
 
     //virtual MaterialDefinition* GetMaterial() { return m_pMaterial; }
     virtual void SetMaterial(unsigned int materialindex, MaterialDefinition* pMaterial);
+
+    FontDefinition* GetFont() { return m_pFont; }
+    virtual void SetFont(FontDefinition* pFont);
 
 #if MYFW_USING_WX
     int m_CONTROLID_Materials[Materials_NumTypes];

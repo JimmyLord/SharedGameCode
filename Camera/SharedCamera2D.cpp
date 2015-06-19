@@ -9,13 +9,13 @@
 
 #include "GameCommonHeader.h"
 
-#include "Camera2D.h"
+#include "SharedCamera2D.h"
 
 #if MYFW_WP8
 #include "../../SourceWP8/WP8Main.h"
 #endif
 
-Camera2D::Camera2D()
+SharedCamera2D::SharedCamera2D()
 {
     m_OffsetX = 0;
     m_OffsetY = 0;
@@ -28,11 +28,11 @@ Camera2D::Camera2D()
     m_matViewProj.SetIdentity();
 }
 
-Camera2D::~Camera2D()
+SharedCamera2D::~SharedCamera2D()
 {
 }
 
-void Camera2D::SetViewSize(float width, float height)
+void SharedCamera2D::SetViewSize(float width, float height)
 {
     m_Width = width;
     m_Height = height;
@@ -40,7 +40,7 @@ void Camera2D::SetViewSize(float width, float height)
     ResetMatrix();
 }
 
-void Camera2D::SetPos(float newx, float newy)
+void SharedCamera2D::SetPos(float newx, float newy)
 {
     m_OffsetX = newx;
     m_OffsetY = newy;
@@ -48,14 +48,14 @@ void Camera2D::SetPos(float newx, float newy)
     ResetMatrix();
 }
 
-void Camera2D::SetZoom(float newzoom)
+void SharedCamera2D::SetZoom(float newzoom)
 {
     m_Zoom = newzoom;
 
     ResetMatrix();
 }
 
-void Camera2D::MoveBy(float offx, float offy, float zoom)
+void SharedCamera2D::MoveBy(float offx, float offy, float zoom)
 {
     m_OffsetX += offx;
     m_OffsetY += offy;
@@ -72,7 +72,7 @@ void Camera2D::MoveBy(float offx, float offy, float zoom)
     ResetMatrix();
 }
 
-void Camera2D::ResetMatrix()
+void SharedCamera2D::ResetMatrix()
 {
     float width;
     float height;
@@ -137,7 +137,7 @@ void Camera2D::ResetMatrix()
     }
 }
 
-void Camera2D::QueryOffsetAndSize( float* offx, float* offy, float* width, float* height )
+void SharedCamera2D::QueryOffsetAndSize( float* offx, float* offy, float* width, float* height )
 {
     *width = m_Width;
     *height = m_Height;

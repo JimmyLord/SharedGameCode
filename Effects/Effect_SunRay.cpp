@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2012-2014 Jimmy Lord http://www.flatheadgames.com
+// Copyright (c) 2012-2015 Jimmy Lord http://www.flatheadgames.com
 //
 // This software is provided 'as-is', without any express or implied warranty.  In no event will the authors be held liable for any damages arising from the use of this software.
 // Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
@@ -16,8 +16,8 @@ Effect_SunRay::Effect_SunRay()
 {
     m_TimeAlive = 0;
 
-    m_pSpriteRayColor1 = MyNew MySprite_XYZVertexColor();
-    m_pSpriteRayColor2 = MyNew MySprite_XYZVertexColor();
+    m_pSpriteRayColor1 = MyNew MySprite_XYZVertexColor( false );
+    m_pSpriteRayColor2 = MyNew MySprite_XYZVertexColor( false );
 
     m_Center = Vector2( 320.0f, 480.0f );
     m_NumSlices = 30;
@@ -29,11 +29,11 @@ Effect_SunRay::Effect_SunRay()
     m_AngleOffset = 0;
 
     m_pSpriteRayColor1->Create( "Effect_SunRay", 1000, 20, 0, 1, 0, 1, Justify_Bottom | Justify_Left );
-    m_pSpriteRayColor1->SetShaderAndTexture( g_pGame->m_pShader_TextureVertexColor, g_pGame->m_pResources->m_pSpriteTextures[SL_WhiteSquare] );
+    //m_pSpriteRayColor1->SetShaderAndTexture( g_pGame->m_pShader_TextureVertexColor, g_pGame->m_pResources->m_pSpriteTextures[SL_WhiteSquare] );
     m_pSpriteRayColor1->SetPosition( 320.0f, 480.0f, 0.0f );
 
     m_pSpriteRayColor2->Create( "Effect_SunRay", 1000, 20, 0, 1, 0, 1, Justify_Bottom | Justify_Left );
-    m_pSpriteRayColor2->SetShaderAndTexture( g_pGame->m_pShader_TextureVertexColor, g_pGame->m_pResources->m_pSpriteTextures[SL_WhiteSquare] );
+    //m_pSpriteRayColor2->SetShaderAndTexture( g_pGame->m_pShader_TextureVertexColor, g_pGame->m_pResources->m_pSpriteTextures[SL_WhiteSquare] );
     m_pSpriteRayColor2->SetPosition( 320.0f, 480.0f, 0.0f );
 }
 

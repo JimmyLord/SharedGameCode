@@ -171,7 +171,7 @@ void MenuButton::Draw(MyMatrix* matviewproj)
     // create a sprite if one doesn't exist.
     if( m_pSprite == 0 )
     {
-        m_pSprite = MyNew MySprite();
+        m_pSprite = MyNew MySprite( false );
         m_pSprite->Create( "MenuButton Sprite", 1, 1, 0, 1, 0, 1, Justify_Center, false );
     }
 
@@ -837,6 +837,14 @@ void MenuButton::SetMaterial(unsigned int materialindex, MaterialDefinition* pMa
     m_pMaterials[materialindex] = pMaterial;
 }
 
+void MenuButton::SetFont(FontDefinition* pFont)
+{
+    if( pFont )
+        pFont->AddRef();
+    SAFE_RELEASE( m_pFont );
+    m_pFont = pFont;
+}
+
 #if MYFW_USING_WX
 void MenuButton::FillPropertiesWindow()
 {
@@ -886,6 +894,8 @@ void MenuButton::OnDropFont(int controlid, wxCoord x, wxCoord y)
                 SAFE_RELEASE( m_pFont );
                 if( pFontDef == 0 )
                     pFontDef = g_pFontManager->CreateFont( pFile );
+                else
+                    pFontDef->AddRef();
                 m_pFont = pFontDef;
             }
         }

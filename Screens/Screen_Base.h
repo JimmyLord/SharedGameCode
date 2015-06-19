@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2012-2014 Jimmy Lord http://www.flatheadgames.com
+// Copyright (c) 2012-2015 Jimmy Lord http://www.flatheadgames.com
 //
 // This software is provided 'as-is', without any express or implied warranty.  In no event will the authors be held liable for any damages arising from the use of this software.
 // Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
@@ -125,7 +125,7 @@ public:
     virtual bool OnMenuAction(int action) { return false; }
 
 #if MYFW_USING_WX
-    static void StaticFillPropertiesWindow(void* pObjectPtr, unsigned int count) { ((Screen_Base*)pObjectPtr)->FillPropertiesWindow(); }
+    static void StaticFillPropertiesWindow(void* pObjectPtr, wxTreeItemId id, unsigned int count) { ((Screen_Base*)pObjectPtr)->FillPropertiesWindow(); }
     void FillPropertiesWindow();
 #endif //MYFW_USING_WX
 
@@ -134,7 +134,7 @@ public:
     void SetScreenOverlayToShow(ScreenOverlays screen, Screen_Base* pParent = 0, void* pPtr = 0, void* pPtr2 = 0);
     void ReplaceCurrentScreenOverlayWith(ScreenOverlays screen, Screen_Base* pParent = 0, void* pPtr = 0, void* pPtr2 = 0);
 
-    void DrawAllMenuItems();
+    void DrawAllMenuItems(MyMatrix* matviewproj);
     void DrawMenuItem(int index);
     MenuItem* GetMenuItem(int index);
 

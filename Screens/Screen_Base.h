@@ -10,6 +10,10 @@
 #ifndef __Screen_Base_H__
 #define __Screen_Base_H__
 
+// part of LEGACYHACK to allow screen menu items to be imported into a ComponentMenuPage.
+//#include "../../GameInfiniteDung/Game/SourceCommon/Core/ScreenOverlays.h"
+#include "Core/ScreenOverlays.h"
+
 class Screen_Base;
 
 class InputFinger;
@@ -26,8 +30,6 @@ class MenuCheckBox;
 
 #define MAX_MENUITEMS           128
 #define MAX_SCREENNAME_LENGTH   32
-
-#include "Core/ScreenOverlays.h"
 
 enum ScreenStates
 {

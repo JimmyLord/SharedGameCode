@@ -23,7 +23,7 @@ class Menu_ImportExport
 {
 public:
     static cJSON* ExportMenuLayout(MenuItem** itemarray, unsigned int numitems);
-    static unsigned int ImportMenuLayout(const char* layout, MenuItem** itemarray, unsigned int maxitems);
+    static unsigned int ImportMenuLayout(cJSON* layout, MenuItem** itemarray, unsigned int maxitems);
 };
 
 #endif //__MenuImportExport_H__

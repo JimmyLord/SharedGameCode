@@ -10,7 +10,7 @@
 #include PCHFILE
 
 #define GETMENUTYPE(itemarray, index, type, typeclass) \
-    assert( itemarray[index]->m_MenuItemType == type ); \
+    MyAssert( itemarray[index]->m_MenuItemType == type ); \
     if( itemarray[index]->m_MenuItemType != type ) return 0; \
     return (typeclass*)itemarray[index];
 
@@ -23,12 +23,12 @@ MenuInputBox* GetMenuInputBox(MenuItem** itemarray, int index)           { GETME
 MenuCheckBox* GetMenuCheckBox(MenuItem** itemarray, int index)           { GETMENUTYPE( itemarray, index, MIT_CheckBox, MenuCheckBox ); }
 
 #define CREATEMENUTYPE(itemarray, index, typeclass) \
-    assert( itemarray[index] == 0 ); \
+    MyAssert( itemarray[index] == 0 ); \
     itemarray[index] = MyNew typeclass; \
     return (typeclass*)itemarray[index];
 
 #define CREATEMENUTYPEINT(itemarray, index, typeclass, value) \
-    assert( itemarray[index] == 0 ); \
+    MyAssert( itemarray[index] == 0 ); \
     itemarray[index] = MyNew typeclass(value); \
     return (typeclass*)itemarray[index];
 
@@ -152,6 +152,7 @@ cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int nu
             case MIT_ScrollBox:
             case MIT_CheckBox:
             case MIT_NumMenuItemTypes:
+                MyAssert( false ); // need to add support for more, if I ever use them again.
                 break;
             }
         }
@@ -160,163 +161,164 @@ cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int nu
     return menuitemarray;
 }
 
-unsigned int Menu_ImportExport::ImportMenuLayout(const char* layout, MenuItem** itemarray, unsigned int maxitems)
+unsigned int Menu_ImportExport::ImportMenuLayout(cJSON* layout, MenuItem** itemarray, unsigned int maxitems)
 {
     if( layout == 0 )
         return 0;
 
-    cJSON* jMenuItemArray = cJSON_Parse( layout );
-    assert( jMenuItemArray );
-
     unsigned int numitems = 0;
 
+    cJSON* jMenuItemArray = layout;
     if( jMenuItemArray )
     {
-        numitems = cJSON_GetArraySize( jMenuItemArray );
-        assert( numitems <= maxitems );
-
-        for( unsigned int i=0; i<numitems; i++ )
+        if( jMenuItemArray )
         {
-            if( i < maxitems )
+            numitems = cJSON_GetArraySize( jMenuItemArray );
+            assert( numitems <= maxitems );
+
+            for( unsigned int i=0; i<numitems; i++ )
             {
-                cJSON* jMenuItem = cJSON_GetArrayItem( jMenuItemArray, i );
-
-                cJSON* jMIT = cJSON_GetObjectItem( jMenuItem, "MIT" );
-            
-                int lettersneeded = -1;
-                cJSONExt_GetInt( jMenuItem, "LettersNeeded", &lettersneeded );
-
-                MenuItem* pMenuItem = 0;
-                if( jMIT->valueint == MIT_Sprite )   pMenuItem = CreateMenuSprite( itemarray, i );
-                if( jMIT->valueint == MIT_Text )     pMenuItem = CreateMenuText( itemarray, i, lettersneeded );
-                if( jMIT->valueint == MIT_Button )   pMenuItem = CreateMenuButton( itemarray, i, lettersneeded );
-
-                cJSONExt_GetString( jMenuItem, "Name", pMenuItem->m_Name, MenuItem::MAX_MENUITEM_NAME_LENGTH );
-
-                float x = 0;
-                float y = 0;
-                float w = 0;
-                float h = 0;
-                float iw = -1;
-                float ih = -1;
-
-                cJSONExt_GetFloat( jMenuItem, "X", &x );
-                cJSONExt_GetFloat( jMenuItem, "Y", &y );
-
-                cJSONExt_GetFloat( jMenuItem, "Scale", &pMenuItem->m_Scale.x );
-                cJSONExt_GetFloat( jMenuItem, "Scale", &pMenuItem->m_Scale.y );
-                cJSONExt_GetFloat( jMenuItem, "Scale", &pMenuItem->m_Scale.z );
-
-                cJSONExt_GetFloat( jMenuItem, "SX", &pMenuItem->m_Size.x );
-                cJSONExt_GetFloat( jMenuItem, "SY", &pMenuItem->m_Size.y );
-
-                cJSONExt_GetFloat( jMenuItem, "W", &w );
-                cJSONExt_GetFloat( jMenuItem, "H", &h );
-
-                cJSONExt_GetFloat( jMenuItem, "IW", &iw );
-                cJSONExt_GetFloat( jMenuItem, "IH", &ih );
-
-                cJSONExt_GetFloat( jMenuItem, "OffX", &pMenuItem->m_PositionOffset.x );
-                cJSONExt_GetFloat( jMenuItem, "OffY", &pMenuItem->m_PositionOffset.y );
-
-                pMenuItem->SetPositionAndSize( x, y, w, h, iw, ih );
-
-                switch( pMenuItem->m_MenuItemType )
+                if( i < maxitems )
                 {
-                case MIT_Sprite:
+                    cJSON* jMenuItem = cJSON_GetArrayItem( jMenuItemArray, i );
+
+                    cJSON* jMIT = cJSON_GetObjectItem( jMenuItem, "MIT" );
+            
+                    int lettersneeded = -1;
+                    cJSONExt_GetInt( jMenuItem, "LettersNeeded", &lettersneeded );
+
+                    MenuItem* pMenuItem = 0;
+                    if( jMIT->valueint == MIT_Sprite )   pMenuItem = CreateMenuSprite( itemarray, i );
+                    if( jMIT->valueint == MIT_Text )     pMenuItem = CreateMenuText( itemarray, i, lettersneeded );
+                    if( jMIT->valueint == MIT_Button )   pMenuItem = CreateMenuButton( itemarray, i, lettersneeded );
+
+                    cJSONExt_GetString( jMenuItem, "Name", pMenuItem->m_Name, MenuItem::MAX_MENUITEM_NAME_LENGTH );
+
+                    float x = 0;
+                    float y = 0;
+                    float w = 0;
+                    float h = 0;
+                    float iw = -1;
+                    float ih = -1;
+
+                    cJSONExt_GetFloat( jMenuItem, "X", &x );
+                    cJSONExt_GetFloat( jMenuItem, "Y", &y );
+
+                    cJSONExt_GetFloat( jMenuItem, "Scale", &pMenuItem->m_Scale.x );
+                    cJSONExt_GetFloat( jMenuItem, "Scale", &pMenuItem->m_Scale.y );
+                    cJSONExt_GetFloat( jMenuItem, "Scale", &pMenuItem->m_Scale.z );
+
+                    cJSONExt_GetFloat( jMenuItem, "SX", &pMenuItem->m_Size.x );
+                    cJSONExt_GetFloat( jMenuItem, "SY", &pMenuItem->m_Size.y );
+
+                    cJSONExt_GetFloat( jMenuItem, "W", &w );
+                    cJSONExt_GetFloat( jMenuItem, "H", &h );
+
+                    cJSONExt_GetFloat( jMenuItem, "IW", &iw );
+                    cJSONExt_GetFloat( jMenuItem, "IH", &ih );
+
+                    cJSONExt_GetFloat( jMenuItem, "OffX", &pMenuItem->m_PositionOffset.x );
+                    cJSONExt_GetFloat( jMenuItem, "OffY", &pMenuItem->m_PositionOffset.y );
+
+                    pMenuItem->SetPositionAndSize( x, y, w, h, iw, ih );
+
+                    switch( pMenuItem->m_MenuItemType )
                     {
-                        MenuSprite* pMenuSprite = (MenuSprite*)pMenuItem;
-
-                        cJSONExt_GetFloatArray( jMenuItem, "Shadow", &pMenuSprite->m_DropShadowOffset.x, 2 );
-
-                        for( unsigned int i=0; i<MenuSprite::Materials_NumTypes; i++ )
+                    case MIT_Sprite:
                         {
-                            cJSON* jMaterial = cJSON_GetObjectItem( jMenuItem, MenuSprite::m_MaterialNames[i] );
-                            if( jMaterial )
+                            MenuSprite* pMenuSprite = (MenuSprite*)pMenuItem;
+
+                            cJSONExt_GetFloatArray( jMenuItem, "Shadow", &pMenuSprite->m_DropShadowOffset.x, 2 );
+
+                            for( unsigned int i=0; i<MenuSprite::Materials_NumTypes; i++ )
                             {
-                                MaterialDefinition* pMaterial = g_pMaterialManager->LoadMaterial( jMaterial->valuestring );
-                                if( pMaterial )
+                                cJSON* jMaterial = cJSON_GetObjectItem( jMenuItem, MenuSprite::m_MaterialNames[i] );
+                                if( jMaterial )
                                 {
-                                    pMenuSprite->SetMaterial( i, pMaterial );
-                                    pMaterial->Release();
+                                    MaterialDefinition* pMaterial = g_pMaterialManager->LoadMaterial( jMaterial->valuestring );
+                                    if( pMaterial )
+                                    {
+                                        pMenuSprite->SetMaterial( i, pMaterial );
+                                        pMaterial->Release();
+                                    }
                                 }
                             }
                         }
-                    }
-                    break;
+                        break;
 
-                case MIT_Text: // MenuText_SaveLoad
-                    {
-                        MenuText* pMenuText = (MenuText*)pMenuItem;
-
-                        cJSONExt_GetFloat( jMenuItem, "FontHeight", &pMenuText->m_FontHeight );
-                        cJSONExt_GetFloat( jMenuItem, "LineHeight", &pMenuText->m_LineHeight );
-                        cJSONExt_GetFloat( jMenuItem, "TextShadowX", &pMenuText->m_DropShadowOffsetX );
-                        cJSONExt_GetFloat( jMenuItem, "TextShadowY", &pMenuText->m_DropShadowOffsetY );
-
-                        cJSONExt_GetUnsignedChar( jMenuItem, "Justify", &pMenuText->m_Justification );
-
-                        cJSON* jFont = cJSON_GetObjectItem( jMenuItem, "Font" );
-                        if( jFont )
-                            pMenuText->SetFont( g_pFontManager->CreateFont( jFont->valuestring ) );
-
-                        cJSONExt_GetString( jMenuItem, "String", pMenuText->m_String, MenuText::MAX_MenuText_STRING );
-                    }
-                    break;
-
-                case MIT_Button:
-                    {
-                        MenuButton* pMenuButton = (MenuButton*)pMenuItem;
-
-                        cJSONExt_GetFloat( jMenuItem, "FontHeight", &pMenuButton->m_FontHeight );
-                        cJSONExt_GetFloat( jMenuItem, "LineHeight", &pMenuButton->m_LineHeight );
-                        cJSONExt_GetFloatArray( jMenuItem, "BGShadow", &pMenuButton->m_DropShadowOffsetBG.x, 2 );
-                        cJSONExt_GetFloatArray( jMenuItem, "TextShadow", &pMenuButton->m_DropShadowOffsetText.x, 2 );
-
-                        // Legacy
-                        cJSONExt_GetFloat( jMenuItem, "BGShadowX", &pMenuButton->m_DropShadowOffsetBG.x );
-                        cJSONExt_GetFloat( jMenuItem, "BGShadowY", &pMenuButton->m_DropShadowOffsetBG.y );
-                        cJSONExt_GetFloat( jMenuItem, "TextShadowX", &pMenuButton->m_DropShadowOffsetText.x );
-                        cJSONExt_GetFloat( jMenuItem, "TextShadowY", &pMenuButton->m_DropShadowOffsetText.y );
-
-                        for( unsigned int i=0; i<MenuButton::Materials_NumTypes; i++ )
+                    case MIT_Text: // MenuText_SaveLoad
                         {
-                            cJSON* jMaterial = cJSON_GetObjectItem( jMenuItem, MenuButton::m_MaterialNames[i] );
-                            if( jMaterial )
+                            MenuText* pMenuText = (MenuText*)pMenuItem;
+
+                            cJSONExt_GetFloat( jMenuItem, "FontHeight", &pMenuText->m_FontHeight );
+                            cJSONExt_GetFloat( jMenuItem, "LineHeight", &pMenuText->m_LineHeight );
+                            cJSONExt_GetFloat( jMenuItem, "TextShadowX", &pMenuText->m_DropShadowOffsetX );
+                            cJSONExt_GetFloat( jMenuItem, "TextShadowY", &pMenuText->m_DropShadowOffsetY );
+
+                            cJSONExt_GetUnsignedChar( jMenuItem, "Justify", &pMenuText->m_Justification );
+
+                            cJSON* jFont = cJSON_GetObjectItem( jMenuItem, "Font" );
+                            if( jFont )
+                                pMenuText->SetFont( g_pFontManager->CreateFont( jFont->valuestring ) );
+
+                            cJSONExt_GetString( jMenuItem, "String", pMenuText->m_String, MenuText::MAX_MenuText_STRING );
+                        }
+                        break;
+
+                    case MIT_Button:
+                        {
+                            MenuButton* pMenuButton = (MenuButton*)pMenuItem;
+
+                            cJSONExt_GetFloat( jMenuItem, "FontHeight", &pMenuButton->m_FontHeight );
+                            cJSONExt_GetFloat( jMenuItem, "LineHeight", &pMenuButton->m_LineHeight );
+                            cJSONExt_GetFloatArray( jMenuItem, "BGShadow", &pMenuButton->m_DropShadowOffsetBG.x, 2 );
+                            cJSONExt_GetFloatArray( jMenuItem, "TextShadow", &pMenuButton->m_DropShadowOffsetText.x, 2 );
+
+                            // Legacy
+                            cJSONExt_GetFloat( jMenuItem, "BGShadowX", &pMenuButton->m_DropShadowOffsetBG.x );
+                            cJSONExt_GetFloat( jMenuItem, "BGShadowY", &pMenuButton->m_DropShadowOffsetBG.y );
+                            cJSONExt_GetFloat( jMenuItem, "TextShadowX", &pMenuButton->m_DropShadowOffsetText.x );
+                            cJSONExt_GetFloat( jMenuItem, "TextShadowY", &pMenuButton->m_DropShadowOffsetText.y );
+
+                            for( unsigned int i=0; i<MenuButton::Materials_NumTypes; i++ )
                             {
-                                MaterialDefinition* pMaterial = g_pMaterialManager->LoadMaterial( jMaterial->valuestring );
-                                if( pMaterial )
+                                cJSON* jMaterial = cJSON_GetObjectItem( jMenuItem, MenuButton::m_MaterialNames[i] );
+                                if( jMaterial )
                                 {
-                                    pMenuButton->SetMaterial( i, pMaterial );
-                                    pMaterial->Release();
+                                    MaterialDefinition* pMaterial = g_pMaterialManager->LoadMaterial( jMaterial->valuestring );
+                                    if( pMaterial )
+                                    {
+                                        pMenuButton->SetMaterial( i, pMaterial );
+                                        pMaterial->Release();
+                                    }
                                 }
                             }
+
+                            cJSON* jFont = cJSON_GetObjectItem( jMenuItem, "Font" );
+                            if( jFont )
+                                pMenuButton->m_pFont = g_pFontManager->CreateFont( jFont->valuestring );
+
+                            cJSONExt_GetString( jMenuItem, "String1", pMenuButton->m_Strings[0], MenuButton::MAX_STRING_LENGTH );
+                            cJSONExt_GetString( jMenuItem, "String2", pMenuButton->m_Strings[1], MenuButton::MAX_STRING_LENGTH );
+                            cJSONExt_GetString( jMenuItem, "String3", pMenuButton->m_Strings[2], MenuButton::MAX_STRING_LENGTH );
+
+                            cJSONExt_GetString( jMenuItem, "Action", pMenuButton->m_ButtonAction, MenuButton::MAX_BUTTON_ACTION_LENGTH );
                         }
+                        break;
 
-                        cJSON* jFont = cJSON_GetObjectItem( jMenuItem, "Font" );
-                        if( jFont )
-                            pMenuButton->m_pFont = g_pFontManager->CreateFont( jFont->valuestring );
-
-                        cJSONExt_GetString( jMenuItem, "String1", pMenuButton->m_Strings[0], MenuButton::MAX_STRING_LENGTH );
-                        cJSONExt_GetString( jMenuItem, "String2", pMenuButton->m_Strings[1], MenuButton::MAX_STRING_LENGTH );
-                        cJSONExt_GetString( jMenuItem, "String3", pMenuButton->m_Strings[2], MenuButton::MAX_STRING_LENGTH );
-
-                        cJSONExt_GetString( jMenuItem, "Action", pMenuButton->m_ButtonAction, MenuButton::MAX_BUTTON_ACTION_LENGTH );
+                    case MIT_Base:
+                    case MIT_InputBox:
+                    case MIT_ScrollingText:
+                    case MIT_ScrollBox:
+                    case MIT_CheckBox:
+                    case MIT_NumMenuItemTypes:
+                        break;
                     }
-                    break;
-
-                case MIT_Base:
-                case MIT_InputBox:
-                case MIT_ScrollingText:
-                case MIT_ScrollBox:
-                case MIT_CheckBox:
-                case MIT_NumMenuItemTypes:
-                    break;
                 }
             }
-        }
 
-        cJSON_Delete( jMenuItemArray );
+            //cJSON_Delete( jMenuItemArray );
+        }
     }
 
     return numitems;

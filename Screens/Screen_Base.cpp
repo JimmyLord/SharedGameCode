@@ -632,7 +632,7 @@ bool Screen_Base::BasicMenuTouchFunc(int action, int id, float x, float y, float
 void Screen_Base::FillPropertiesWindow()
 {
     g_pPanelWatch->ClearAllVariables();
-    g_pPanelWatch->AddDouble( "m_TimeAlive", &m_TimeAlive, 0, m_TimeToOpen );
+    g_pPanelWatch->AddDouble( "m_TimeAlive", &m_TimeAlive, 0, (float)m_TimeToOpen );
     g_pPanelWatch->AddDouble( "m_TimeInState", &m_TimeInState, 0, 100000 );
     g_pPanelWatch->AddDouble( "m_TimeToOpen", &m_TimeToOpen, 0, 100000 );
     g_pPanelWatch->AddDouble( "m_TimeToClose", &m_TimeToClose, 0, 100000 );

@@ -107,7 +107,7 @@ void SpeechBubble::SetString(const char* string)
         return;
     }
 
-    Vector2 size = g_pGame->m_pSystemFont->m_pFont->GetSize( m_String, 20 );
+    Vector2 size = g_pGame->m_pSystemFont->m_pBMFont->GetSize( m_String, 20 );
 
     SetSize( size.x + 4, size.y + 20 - 14 );
 
@@ -131,7 +131,7 @@ void SpeechBubble::Draw(MyMatrix* matviewproj)
         m_pPoint->SetTint( m_CurrentColor );
         m_pPoint->Draw( matviewproj );
 
-        Vector2 size = g_pGame->m_pSystemFont->m_pFont->GetSize( stringtoshow, 20 );
+        Vector2 size = g_pGame->m_pSystemFont->m_pBMFont->GetSize( stringtoshow, 20 );
 
         m_pTextMesh->CreateStringColorAndShadow( false, 20, m_CurrentPos.x + 12, m_CurrentPos.y + 10 + size.y + 5, Justify_Left|Justify_Top,
             ColorByte(255,255,255,m_CurrentColor.a), ColorByte(0,0,0,m_CurrentColor.a), 2, -2, size, stringtoshow );

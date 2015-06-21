@@ -60,7 +60,7 @@ Vector2 MyMeshText::GetStringSize(float fontheight, Vector2 size, const char* te
     vsnprintf_s( tempbuffer, sizeof(tempbuffer), _TRUNCATE, stringtodraw, arg );
     va_end(arg);
 
-    return m_pFont->m_pFont->GetSize( tempbuffer, fontheight );
+    return m_pFont->m_pBMFont->GetSize( tempbuffer, fontheight );
 }
 
 int MyMeshText::CreateStringWhite(bool concat, float fontheight, float x, float y, unsigned char justificationflags, Vector2 size, const char* text, ...)
@@ -309,7 +309,7 @@ int MyMeshText::CreateString(bool concat, float fontheight, float x, float y, fl
     if( m_pFont->m_FullyLoaded == false )
         return 0;
     
-    MyAssert( m_pFont->m_pFont );
+    MyAssert( m_pFont->m_pBMFont );
 
     if( strlen( text ) == 0 )
         return 0;
@@ -401,7 +401,7 @@ int MyMeshText::CreateString(bool concat, float fontheight, float x, float y, fl
 
         pVertsToDraw += m_SubmeshList[0]->m_NumVertsToDraw;
 
-        unsigned int textstrlen = m_pFont->m_pFont->GenerateVerts( stringtodraw, true, pVertsToDraw, fontheight, GL_TRIANGLES, justificationflags, color );
+        unsigned int textstrlen = m_pFont->m_pBMFont->GenerateVerts( stringtodraw, true, pVertsToDraw, fontheight, GL_TRIANGLES, justificationflags, color );
 
         m_SubmeshList[0]->m_NumVertsToDraw += (unsigned short)(textstrlen * 4);
         m_SubmeshList[0]->m_NumIndicesToDraw += textstrlen * 6;

@@ -71,7 +71,7 @@ Vector2 GetStringSize(FontDefinition* pFont, float fontheight, const char* text,
     vsnprintf_s( tempbuffer, sizeof(tempbuffer), _TRUNCATE, stringtodraw, arg );
     va_end(arg);
 
-    return pFont->m_pFont->GetSize( tempbuffer, fontheight );
+    return pFont->m_pBMFont->GetSize( tempbuffer, fontheight );
 }
 
 int RenderTextQuick(FontDefinition* pFont, float fontheight, float x, float y, unsigned char justificationflags, const char* text, ...)
@@ -273,7 +273,7 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
 
     int numlines = 0;
 
-    if( pFont && pFont->m_pFont && pFont->m_pTextureDef && pFont->m_pTextureDef->m_TextureID )
+    if( pFont && pFont->m_pBMFont && pFont->m_pTextureDef && pFont->m_pTextureDef->m_TextureID )
     {
         bool moretexttocome = true;
         const char* stringpos = stringtodraw;
@@ -365,7 +365,7 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
                 g_pRTQGlobals->m_pVertexBuffer = g_pBufferManager->CreateBuffer( 0, sizeof(Vertex_XYZUV_RGBA)*g_pRTQGlobals->m_VBONumVerts, GL_ARRAY_BUFFER, GL_DYNAMIC_DRAW, false, 2, VertexFormat_XYZUV_RGBA, "RenderTextQuick", "Verts" );
             }
 
-            textstrlen = pFont->m_pFont->GenerateVerts( stringtodraw, false, pVertToDraws, fontheight, GL_TRIANGLES, justificationflags, color );
+            textstrlen = pFont->m_pBMFont->GenerateVerts( stringtodraw, false, pVertToDraws, fontheight, GL_TRIANGLES, justificationflags, color );
 
             MyMatrix position;
             position.SetIdentity();

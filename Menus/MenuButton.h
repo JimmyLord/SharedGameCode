@@ -57,7 +57,6 @@ public:
     static const int MAX_STRING_LENGTH = 64;
     static const int MAX_BUTTON_ACTION_LENGTH = 32;
 
-protected:
     enum MaterialTypes
     {
         Material_BG,
@@ -67,6 +66,7 @@ protected:
         Material_Shadow,
         Materials_NumTypes,
     };
+protected:
     static const char* m_MaterialNames[Materials_NumTypes];
 
     //friend class Screen_Base; // for import/export of menu page layout

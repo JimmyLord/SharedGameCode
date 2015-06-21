@@ -146,8 +146,10 @@ cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int nu
                 }
                 break;
 
-            case MIT_Base:
             case MIT_InputBox:
+                break;
+
+            case MIT_Base:
             case MIT_ScrollingText:
             case MIT_ScrollBox:
             case MIT_CheckBox:
@@ -259,7 +261,11 @@ unsigned int Menu_ImportExport::ImportMenuLayout(cJSON* layout, MenuItem** itema
 
                             cJSON* jFont = cJSON_GetObjectItem( jMenuItem, "Font" );
                             if( jFont )
-                                pMenuText->SetFont( g_pFontManager->CreateFont( jFont->valuestring ) );
+                            {
+                                FontDefinition* pFont = g_pFontManager->CreateFont( jFont->valuestring );
+                                pMenuText->SetFont( pFont );
+                                pFont->Release();
+                            }
 
                             cJSONExt_GetString( jMenuItem, "String", pMenuText->m_String, MenuText::MAX_MenuText_STRING );
                         }

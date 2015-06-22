@@ -37,7 +37,7 @@ MenuText* CreateMenuText(MenuItem** itemarray, int index, int maxletters)       
 MenuButton* CreateMenuButton(MenuItem** itemarray, int index, int maxletters)    { CREATEMENUTYPEINT( itemarray, index, MenuButton, maxletters ); }
 //MenuScrollBox* CreateMenuScrollBox(MenuItem** itemarray, int index)              { CREATEMENUTYPE( itemarray, index, MenuScrollBox ); }
 //MenuScrollingText* CreateMenuScrollingText(MenuItem** itemarray, int index)      { CREATEMENUTYPE( itemarray, index, MenuScrollingText ); }
-//MenuInputBox* CreateMenuInputBox(MenuItem** itemarray, int index)                { CREATEMENUTYPE( itemarray, index, MenuInputBox ); }
+MenuInputBox* CreateMenuInputBox(MenuItem** itemarray, int index)                { CREATEMENUTYPE( itemarray, index, MenuInputBox ); }
 MenuCheckBox* CreateMenuCheckBox(MenuItem** itemarray, int index)                { CREATEMENUTYPE( itemarray, index, MenuCheckBox ); }
 
 cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int numitems)
@@ -110,8 +110,13 @@ cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int nu
                 break;
 
             case MIT_Button:
+            case MIT_InputBox:
                 {
-                    MenuButton* pMenuButton = GetMenuButton( itemarray, i );
+                    MenuButton* pMenuButton;
+                    if( pMenuItem->m_MenuItemType == MIT_InputBox )
+                        pMenuButton = (MenuButton*)GetMenuInputBox( itemarray, i );
+                    else
+                        pMenuButton = GetMenuButton( itemarray, i );
 
                     cJSON_AddNumberToObject( menuitem, "W", pMenuItem->m_Transform.m11 );
                     cJSON_AddNumberToObject( menuitem, "H", pMenuItem->m_Transform.m22 );
@@ -143,15 +148,19 @@ cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int nu
 
                     if( pMenuButton->m_ButtonAction[0] != 0 )
                         cJSON_AddStringToObject( menuitem, "Action", pMenuButton->m_ButtonAction );
+
+                    if( pMenuItem->m_MenuItemType == MIT_InputBox )
+                    {
+                        cJSON_AddNumberToObject( menuitem, "MaxLength", ((MenuInputBox*)pMenuButton)->m_MaxLength );
+                    }
                 }
                 break;
 
-            case MIT_InputBox:
+            case MIT_ScrollBox:
                 break;
 
             case MIT_Base:
             case MIT_ScrollingText:
-            case MIT_ScrollBox:
             case MIT_CheckBox:
             case MIT_NumMenuItemTypes:
                 MyAssert( false ); // need to add support for more, if I ever use them again.
@@ -193,6 +202,7 @@ unsigned int Menu_ImportExport::ImportMenuLayout(cJSON* layout, MenuItem** itema
                     if( jMIT->valueint == MIT_Sprite )   pMenuItem = CreateMenuSprite( itemarray, i );
                     if( jMIT->valueint == MIT_Text )     pMenuItem = CreateMenuText( itemarray, i, lettersneeded );
                     if( jMIT->valueint == MIT_Button )   pMenuItem = CreateMenuButton( itemarray, i, lettersneeded );
+                    if( jMIT->valueint == MIT_InputBox ) pMenuItem = CreateMenuInputBox( itemarray, i );
 
                     cJSONExt_GetString( jMenuItem, "Name", pMenuItem->m_Name, MenuItem::MAX_MENUITEM_NAME_LENGTH );
 
@@ -309,6 +319,11 @@ unsigned int Menu_ImportExport::ImportMenuLayout(cJSON* layout, MenuItem** itema
                             cJSONExt_GetString( jMenuItem, "String3", pMenuButton->m_Strings[2], MenuButton::MAX_STRING_LENGTH );
 
                             cJSONExt_GetString( jMenuItem, "Action", pMenuButton->m_ButtonAction, MenuButton::MAX_BUTTON_ACTION_LENGTH );
+
+                            if( pMenuItem->m_MenuItemType == MIT_InputBox )
+                            {
+                                cJSONExt_GetInt( jMenuItem, "MaxLength", &((MenuInputBox*)pMenuButton)->m_MaxLength );
+                            }
                         }
                         break;
 

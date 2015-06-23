@@ -41,6 +41,8 @@ void MenuScrollingText::SetTextMesh(MyMeshText* pMesh)
 
 void MenuScrollingText::Draw(MyMatrix* matviewproj)
 {
+    if( m_peTextMesh == 0 )
+        return;
     MyAssert( m_peTextMesh );
 
     MenuScrollBox::Draw( matviewproj );

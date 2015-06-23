@@ -36,7 +36,7 @@ MenuSprite* CreateMenuSprite(MenuItem** itemarray, int index)                   
 MenuText* CreateMenuText(MenuItem** itemarray, int index, int maxletters)        { CREATEMENUTYPEINT( itemarray, index, MenuText, maxletters ); }
 MenuButton* CreateMenuButton(MenuItem** itemarray, int index, int maxletters)    { CREATEMENUTYPEINT( itemarray, index, MenuButton, maxletters ); }
 //MenuScrollBox* CreateMenuScrollBox(MenuItem** itemarray, int index)              { CREATEMENUTYPE( itemarray, index, MenuScrollBox ); }
-//MenuScrollingText* CreateMenuScrollingText(MenuItem** itemarray, int index)      { CREATEMENUTYPE( itemarray, index, MenuScrollingText ); }
+MenuScrollingText* CreateMenuScrollingText(MenuItem** itemarray, int index)      { CREATEMENUTYPE( itemarray, index, MenuScrollingText ); }
 MenuInputBox* CreateMenuInputBox(MenuItem** itemarray, int index)                { CREATEMENUTYPE( itemarray, index, MenuInputBox ); }
 MenuCheckBox* CreateMenuCheckBox(MenuItem** itemarray, int index)                { CREATEMENUTYPE( itemarray, index, MenuCheckBox ); }
 
@@ -156,11 +156,25 @@ cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int nu
                 }
                 break;
 
+            case MIT_ScrollingText:
+                {
+                    MenuScrollingText* pMenuScrollingText = GetMenuScrollingText( itemarray, i );
+
+                    if( pMenuScrollingText->m_StringToShow )
+                        cJSON_AddStringToObject( menuitem, "StringToShow", pMenuScrollingText->m_StringToShow );
+
+                    cJSON_AddNumberToObject( menuitem, "TopFade0", pMenuScrollingText->m_TopFade0 );
+                    cJSON_AddNumberToObject( menuitem, "TopFade1", pMenuScrollingText->m_TopFade1 );
+
+                    cJSON_AddNumberToObject( menuitem, "BottomFade1", pMenuScrollingText->m_BottomFade1 );
+                    cJSON_AddNumberToObject( menuitem, "BottomFade0", pMenuScrollingText->m_BottomFade0 );
+                }
+                break;
+
             case MIT_ScrollBox:
                 break;
 
             case MIT_Base:
-            case MIT_ScrollingText:
             case MIT_CheckBox:
             case MIT_NumMenuItemTypes:
                 MyAssert( false ); // need to add support for more, if I ever use them again.
@@ -199,10 +213,11 @@ unsigned int Menu_ImportExport::ImportMenuLayout(cJSON* layout, MenuItem** itema
                     cJSONExt_GetInt( jMenuItem, "LettersNeeded", &lettersneeded );
 
                     MenuItem* pMenuItem = 0;
-                    if( jMIT->valueint == MIT_Sprite )   pMenuItem = CreateMenuSprite( itemarray, i );
-                    if( jMIT->valueint == MIT_Text )     pMenuItem = CreateMenuText( itemarray, i, lettersneeded );
-                    if( jMIT->valueint == MIT_Button )   pMenuItem = CreateMenuButton( itemarray, i, lettersneeded );
-                    if( jMIT->valueint == MIT_InputBox ) pMenuItem = CreateMenuInputBox( itemarray, i );
+                    if( jMIT->valueint == MIT_Sprite )        pMenuItem = CreateMenuSprite( itemarray, i );
+                    if( jMIT->valueint == MIT_Text )          pMenuItem = CreateMenuText( itemarray, i, lettersneeded );
+                    if( jMIT->valueint == MIT_Button )        pMenuItem = CreateMenuButton( itemarray, i, lettersneeded );
+                    if( jMIT->valueint == MIT_InputBox )      pMenuItem = CreateMenuInputBox( itemarray, i );
+                    if( jMIT->valueint == MIT_ScrollingText ) pMenuItem = CreateMenuScrollingText( itemarray, i );
 
                     cJSONExt_GetString( jMenuItem, "Name", pMenuItem->m_Name, MenuItem::MAX_MENUITEM_NAME_LENGTH );
 
@@ -312,7 +327,11 @@ unsigned int Menu_ImportExport::ImportMenuLayout(cJSON* layout, MenuItem** itema
 
                             cJSON* jFont = cJSON_GetObjectItem( jMenuItem, "Font" );
                             if( jFont )
-                                pMenuButton->m_pFont = g_pFontManager->CreateFont( jFont->valuestring );
+                            {
+                                FontDefinition* pFont = g_pFontManager->CreateFont( jFont->valuestring );
+                                pMenuButton->SetFont( pFont );
+                                pFont->Release();
+                            }
 
                             cJSONExt_GetString( jMenuItem, "String1", pMenuButton->m_Strings[0], MenuButton::MAX_STRING_LENGTH );
                             cJSONExt_GetString( jMenuItem, "String2", pMenuButton->m_Strings[1], MenuButton::MAX_STRING_LENGTH );
@@ -327,9 +346,23 @@ unsigned int Menu_ImportExport::ImportMenuLayout(cJSON* layout, MenuItem** itema
                         }
                         break;
 
+                    case MIT_ScrollingText:
+                        {
+                            MenuScrollingText* pMenuScrollingText = (MenuScrollingText*)pMenuItem;
+
+                            // TODO: need to allocate memory if this is stored...
+                            //cJSONExt_GetString( jMenuItem, "StringToShow", pMenuScrollingText->m_StringToShow, size of buffer );
+
+                            cJSONExt_GetFloat( jMenuItem, "TopFade0", &pMenuScrollingText->m_TopFade0 );
+                            cJSONExt_GetFloat( jMenuItem, "TopFade1", &pMenuScrollingText->m_TopFade1 );
+
+                            cJSONExt_GetFloat( jMenuItem, "BottomFade1", &pMenuScrollingText->m_BottomFade1 );
+                            cJSONExt_GetFloat( jMenuItem, "BottomFade0", &pMenuScrollingText->m_BottomFade0 );
+                        }
+                        break;
+
                     case MIT_Base:
                     case MIT_InputBox:
-                    case MIT_ScrollingText:
                     case MIT_ScrollBox:
                     case MIT_CheckBox:
                     case MIT_NumMenuItemTypes:

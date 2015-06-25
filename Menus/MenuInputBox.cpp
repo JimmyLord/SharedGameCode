@@ -42,7 +42,8 @@ void MenuInputBox::SetInputString(const char* str, ...)
 
 void MenuInputBox::Draw(MyMatrix* matviewproj)
 {
-    SetString( m_Strings[0], m_InputBuffer );
+    MenuButton::SetString( m_InputBuffer );
+    //SetString( m_Strings[0], m_InputBuffer );
 
     MenuButton::Draw( matviewproj );
 }

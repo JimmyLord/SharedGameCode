@@ -297,6 +297,7 @@ unsigned int Menu_ImportExport::ImportMenuLayout(cJSON* layout, MenuItem** itema
                         break;
 
                     case MIT_Button:
+                    case MIT_InputBox:
                         {
                             MenuButton* pMenuButton = (MenuButton*)pMenuItem;
 
@@ -362,7 +363,6 @@ unsigned int Menu_ImportExport::ImportMenuLayout(cJSON* layout, MenuItem** itema
                         break;
 
                     case MIT_Base:
-                    case MIT_InputBox:
                     case MIT_ScrollBox:
                     case MIT_CheckBox:
                     case MIT_NumMenuItemTypes:

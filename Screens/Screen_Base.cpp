@@ -170,7 +170,7 @@ char* Screen_Base::ExportMenuLayout()
     int len = (int)strlen( savestring );
     RidiculousReallocatedStringSoICanUseMyNewDeleteOverridesWithoutChangingThecJSONCodeToUseThemForAllItsSmallAllocations = MyNew char[len+1];
     strcpy_s( RidiculousReallocatedStringSoICanUseMyNewDeleteOverridesWithoutChangingThecJSONCodeToUseThemForAllItsSmallAllocations, len+1, savestring );
-    free( savestring );
+    cJSONExt_free( savestring );
 
     return RidiculousReallocatedStringSoICanUseMyNewDeleteOverridesWithoutChangingThecJSONCodeToUseThemForAllItsSmallAllocations;
 }

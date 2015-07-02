@@ -129,6 +129,9 @@ public:
 
     MenuItemDeletedCallbackStruct m_MenuItemDeletedCallbackStruct;
     void RegisterMenuItemDeletedCallback(void* pObj, MenuItemDeletedCallbackFunc pFunc);
+
+    static void StaticOnLabelEdit(void* pObjectPtr, wxTreeItemId id, wxString newlabel) { ((MenuItem*)pObjectPtr)->OnLabelEdit( newlabel ); }
+    void OnLabelEdit(wxString newlabel);
 #endif //MYFW_USING_WX
 
     void SetMenuItemNavigation(int up, int right, int down, int left);

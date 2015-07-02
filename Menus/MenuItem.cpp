@@ -76,7 +76,21 @@ int MenuItem::CheckForCollisionPosition(float x, float y, bool held)
 
 void MenuItem::SetName(const char* name)
 {
-    strcpy_s( m_Name, MAX_MENUITEM_NAME_LENGTH, name );
+    MyAssert( name );
+
+    unsigned int charstocopy = strlen( name )+1;
+    if( charstocopy > MAX_MENUITEM_NAME_LENGTH )
+        charstocopy = MAX_MENUITEM_NAME_LENGTH;
+
+    strncpy( m_Name, name, charstocopy );
+    m_Name[MAX_MENUITEM_NAME_LENGTH-1] = 0;
+
+#if MYFW_USING_WX
+    if( g_pPanelObjectList )
+    {
+        g_pPanelObjectList->RenameObject( this, m_Name );
+    }
+#endif //MYFW_USING_WX
 }
 
 void MenuItem::SetPositionOffset(float offx, float offy)
@@ -150,6 +164,15 @@ void MenuItem::RegisterMenuItemDeletedCallback(void* pObj, MenuItemDeletedCallba
 {
     m_MenuItemDeletedCallbackStruct.pFunc = pFunc;
     m_MenuItemDeletedCallbackStruct.pObj = pObj;
+}
+
+void MenuItem::OnLabelEdit(wxString newlabel)
+{
+    size_t len = newlabel.length();
+    if( len > 0 )
+    {
+        SetName( newlabel );
+    }
 }
 #endif //MYFW_USING_WX
 

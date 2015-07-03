@@ -265,12 +265,14 @@ void MenuButton::Draw(MyMatrix* matviewproj)
                 m_pSprite->Draw( matviewproj ); //&g_pGame->m_OrthoMatrixGameSize );
             }
 
-            if( pMaterial )
+            if( pMaterial != 0 )
+            {
                 m_pSprite->SetMaterial( pMaterial );
-            //m_pSprite->SetTint( bgcolor );
+                ////m_pSprite->SetTint( bgcolor );
 
-            m_pSprite->SetTransform( transform );
-            m_pSprite->Draw( matviewproj ); //&g_pGame->m_OrthoMatrixGameSize );
+                m_pSprite->SetTransform( transform );
+                m_pSprite->Draw( matviewproj ); //&g_pGame->m_OrthoMatrixGameSize );
+            }
         }
     }
 
@@ -864,9 +866,9 @@ void MenuButton::FillPropertiesWindow()
     for( unsigned int i=0; i<Materials_NumTypes; i++ )
     {
         if( m_pMaterials[i] )
-            m_CONTROLID_Materials[i] = g_pPanelWatch->AddPointerWithDescription( m_MaterialNames[i], &m_pMaterials[i], m_pMaterials[i]->GetName(), this, MenuButton::StaticOnDropMaterial );
+            m_CONTROLID_Materials[i] = g_pPanelWatch->AddPointerWithDescription( m_MaterialNames[i], &m_pMaterials[i], m_pMaterials[i]->GetName(), this, MenuButton::StaticOnDropMaterial, MenuButton::StaticOnValueChanged );
         else
-            m_CONTROLID_Materials[i] = g_pPanelWatch->AddPointerWithDescription( m_MaterialNames[i], &m_pMaterials[i], "no material", this, MenuButton::StaticOnDropMaterial );
+            m_CONTROLID_Materials[i] = g_pPanelWatch->AddPointerWithDescription( m_MaterialNames[i], &m_pMaterials[i], "no material", this, MenuButton::StaticOnDropMaterial, MenuButton::StaticOnValueChanged );
     }
 
     g_pPanelWatch->AddString( "String1", &m_Strings[0][0], MAX_STRING_LENGTH );
@@ -922,6 +924,36 @@ void MenuButton::OnDropMaterial(int controlid, wxCoord x, wxCoord y)
 
         // update the panel so new Material name shows up.
         g_pPanelWatch->m_pVariables[g_DragAndDropStruct.m_ID].m_Description = pMaterial->GetName();
+    }
+}
+
+void MenuButton::OnValueChanged(int controlid, bool finishedchanging)
+{
+    if( controlid == -1 )
+        return;
+
+    for( int i=0; i<Materials_NumTypes; i++ )
+    {
+        if( controlid == m_CONTROLID_Materials[i] )
+        {
+            wxString text = g_pPanelWatch->m_pVariables[controlid].m_Handle_TextCtrl->GetValue();
+            if( text == "" )
+            {
+                // if blank, then remove the material.
+                MyAssert( g_pPanelWatch->m_pVariables[controlid].m_Handle_TextCtrl != 0 );
+                g_pPanelWatch->ChangeDescriptionForPointerWithDescription( controlid, "no material" );
+                SetMaterial( i, 0 );
+            }
+            else
+            {
+                // if not blank, then reset the text box back to the material name...
+                // TODO: handle typing in a name
+                if( m_pMaterials[i] )
+                {
+                    g_pPanelWatch->ChangeDescriptionForPointerWithDescription( controlid, m_pMaterials[i]->GetName() );
+                }
+            }
+        }
     }
 }
 #endif //MYFW_USING_WX

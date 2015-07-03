@@ -211,6 +211,9 @@ public:
 
     static void StaticOnDropMaterial(void* pObjectPtr, int controlid, wxCoord x, wxCoord y) { ((MenuButton*)pObjectPtr)->OnDropMaterial(controlid, x, y); }
     void OnDropMaterial(int controlid, wxCoord x, wxCoord y);
+
+    static void StaticOnValueChanged(void* pObjectPtr, int controlid, bool finishedchanging) { ((MenuButton*)pObjectPtr)->OnValueChanged( controlid, finishedchanging ); }
+    void OnValueChanged(int controlid, bool finishedchanging);
 #endif //MYFW_USING_WX
 };
 

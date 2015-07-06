@@ -30,18 +30,18 @@ MenuText::MenuText()
     m_LineHeight = 30*0.8f;
 
     // set some reasonable defaults.
-    m_Transform.m41 = 100;
-    m_Transform.m42 = 400;
+    m_Position.x = 100;
+    m_Position.y = 400;
 
     strcpy_s( m_String, MAX_MenuText_STRING, "Text Item" );
     if( g_pFontManager )
         m_pFont = g_pFontManager->GetFirstFont();
 
+    m_TextSize.Set( 0, 0 );
+
     m_Justification = Justify_CenterX|Justify_CenterY;
     m_DropShadowOffsetX = 3;
     m_DropShadowOffsetY = -3;
-
-    m_Scale.Set( 1, 1, 1 );
 }
 
 MenuText::MenuText(int maxletters)
@@ -68,11 +68,11 @@ MenuText::MenuText(int maxletters)
     m_FontHeight = 30;
     m_LineHeight = 30*0.8f;
 
+    m_TextSize.Set( 0, 0 );
+
     m_Justification = Justify_CenterX|Justify_CenterY;
     m_DropShadowOffsetX = 3;
     m_DropShadowOffsetY = -3;
-
-    m_Scale.Set( 1, 1, 1 );
 }
 
 MenuText::MenuText(MyMeshText* pMeshText)
@@ -93,11 +93,11 @@ MenuText::MenuText(MyMeshText* pMeshText)
     m_FontHeight = 30;
     m_LineHeight = 30*0.8f;
 
+    m_TextSize.Set( 0, 0 );
+
     m_Justification = Justify_CenterX|Justify_CenterY;
     m_DropShadowOffsetX = 3;
     m_DropShadowOffsetY = -3;
-
-    m_Scale.Set( 1, 1, 1 );
 }
 
 MenuText::~MenuText()
@@ -123,8 +123,8 @@ void MenuText::Draw(MyMatrix* matviewproj)
     float shadowoffx = m_DropShadowOffsetX;
     float shadowoffy = m_DropShadowOffsetY;
 
-    float posx = (m_PositionOffset.x + m_Transform.m41);
-    float posy = (m_PositionOffset.y + m_Transform.m42);
+    float posx = m_Position.x;
+    float posy = m_Position.y;
 
     ColorByte textcolor = m_TextColor;
     ColorByte textshadowcolor = m_TextShadowColor;
@@ -133,12 +133,12 @@ void MenuText::Draw(MyMatrix* matviewproj)
     {
         if( shadowoffx != 0 && shadowoffy != 0 )
         {
-            m_pMeshText->CreateString( m_DrawAsPartOfBatch, m_FontHeight*m_Scale.y, posx+shadowoffx, posy+shadowoffy, 0, 0, m_Justification, textshadowcolor, m_Size, m_String );
-            m_pMeshText->CreateString( true, m_FontHeight*m_Scale.y, posx, posy, 0, 0, m_Justification, textcolor, m_Size, m_String );
+            m_pMeshText->CreateString( m_DrawAsPartOfBatch, m_FontHeight, posx+shadowoffx, posy+shadowoffy, 0, 0, m_Justification, textshadowcolor, m_TextSize, m_String );
+            m_pMeshText->CreateString( true, m_FontHeight, posx, posy, 0, 0, m_Justification, textcolor, m_TextSize, m_String );
         }
         else
         {
-            m_pMeshText->CreateString( m_DrawAsPartOfBatch, m_FontHeight*m_Scale.y, posx, posy, 0, 0, m_Justification, textcolor, m_Size, m_String );
+            m_pMeshText->CreateString( m_DrawAsPartOfBatch, m_FontHeight, posx, posy, 0, 0, m_Justification, textcolor, m_TextSize, m_String );
         }
         //m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
         //m_pMaterial->SetTextureColor( m_pFont->m_pTextureDef );
@@ -167,11 +167,11 @@ MyRect MenuText::GetBoundingRect()
 {
     MyRect rect;
 
-    float textwidth = m_Size.x;//1000;
+    float textwidth = m_TextSize.x;//1000;
 
-    rect.x = (int)(m_Transform.m41 + m_PositionOffset.x);
+    rect.x = (int)(m_Position.x);
     rect.w = (int)textwidth;
-    rect.y = (int)(m_Transform.m42 + m_PositionOffset.y);
+    rect.y = (int)(m_Position.y);
     rect.h = (int)m_FontHeight;
 
     if( m_Justification & Justify_CenterX )
@@ -189,10 +189,10 @@ MyRect MenuText::GetBoundingRect()
 
 void MenuText::SetPositionAndSize(float x, float y, float w, float h, float inputw, float inputh)
 {
-    m_Transform.m41 = x;
-    m_Transform.m42 = y;
+    m_Position.x = x;
+    m_Position.y = y;
 
-    m_Size.Set( w, h );
+    m_TextSize.Set( w, h );
 }
 
 void MenuText::SetString(const char* str, ...)

@@ -79,210 +79,210 @@ void Screen_Base::OnClose()
 }
 
 #if _DEBUG
-char* Screen_Base::ExportMenuLayout()
-{
-    cJSON* menuitemarray = cJSON_CreateArray();
-
-    for( int i=0; i<MAX_MENUITEMS; i++ )
-    {
-        MenuItem* pMenuItem = m_pMenuItems[i];
-
-        if( pMenuItem )
-        {
-            cJSON* menuitem = cJSON_CreateObject();
-            cJSON_AddItemToArray( menuitemarray, menuitem );
-
-            cJSON_AddStringToObject( menuitem, "Name", pMenuItem->m_Name );
-
-            cJSON_AddNumberToObject( menuitem, "X", pMenuItem->m_Transform.m41 );
-            cJSON_AddNumberToObject( menuitem, "Y", pMenuItem->m_Transform.m42 );
-
-            cJSON_AddNumberToObject( menuitem, "Scale", pMenuItem->m_Scale.x );
-
-            cJSON_AddNumberToObject( menuitem, "SX", pMenuItem->m_Size.x );
-            cJSON_AddNumberToObject( menuitem, "SY", pMenuItem->m_Size.y );
-
-            cJSON_AddNumberToObject( menuitem, "OffX", pMenuItem->m_PositionOffset.x );
-            cJSON_AddNumberToObject( menuitem, "OffY", pMenuItem->m_PositionOffset.y );
-
-            switch( pMenuItem->m_MenuItemType )
-            {
-            case MIT_Sprite:
-                {
-                    MenuSprite* pMenuSprite = GetMenuSprite( i );
-
-                    cJSON_AddNumberToObject( menuitem, "W", pMenuItem->m_Transform.m11 );
-                    cJSON_AddNumberToObject( menuitem, "H", pMenuItem->m_Transform.m22 );
-
-                    cJSON_AddNumberToObject( menuitem, "BGShadowX", pMenuSprite->m_DropShadowOffset.x );
-                    cJSON_AddNumberToObject( menuitem, "BGShadowY", pMenuSprite->m_DropShadowOffset.y );
-                }
-                break;
-
-            case MIT_Text: // MenuText_SaveLoad
-                {
-                    MenuText* pMenuText = GetMenuText( i );
-
-                    cJSON_AddNumberToObject( menuitem, "FontHeight", pMenuText->m_FontHeight );
-
-                    cJSON_AddNumberToObject( menuitem, "TextShadowX", pMenuText->m_DropShadowOffsetX );
-                    cJSON_AddNumberToObject( menuitem, "TextShadowY", pMenuText->m_DropShadowOffsetY );
-
-                    cJSON_AddNumberToObject( menuitem, "Justify", pMenuText->m_Justification );
-                }
-                break;
-
-            case MIT_Button:
-                {
-                    MenuButton* pMenuButton = GetMenuButton( i );
-
-                    cJSON_AddNumberToObject( menuitem, "W", pMenuItem->m_Transform.m11 );
-                    cJSON_AddNumberToObject( menuitem, "H", pMenuItem->m_Transform.m22 );
-
-                    cJSON_AddNumberToObject( menuitem, "IW", pMenuButton->m_InputWidth );
-                    cJSON_AddNumberToObject( menuitem, "IH", pMenuButton->m_InputHeight );
-
-                    cJSON_AddNumberToObject( menuitem, "FontHeight", pMenuButton->m_FontHeight );
-
-                    cJSON_AddNumberToObject( menuitem, "BGShadowX", pMenuButton->m_DropShadowOffsetBG.x );
-                    cJSON_AddNumberToObject( menuitem, "BGShadowY", pMenuButton->m_DropShadowOffsetBG.y );
-
-                    cJSON_AddNumberToObject( menuitem, "TextShadowX", pMenuButton->m_DropShadowOffsetText.x );
-                    cJSON_AddNumberToObject( menuitem, "TextShadowY", pMenuButton->m_DropShadowOffsetText.y );
-                }
-                break;
-
-            case MIT_Base:
-            case MIT_InputBox:
-            case MIT_ScrollingText:
-            case MIT_ScrollBox:
-            case MIT_CheckBox:
-            case MIT_NumMenuItemTypes:
-                break;
-            }
-        }
-    }
-
-    char* savestring = cJSON_PrintUnformatted( menuitemarray );
-    cJSON_Delete( menuitemarray );
-
-    char* RidiculousReallocatedStringSoICanUseMyNewDeleteOverridesWithoutChangingThecJSONCodeToUseThemForAllItsSmallAllocations;
-    int len = (int)strlen( savestring );
-    RidiculousReallocatedStringSoICanUseMyNewDeleteOverridesWithoutChangingThecJSONCodeToUseThemForAllItsSmallAllocations = MyNew char[len+1];
-    strcpy_s( RidiculousReallocatedStringSoICanUseMyNewDeleteOverridesWithoutChangingThecJSONCodeToUseThemForAllItsSmallAllocations, len+1, savestring );
-    cJSONExt_free( savestring );
-
-    return RidiculousReallocatedStringSoICanUseMyNewDeleteOverridesWithoutChangingThecJSONCodeToUseThemForAllItsSmallAllocations;
-}
+//char* Screen_Base::ExportMenuLayout()
+//{
+//    cJSON* menuitemarray = cJSON_CreateArray();
+//
+//    for( int i=0; i<MAX_MENUITEMS; i++ )
+//    {
+//        MenuItem* pMenuItem = m_pMenuItems[i];
+//
+//        if( pMenuItem )
+//        {
+//            cJSON* menuitem = cJSON_CreateObject();
+//            cJSON_AddItemToArray( menuitemarray, menuitem );
+//
+//            cJSON_AddStringToObject( menuitem, "Name", pMenuItem->m_Name );
+//
+//            cJSON_AddNumberToObject( menuitem, "X", pMenuItem->m_Position.x );
+//            cJSON_AddNumberToObject( menuitem, "Y", pMenuItem->m_Position.y );
+//
+//            //cJSON_AddNumberToObject( menuitem, "Scale", pMenuItem->m_Scale.x );
+//
+//            //cJSON_AddNumberToObject( menuitem, "SX", pMenuItem->m_Size.x );
+//            //cJSON_AddNumberToObject( menuitem, "SY", pMenuItem->m_Size.y );
+//
+//            //cJSON_AddNumberToObject( menuitem, "OffX", pMenuItem->m_PositionOffset.x );
+//            //cJSON_AddNumberToObject( menuitem, "OffY", pMenuItem->m_PositionOffset.y );
+//
+//            switch( pMenuItem->m_MenuItemType )
+//            {
+//            case MIT_Sprite:
+//                {
+//                    MenuSprite* pMenuSprite = GetMenuSprite( i );
+//
+//                    cJSON_AddNumberToObject( menuitem, "W", pMenuItem->m_Transform.m11 );
+//                    cJSON_AddNumberToObject( menuitem, "H", pMenuItem->m_Transform.m22 );
+//
+//                    cJSON_AddNumberToObject( menuitem, "BGShadowX", pMenuSprite->m_DropShadowOffset.x );
+//                    cJSON_AddNumberToObject( menuitem, "BGShadowY", pMenuSprite->m_DropShadowOffset.y );
+//                }
+//                break;
+//
+//            case MIT_Text: // MenuText_SaveLoad
+//                {
+//                    MenuText* pMenuText = GetMenuText( i );
+//
+//                    cJSON_AddNumberToObject( menuitem, "FontHeight", pMenuText->m_FontHeight );
+//
+//                    cJSON_AddNumberToObject( menuitem, "TextShadowX", pMenuText->m_DropShadowOffsetX );
+//                    cJSON_AddNumberToObject( menuitem, "TextShadowY", pMenuText->m_DropShadowOffsetY );
+//
+//                    cJSON_AddNumberToObject( menuitem, "Justify", pMenuText->m_Justification );
+//                }
+//                break;
+//
+//            case MIT_Button:
+//                {
+//                    MenuButton* pMenuButton = GetMenuButton( i );
+//
+//                    cJSON_AddNumberToObject( menuitem, "W", pMenuItem->m_Transform.m11 );
+//                    cJSON_AddNumberToObject( menuitem, "H", pMenuItem->m_Transform.m22 );
+//
+//                    cJSON_AddNumberToObject( menuitem, "IW", pMenuButton->m_InputWidth );
+//                    cJSON_AddNumberToObject( menuitem, "IH", pMenuButton->m_InputHeight );
+//
+//                    cJSON_AddNumberToObject( menuitem, "FontHeight", pMenuButton->m_FontHeight );
+//
+//                    cJSON_AddNumberToObject( menuitem, "BGShadowX", pMenuButton->m_DropShadowOffsetBG.x );
+//                    cJSON_AddNumberToObject( menuitem, "BGShadowY", pMenuButton->m_DropShadowOffsetBG.y );
+//
+//                    cJSON_AddNumberToObject( menuitem, "TextShadowX", pMenuButton->m_DropShadowOffsetText.x );
+//                    cJSON_AddNumberToObject( menuitem, "TextShadowY", pMenuButton->m_DropShadowOffsetText.y );
+//                }
+//                break;
+//
+//            case MIT_Base:
+//            case MIT_InputBox:
+//            case MIT_ScrollingText:
+//            case MIT_ScrollBox:
+//            case MIT_CheckBox:
+//            case MIT_NumMenuItemTypes:
+//                break;
+//            }
+//        }
+//    }
+//
+//    char* savestring = cJSON_PrintUnformatted( menuitemarray );
+//    cJSON_Delete( menuitemarray );
+//
+//    char* RidiculousReallocatedStringSoICanUseMyNewDeleteOverridesWithoutChangingThecJSONCodeToUseThemForAllItsSmallAllocations;
+//    int len = (int)strlen( savestring );
+//    RidiculousReallocatedStringSoICanUseMyNewDeleteOverridesWithoutChangingThecJSONCodeToUseThemForAllItsSmallAllocations = MyNew char[len+1];
+//    strcpy_s( RidiculousReallocatedStringSoICanUseMyNewDeleteOverridesWithoutChangingThecJSONCodeToUseThemForAllItsSmallAllocations, len+1, savestring );
+//    cJSONExt_free( savestring );
+//
+//    return RidiculousReallocatedStringSoICanUseMyNewDeleteOverridesWithoutChangingThecJSONCodeToUseThemForAllItsSmallAllocations;
+//}
 #endif
 
-void Screen_Base::ImportMenuLayout(const char* layout)
-{
-    if( layout == 0 )
-        return;
-
-    cJSON* menuitemarray = cJSON_Parse( layout );
-    MyAssert( menuitemarray );
-
-    if( menuitemarray )
-    {
-        int numitems = cJSON_GetArraySize( menuitemarray );
-        MyAssert( numitems <= MAX_MENUITEMS );
-
-        for( int i=0; i<numitems; i++ )
-        {
-            cJSON* menuitem = cJSON_GetArrayItem( menuitemarray, i );
-
-            cJSON* objname = cJSON_GetObjectItem( menuitem, "Name" );
-
-            int itemindex = -1;
-            for( itemindex = 0; itemindex < MAX_MENUITEMS; itemindex++ )
-            {
-                if( strcmp( objname->valuestring, m_pMenuItems[itemindex]->m_Name ) == 0 )
-                    break;
-            }
-
-            if( itemindex < MAX_MENUITEMS )
-            {
-                float x = 0;
-                float y = 0;
-                float w = 0;
-                float h = 0;
-                float iw = -1;
-                float ih = -1;
-
-                MenuItem* pMenuItem = m_pMenuItems[itemindex];
-
-                cJSONExt_GetFloat( menuitem, "X", &x );
-                cJSONExt_GetFloat( menuitem, "Y", &y );
-
-                cJSONExt_GetFloat( menuitem, "Scale", &pMenuItem->m_Scale.x );
-                cJSONExt_GetFloat( menuitem, "Scale", &pMenuItem->m_Scale.y );
-                cJSONExt_GetFloat( menuitem, "Scale", &pMenuItem->m_Scale.z );
-
-                cJSONExt_GetFloat( menuitem, "SX", &pMenuItem->m_Size.x );
-                cJSONExt_GetFloat( menuitem, "SY", &pMenuItem->m_Size.y );
-
-                cJSONExt_GetFloat( menuitem, "W", &w );
-                cJSONExt_GetFloat( menuitem, "H", &h );
-
-                cJSONExt_GetFloat( menuitem, "IW", &iw );
-                cJSONExt_GetFloat( menuitem, "IH", &ih );
-
-                cJSONExt_GetFloat( menuitem, "OffX", &pMenuItem->m_PositionOffset.x );
-                cJSONExt_GetFloat( menuitem, "OffY", &pMenuItem->m_PositionOffset.y );
-
-                pMenuItem->SetPositionAndSize( x, y, w, h, iw, ih );
-
-                switch( pMenuItem->m_MenuItemType )
-                {
-                case MIT_Sprite:
-                    {
-                        MenuSprite* pMenuSprite = GetMenuSprite( itemindex );
-
-                        cJSONExt_GetFloat( menuitem, "BGShadowX", &pMenuSprite->m_DropShadowOffset.x );
-                        cJSONExt_GetFloat( menuitem, "BGShadowY", &pMenuSprite->m_DropShadowOffset.y );
-                    }
-                    break;
-
-                case MIT_Text: // MenuText_SaveLoad
-                    {
-                        MenuText* pMenuText = GetMenuText( itemindex );
-
-                        cJSONExt_GetFloat( menuitem, "FontHeight", &pMenuText->m_FontHeight );
-                        cJSONExt_GetFloat( menuitem, "TextShadowX", &pMenuText->m_DropShadowOffsetX );
-                        cJSONExt_GetFloat( menuitem, "TextShadowY", &pMenuText->m_DropShadowOffsetY );
-
-                        cJSONExt_GetUnsignedChar( menuitem, "Justify", &pMenuText->m_Justification );
-                    }
-                    break;
-
-                case MIT_Button:
-                    {
-                        MenuButton* pMenuButton = GetMenuButton( itemindex );
-
-                        cJSONExt_GetFloat( menuitem, "FontHeight", &pMenuButton->m_FontHeight );
-                        cJSONExt_GetFloat( menuitem, "BGShadowX", &pMenuButton->m_DropShadowOffsetBG.x );
-                        cJSONExt_GetFloat( menuitem, "BGShadowY", &pMenuButton->m_DropShadowOffsetBG.y );
-                        cJSONExt_GetFloat( menuitem, "TextShadowX", &pMenuButton->m_DropShadowOffsetText.x );
-                        cJSONExt_GetFloat( menuitem, "TextShadowY", &pMenuButton->m_DropShadowOffsetText.y );
-                    }
-                    break;
-
-                case MIT_Base:
-                case MIT_InputBox:
-                case MIT_ScrollingText:
-                case MIT_ScrollBox:
-                case MIT_CheckBox:
-                case MIT_NumMenuItemTypes:
-                    break;
-                }
-            }
-        }
-
-        cJSON_Delete( menuitemarray );
-    }
-}
+//void Screen_Base::ImportMenuLayout(const char* layout)
+//{
+//    if( layout == 0 )
+//        return;
+//
+//    cJSON* menuitemarray = cJSON_Parse( layout );
+//    MyAssert( menuitemarray );
+//
+//    if( menuitemarray )
+//    {
+//        int numitems = cJSON_GetArraySize( menuitemarray );
+//        MyAssert( numitems <= MAX_MENUITEMS );
+//
+//        for( int i=0; i<numitems; i++ )
+//        {
+//            cJSON* menuitem = cJSON_GetArrayItem( menuitemarray, i );
+//
+//            cJSON* objname = cJSON_GetObjectItem( menuitem, "Name" );
+//
+//            int itemindex = -1;
+//            for( itemindex = 0; itemindex < MAX_MENUITEMS; itemindex++ )
+//            {
+//                if( strcmp( objname->valuestring, m_pMenuItems[itemindex]->m_Name ) == 0 )
+//                    break;
+//            }
+//
+//            if( itemindex < MAX_MENUITEMS )
+//            {
+//                float x = 0;
+//                float y = 0;
+//                float w = 0;
+//                float h = 0;
+//                float iw = -1;
+//                float ih = -1;
+//
+//                MenuItem* pMenuItem = m_pMenuItems[itemindex];
+//
+//                cJSONExt_GetFloat( menuitem, "X", &x );
+//                cJSONExt_GetFloat( menuitem, "Y", &y );
+//
+//                cJSONExt_GetFloat( menuitem, "Scale", &pMenuItem->m_Scale.x );
+//                cJSONExt_GetFloat( menuitem, "Scale", &pMenuItem->m_Scale.y );
+//                cJSONExt_GetFloat( menuitem, "Scale", &pMenuItem->m_Scale.z );
+//
+//                cJSONExt_GetFloat( menuitem, "SX", &pMenuItem->m_Size.x );
+//                cJSONExt_GetFloat( menuitem, "SY", &pMenuItem->m_Size.y );
+//
+//                cJSONExt_GetFloat( menuitem, "W", &w );
+//                cJSONExt_GetFloat( menuitem, "H", &h );
+//
+//                cJSONExt_GetFloat( menuitem, "IW", &iw );
+//                cJSONExt_GetFloat( menuitem, "IH", &ih );
+//
+//                cJSONExt_GetFloat( menuitem, "OffX", &pMenuItem->m_PositionOffset.x );
+//                cJSONExt_GetFloat( menuitem, "OffY", &pMenuItem->m_PositionOffset.y );
+//
+//                pMenuItem->SetPositionAndSize( x, y, w, h, iw, ih );
+//
+//                switch( pMenuItem->m_MenuItemType )
+//                {
+//                case MIT_Sprite:
+//                    {
+//                        MenuSprite* pMenuSprite = GetMenuSprite( itemindex );
+//
+//                        cJSONExt_GetFloat( menuitem, "BGShadowX", &pMenuSprite->m_DropShadowOffset.x );
+//                        cJSONExt_GetFloat( menuitem, "BGShadowY", &pMenuSprite->m_DropShadowOffset.y );
+//                    }
+//                    break;
+//
+//                case MIT_Text: // MenuText_SaveLoad
+//                    {
+//                        MenuText* pMenuText = GetMenuText( itemindex );
+//
+//                        cJSONExt_GetFloat( menuitem, "FontHeight", &pMenuText->m_FontHeight );
+//                        cJSONExt_GetFloat( menuitem, "TextShadowX", &pMenuText->m_DropShadowOffsetX );
+//                        cJSONExt_GetFloat( menuitem, "TextShadowY", &pMenuText->m_DropShadowOffsetY );
+//
+//                        cJSONExt_GetUnsignedChar( menuitem, "Justify", &pMenuText->m_Justification );
+//                    }
+//                    break;
+//
+//                case MIT_Button:
+//                    {
+//                        MenuButton* pMenuButton = GetMenuButton( itemindex );
+//
+//                        cJSONExt_GetFloat( menuitem, "FontHeight", &pMenuButton->m_FontHeight );
+//                        cJSONExt_GetFloat( menuitem, "BGShadowX", &pMenuButton->m_DropShadowOffsetBG.x );
+//                        cJSONExt_GetFloat( menuitem, "BGShadowY", &pMenuButton->m_DropShadowOffsetBG.y );
+//                        cJSONExt_GetFloat( menuitem, "TextShadowX", &pMenuButton->m_DropShadowOffsetText.x );
+//                        cJSONExt_GetFloat( menuitem, "TextShadowY", &pMenuButton->m_DropShadowOffsetText.y );
+//                    }
+//                    break;
+//
+//                case MIT_Base:
+//                case MIT_InputBox:
+//                case MIT_ScrollingText:
+//                case MIT_ScrollBox:
+//                case MIT_CheckBox:
+//                case MIT_NumMenuItemTypes:
+//                    break;
+//                }
+//            }
+//        }
+//
+//        cJSON_Delete( menuitemarray );
+//    }
+//}
 
 //void FillProps(void* pObject)
 //{
@@ -447,18 +447,18 @@ void Screen_Base::OnResized()
 
 void Screen_Base::UpdateMenuItems(bool initialsetup)
 {
-    float scrw = g_pGame->m_DeviceWidth;
-    float scrh = g_pGame->m_DeviceHeight;
+    //float scrw = g_pGame->m_DeviceWidth;
+    //float scrh = g_pGame->m_DeviceHeight;
 
-    if( m_ScreenOverlayIndex != -1 )
-    {
-        if( scrw > scrh )
-            ImportMenuLayout( g_pScreenOverlayManager->m_LayoutJSONStrings[m_ScreenOverlayIndex][LayoutType_Wide] );
-        if( scrw < scrh )
-            ImportMenuLayout( g_pScreenOverlayManager->m_LayoutJSONStrings[m_ScreenOverlayIndex][LayoutType_Tall] );
-        if( scrw == scrh )
-            ImportMenuLayout( g_pScreenOverlayManager->m_LayoutJSONStrings[m_ScreenOverlayIndex][LayoutType_Square] );
-    }
+    //if( m_ScreenOverlayIndex != -1 )
+    //{
+    //    if( scrw > scrh )
+    //        ImportMenuLayout( g_pScreenOverlayManager->m_LayoutJSONStrings[m_ScreenOverlayIndex][LayoutType_Wide] );
+    //    if( scrw < scrh )
+    //        ImportMenuLayout( g_pScreenOverlayManager->m_LayoutJSONStrings[m_ScreenOverlayIndex][LayoutType_Tall] );
+    //    if( scrw == scrh )
+    //        ImportMenuLayout( g_pScreenOverlayManager->m_LayoutJSONStrings[m_ScreenOverlayIndex][LayoutType_Square] );
+    //}
 }
 
 float Screen_Base::QueryPercentageStateComplete()
@@ -666,44 +666,44 @@ bool Screen_Base::OnButtons(GameCoreButtonActions action, GameCoreButtonIDs id)
 bool Screen_Base::OnKeyDown(int keycode, int unicodechar)
 {
 #if MYFW_WINDOWS && MYFW_USING_WX && _DEBUG
-    if( keycode == 'R' && g_pGameCore->m_KeysHeld[MYKEYCODE_LCTRL] )
-    {
-        float scrw = g_pGame->m_DeviceWidth;
-        float scrh = g_pGame->m_DeviceHeight;
+    //if( keycode == 'R' && g_pGameCore->m_KeysHeld[MYKEYCODE_LCTRL] )
+    //{
+    //    float scrw = g_pGame->m_DeviceWidth;
+    //    float scrh = g_pGame->m_DeviceHeight;
 
-        if( scrw > scrh )
-            ImportMenuLayout( m_LayoutJSON_Wide );
-        if( scrw < scrh )
-            ImportMenuLayout( m_LayoutJSON_Tall );
-        if( scrw == scrh )
-            ImportMenuLayout( m_LayoutJSON_Square );
-    }
-    if( keycode == 'S' && g_pGameCore->m_KeysHeld[MYKEYCODE_LCTRL] )
-    {
-        float scrw = g_pGame->m_DeviceWidth;
-        float scrh = g_pGame->m_DeviceHeight;
+    //    if( scrw > scrh )
+    //        ImportMenuLayout( m_LayoutJSON_Wide );
+    //    if( scrw < scrh )
+    //        ImportMenuLayout( m_LayoutJSON_Tall );
+    //    if( scrw == scrh )
+    //        ImportMenuLayout( m_LayoutJSON_Square );
+    //}
+    //if( keycode == 'S' && g_pGameCore->m_KeysHeld[MYKEYCODE_LCTRL] )
+    //{
+    //    float scrw = g_pGame->m_DeviceWidth;
+    //    float scrh = g_pGame->m_DeviceHeight;
 
-        if( m_ScreenOverlayIndex != -1 )
-        {
-            if( scrw > scrh )
-            {
-                SAFE_DELETE_ARRAY( g_pScreenOverlayManager->m_LayoutJSONStrings[m_ScreenOverlayIndex][LayoutType_Wide] );
-                g_pScreenOverlayManager->m_LayoutJSONStrings[m_ScreenOverlayIndex][LayoutType_Wide] = ExportMenuLayout();
-            }
-            if( scrw < scrh )
-            {
-                SAFE_DELETE_ARRAY( g_pScreenOverlayManager->m_LayoutJSONStrings[m_ScreenOverlayIndex][LayoutType_Tall] );
-                g_pScreenOverlayManager->m_LayoutJSONStrings[m_ScreenOverlayIndex][LayoutType_Tall] = ExportMenuLayout();
-            }
-            if( scrw == scrh )
-            {
-                SAFE_DELETE_ARRAY( g_pScreenOverlayManager->m_LayoutJSONStrings[m_ScreenOverlayIndex][LayoutType_Square] );
-                g_pScreenOverlayManager->m_LayoutJSONStrings[m_ScreenOverlayIndex][LayoutType_Square] = ExportMenuLayout();
-            }
-        }
+    //    if( m_ScreenOverlayIndex != -1 )
+    //    {
+    //        if( scrw > scrh )
+    //        {
+    //            SAFE_DELETE_ARRAY( g_pScreenOverlayManager->m_LayoutJSONStrings[m_ScreenOverlayIndex][LayoutType_Wide] );
+    //            g_pScreenOverlayManager->m_LayoutJSONStrings[m_ScreenOverlayIndex][LayoutType_Wide] = ExportMenuLayout();
+    //        }
+    //        if( scrw < scrh )
+    //        {
+    //            SAFE_DELETE_ARRAY( g_pScreenOverlayManager->m_LayoutJSONStrings[m_ScreenOverlayIndex][LayoutType_Tall] );
+    //            g_pScreenOverlayManager->m_LayoutJSONStrings[m_ScreenOverlayIndex][LayoutType_Tall] = ExportMenuLayout();
+    //        }
+    //        if( scrw == scrh )
+    //        {
+    //            SAFE_DELETE_ARRAY( g_pScreenOverlayManager->m_LayoutJSONStrings[m_ScreenOverlayIndex][LayoutType_Square] );
+    //            g_pScreenOverlayManager->m_LayoutJSONStrings[m_ScreenOverlayIndex][LayoutType_Square] = ExportMenuLayout();
+    //        }
+    //    }
 
-        g_pScreenOverlayManager->SaveLayouts();
-    }
+    //    g_pScreenOverlayManager->SaveLayouts();
+    //}
 #endif
     return false;
 }

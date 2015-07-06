@@ -82,6 +82,9 @@ protected:
 
     Vector2 m_DropShadowOffsetText;
     Vector2 m_DropShadowOffsetBG;
+    
+    Vector2 m_BGSize;
+    Vector2 m_TextSize;
 
     FontDefinition* m_pFont;
 
@@ -183,6 +186,7 @@ public:
     //void SetOverlay(const Vector2& size, const Vector2& offset, const ColorByte& bgcolor, MySprite* sprite, const Vector4& uvs);
 
     MenuButtonState GetState() { return m_State; }
+    Vector2 GetBGSize() { return m_BGSize; }
 
     //void SetSprites(MySprite* bg, MySprite* disabled, MySprite* pressed, MySprite* overlay, MySprite* shadow);
     //void SetSpritesCopy(MySprite* bg, MySprite* disabled, MySprite* pressed, MySprite* overlay, MySprite* shadow);
@@ -212,7 +216,7 @@ public:
     static void StaticOnDropMaterial(void* pObjectPtr, int controlid, wxCoord x, wxCoord y) { ((MenuButton*)pObjectPtr)->OnDropMaterial(controlid, x, y); }
     void OnDropMaterial(int controlid, wxCoord x, wxCoord y);
 
-    static void StaticOnValueChanged(void* pObjectPtr, int controlid, bool finishedchanging) { ((MenuButton*)pObjectPtr)->OnValueChanged( controlid, finishedchanging ); }
+    static void StaticOnValueChanged(void* pObjectPtr, int controlid, bool finishedchanging, double oldvalue) { ((MenuButton*)pObjectPtr)->OnValueChanged( controlid, finishedchanging ); }
     void OnValueChanged(int controlid, bool finishedchanging);
 #endif //MYFW_USING_WX
 };

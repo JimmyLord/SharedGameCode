@@ -30,6 +30,8 @@ public:
     bool m_MeshAllocatedLocally;
     bool m_DrawAsPartOfBatch;
 
+    Vector2 m_TextSize;
+
     float m_FontHeight;
     float m_LineHeight;
 

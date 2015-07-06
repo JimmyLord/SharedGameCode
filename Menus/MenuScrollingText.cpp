@@ -47,8 +47,8 @@ void MenuScrollingText::Draw(MyMatrix* matviewproj)
 
     MenuScrollBox::Draw( matviewproj );
 
-    float x = m_Transform.m41 + m_PositionOffset.x + m_ScrollAmount.x;
-    float y = m_Transform.m42 + m_PositionOffset.y + m_ScrollAmount.y;
+    float x = m_Position.x + m_ScrollAmount.x;
+    float y = m_Position.y + m_ScrollAmount.y;
 
     m_peTextMesh->ClearText();
 
@@ -97,8 +97,8 @@ void MenuScrollingText::Draw(MyMatrix* matviewproj)
 
                 if( m_peTextMesh )
                 {
-                    m_peTextMesh->CreateString( true, m_FontHeight, x+m_DropShadowOffsetText.x, ny+m_DropShadowOffsetText.y, 0, 0, Justify_Left|Justify_CenterY, shadowcolor, m_Size, line );
-                    m_peTextMesh->CreateString( true, m_FontHeight, x, ny, 0, 0, Justify_Left|Justify_CenterY, color, m_Size, line );
+                    m_peTextMesh->CreateString( true, m_FontHeight, x+m_DropShadowOffsetText.x, ny+m_DropShadowOffsetText.y, 0, 0, Justify_Left|Justify_CenterY, shadowcolor, m_TextSize, line );
+                    m_peTextMesh->CreateString( true, m_FontHeight, x, ny, 0, 0, Justify_Left|Justify_CenterY, color, m_TextSize, line );
                 }
                 else
                 {

@@ -85,9 +85,9 @@ protected:
     char* m_LayoutJSON_Wide;
     char* m_LayoutJSON_Square;
 #if _DEBUG
-    char* ExportMenuLayout();
+    //char* ExportMenuLayout();
 #endif
-    void ImportMenuLayout(const char* layout);
+    //void ImportMenuLayout(const char* layout);
 
 public:
     Screen_Base();

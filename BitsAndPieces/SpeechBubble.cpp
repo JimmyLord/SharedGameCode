@@ -28,6 +28,8 @@ SpeechBubble::SpeechBubble()
     m_DestHeight = 20;
 
     m_pTextMesh = MyNew MyMeshText( 100, g_pGame->m_pSystemFont ); // 50 chars with shadow
+    MaterialDefinition* pMaterial = g_pMaterialManager->FindMaterialByFilename( "Data/Materials/Nevis60.mymaterial" );
+    m_pTextMesh->SetMaterial( pMaterial, 0 );
     //m_pTextMesh->SetShaderAndTexture( g_pGame->m_pShader_TextureVertexColor, g_pGame->m_pSystemFont->m_pTextureDef );
 }
 
@@ -66,8 +68,8 @@ void SpeechBubble::Tick(double timepassed)
                        0, 0.15625f, 1-0.15625f, 1 );
     m_pPoint->Create( "SpeechBubble", 64, 64, 0, 1, 0, 1, Justify_Top );
 
-    m_pBubble->SetTint( m_CurrentColor );
-    m_pPoint->SetTint( m_CurrentColor );
+    //m_pBubble->SetTint( m_CurrentColor );
+    //m_pPoint->SetTint( m_CurrentColor );
 }
 
 void SpeechBubble::SetSize(float width, float height)

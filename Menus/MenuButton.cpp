@@ -81,10 +81,10 @@ MenuButton::MenuButton(int maxletters)
     m_AllowPressWhenDraggedOver = false;
 
     // setup a decently sized button
-    m_Transform.m11 = 300;
-    m_Transform.m22 = 200;
-    m_Transform.m41 = 300;
-    m_Transform.m42 = 300;
+    m_BGSize.x = 300;
+    m_BGSize.y = 200;
+    m_Position.x = 300;
+    m_Position.y = 300;
 
     m_pFont = 0;
     m_FontHeight = 30;
@@ -109,7 +109,7 @@ MenuButton::MenuButton(int maxletters)
 
     m_ShadowSpriteUVs = Vector4( 0, 1, 0, 1 );
 
-    m_Scale.Set( 1, 1, 1 );
+    //m_Scale.Set( 1, 1, 1 );
 
     m_hack_PasswordHideString2 = false;
     
@@ -248,15 +248,18 @@ void MenuButton::Draw(MyMatrix* matviewproj)
 
         if( m_pSprite )
         {
-            MyMatrix transform = m_Transform;
+            MyMatrix transform;
+            transform.SetIdentity();
 
-            transform.m41 += m_PositionOffset.x;
-            transform.m42 += m_PositionOffset.y;
+            transform.m41 = m_Position.x;
+            transform.m42 = m_Position.y;
+            transform.m11 = m_BGSize.x;
+            transform.m22 = m_BGSize.y;
 
             if( pMaterialShadow && (buttonshadowoffx != 0 || buttonshadowoffy != 0) )
             {
                 m_pSprite->SetMaterial( pMaterialShadow );
-                m_pSprite->SetTint( m_BGShadowColor );
+                //m_pSprite->SetTint( m_BGShadowColor );
 
                 MyMatrix shadowmat = transform;
                 shadowmat.Translate( buttonshadowoffx, buttonshadowoffy, 0 );
@@ -338,8 +341,8 @@ void MenuButton::Draw(MyMatrix* matviewproj)
         if( m_pMeshText )
             m_pMeshText->m_pFont = m_pFont; // ugh...
 
-        float posx = m_Transform.m41 + m_TextOffset.x + m_PositionOffset.x;
-        float posy = m_Transform.m42 + m_TextOffset.y + m_PositionOffset.y;
+        float posx = m_Position.x + m_TextOffset.x;
+        float posy = m_Position.y + m_TextOffset.y;
 
         if( m_State == MBS_HeldDown && m_ToolTipString[0] != 0 )
         {
@@ -349,16 +352,16 @@ void MenuButton::Draw(MyMatrix* matviewproj)
             y = posy + 100;
             shadowoffx = -2;
             shadowoffy = 2;
-            RenderTextQuickWithColor( m_pFont, m_FontHeight*m_Scale.y, posx+shadowoffx, y+shadowoffy, m_Justification, textshadowcolor, m_ToolTipString );
+            RenderTextQuickWithColor( m_pFont, m_FontHeight, posx+shadowoffx, y+shadowoffy, m_Justification, textshadowcolor, m_ToolTipString );
             shadowoffx = -2;
             shadowoffy = -2;
-            RenderTextQuickWithColor( m_pFont, m_FontHeight*m_Scale.y, posx+shadowoffx, y+shadowoffy, m_Justification, textshadowcolor, m_ToolTipString );
+            RenderTextQuickWithColor( m_pFont, m_FontHeight, posx+shadowoffx, y+shadowoffy, m_Justification, textshadowcolor, m_ToolTipString );
             shadowoffx = 2;
             shadowoffy = 2;
-            RenderTextQuickWithColor( m_pFont, m_FontHeight*m_Scale.y, posx+shadowoffx, y+shadowoffy, m_Justification, textshadowcolor, m_ToolTipString );
+            RenderTextQuickWithColor( m_pFont, m_FontHeight, posx+shadowoffx, y+shadowoffy, m_Justification, textshadowcolor, m_ToolTipString );
             shadowoffx = 2;
             shadowoffy = -2;
-            RenderTextQuickWithColorAndShadow( m_pFont, m_FontHeight*m_Scale.y, posx, y, m_Justification, textcolor, textshadowcolor, shadowoffx, shadowoffy, m_ToolTipString );
+            RenderTextQuickWithColorAndShadow( m_pFont, m_FontHeight, posx, y, m_Justification, textcolor, textshadowcolor, shadowoffx, shadowoffy, m_ToolTipString );
         }
 
         //if( m_Strings[0][0] != 0 )
@@ -369,19 +372,19 @@ void MenuButton::Draw(MyMatrix* matviewproj)
                 y = posy + lineheight*1;
                 if( m_Strings[0][0] != 0 )
                 {
-                    m_pMeshText->CreateStringColorAndShadowStyle( true, m_FontHeight*m_Scale.y, posx, y, m_Justification, textcolor, textshadowstyle, textshadowcolor, shadowoffx, shadowoffy, m_Size, m_Strings[0] );
+                    m_pMeshText->CreateStringColorAndShadowStyle( true, m_FontHeight, posx, y, m_Justification, textcolor, textshadowstyle, textshadowcolor, shadowoffx, shadowoffy, m_TextSize, m_Strings[0] );
                 }
 
                 y = posy - lineheight*0;
                 if( m_Strings[1][0] != 0 )
                 {
-                    m_pMeshText->CreateStringColorAndShadowStyle( true, m_FontHeight*m_Scale.y, posx, y, m_Justification, textcolor, textshadowstyle, textshadowcolor, shadowoffx, shadowoffy, m_Size, m_Strings[1] );
+                    m_pMeshText->CreateStringColorAndShadowStyle( true, m_FontHeight, posx, y, m_Justification, textcolor, textshadowstyle, textshadowcolor, shadowoffx, shadowoffy, m_TextSize, m_Strings[1] );
                 }
 
                 y = posy - lineheight*1;
                 if( m_Strings[2][0] != 0 )
                 {
-                    m_pMeshText->CreateStringColorAndShadowStyle( true, m_FontHeight*m_Scale.y, posx, y, m_Justification, textcolor, textshadowstyle, textshadowcolor, shadowoffx, shadowoffy, m_Size, m_Strings[2] );
+                    m_pMeshText->CreateStringColorAndShadowStyle( true, m_FontHeight, posx, y, m_Justification, textcolor, textshadowstyle, textshadowcolor, shadowoffx, shadowoffy, m_TextSize, m_Strings[2] );
                 }
             }
             else if( m_Strings[1][0] != 0 ) //m_Style == MBTS_DoubleLine )
@@ -389,7 +392,7 @@ void MenuButton::Draw(MyMatrix* matviewproj)
                 y = posy + lineheight/2;
                 if( m_Strings[0][0] != 0 )
                 {
-                    m_pMeshText->CreateStringColorAndShadowStyle( true, m_FontHeight*m_Scale.y, posx, y, m_Justification, textcolor, textshadowstyle, textshadowcolor, shadowoffx, shadowoffy, m_Size, m_Strings[0] );
+                    m_pMeshText->CreateStringColorAndShadowStyle( true, m_FontHeight, posx, y, m_Justification, textcolor, textshadowstyle, textshadowcolor, shadowoffx, shadowoffy, m_TextSize, m_Strings[0] );
                 }
 
                 y = posy - lineheight/2;
@@ -404,11 +407,11 @@ void MenuButton::Draw(MyMatrix* matviewproj)
                             stars[i] = '*';
                         stars[i] = 0;
 
-                        m_pMeshText->CreateStringColorAndShadowStyle( true, m_FontHeight*m_Scale.y, posx, y, m_Justification, textcolor, textshadowstyle, textshadowcolor, shadowoffx, shadowoffy, m_Size, stars );
+                        m_pMeshText->CreateStringColorAndShadowStyle( true, m_FontHeight, posx, y, m_Justification, textcolor, textshadowstyle, textshadowcolor, shadowoffx, shadowoffy, m_TextSize, stars );
                     }
                     else
                     {
-                        m_pMeshText->CreateStringColorAndShadowStyle( true, m_FontHeight*m_Scale.y, posx, y, m_Justification, textcolor, textshadowstyle, textshadowcolor, shadowoffx, shadowoffy, m_Size, m_Strings[1] );
+                        m_pMeshText->CreateStringColorAndShadowStyle( true, m_FontHeight, posx, y, m_Justification, textcolor, textshadowstyle, textshadowcolor, shadowoffx, shadowoffy, m_TextSize, m_Strings[1] );
                     }
                 }
             }
@@ -417,7 +420,7 @@ void MenuButton::Draw(MyMatrix* matviewproj)
                 y = posy;
                 if( m_Strings[0][0] != 0 )
                 {
-                    m_pMeshText->CreateStringColorAndShadowStyle( false, m_FontHeight*m_Scale.y, posx, y, m_Justification, textcolor, textshadowstyle, textshadowcolor, shadowoffx, shadowoffy, m_Size, m_Strings[0] );
+                    m_pMeshText->CreateStringColorAndShadowStyle( false, m_FontHeight, posx, y, m_Justification, textcolor, textshadowstyle, textshadowcolor, shadowoffx, shadowoffy, m_TextSize, m_Strings[0] );
                 }
             }
         }
@@ -454,16 +457,16 @@ bool MenuButton::CheckForCollision(float x, float y)
     //float scrw = g_pGame->m_GameWidth;
     //float scrh = g_pGame->m_GameHeight;
 
-    float posx = m_Transform.m41 + m_PositionOffset.x;
-    float posy = m_Transform.m42 + m_PositionOffset.y;
+    float posx = m_Position.x;
+    float posy = m_Position.y;
 
     // for the first 5th of a second, make the button huge, so quick taps will register even if users finger moves.
     float sizemultiplier = 1.0f;
     if( m_State == MBS_HeldDown && m_TimeHeld > 0 && m_TimeHeld < 0.2001f ) // FINGER_STABILITY_TIME
         sizemultiplier = 3.0f;
 
-    float inputwidth = m_InputWidth == -1 ? m_Transform.m11 : m_InputWidth;
-    float inputheight = m_InputHeight == -1 ? m_Transform.m22 : m_InputHeight;
+    float inputwidth = m_InputWidth <= 0 ? m_BGSize.x : m_InputWidth;
+    float inputheight = m_InputHeight <= 0 ? m_BGSize.y : m_InputHeight;
 
     if( fabs( posx - x ) < (inputwidth / 2.0f)*sizemultiplier &&
         fabs( posy - y ) < (inputheight / 2.0f)*sizemultiplier )
@@ -485,8 +488,8 @@ float MenuButton::TestCollision(int fingerid, float x, float y, bool fingerwentd
 
     if( CheckForCollision( x, y ) )
     {
-        float posx = m_Transform.m41;
-        float posy = m_Transform.m42;
+        float posx = m_Position.x;
+        float posy = m_Position.y;
 
         float dist = (posx - x)*(posx - x) + (posy - y)*(posy - y);
         return dist;
@@ -582,12 +585,12 @@ MyRect MenuButton::GetBoundingRect()
 {
     MyRect rect;
 
-    float inputwidth = m_InputWidth == -1 ? m_Transform.m11 : m_InputWidth;
-    float inputheight = m_InputHeight == -1 ? m_Transform.m22 : m_InputHeight;
+    float inputwidth = m_InputWidth == -1 ? m_BGSize.x : m_InputWidth;
+    float inputheight = m_InputHeight == -1 ? m_BGSize.y : m_InputHeight;
 
-    rect.x = (int)(m_Transform.m41 + m_PositionOffset.x);
+    rect.x = (int)(m_Position.x);
     rect.w = (int)inputwidth;
-    rect.y = (int)(m_Transform.m42 + m_PositionOffset.y);
+    rect.y = (int)(m_Position.y);
     rect.h = (int)inputheight;
 
     if( m_Justification & Justify_CenterX )
@@ -636,20 +639,11 @@ void MenuButton::PlaySound()
 
 void MenuButton::SetPositionAndSize(float x, float y, float w, float h, float inputw, float inputh)
 {
-    m_Transform.SetIdentity();
-    m_Transform.Scale( w, h, 1 );
-    m_Transform.SetTranslation( x, y, 0 );
+    m_Position.Set( x, y );
+    m_BGSize.Set( w, h );
 
-    if( inputw < 0 )
-    {
-        m_InputWidth = w;
-        m_InputHeight = h;
-    }
-    else
-    {
-        m_InputWidth = inputw;
-        m_InputHeight = inputh;
-    }
+    m_InputWidth = inputw;
+    m_InputHeight = inputh;
 }
 
 void MenuButton::SetString(const char* str1, const char* str2, const char* str3)
@@ -853,7 +847,7 @@ void MenuButton::FillPropertiesWindow()
     MenuItem::FillPropertiesWindow();
 
     g_pPanelWatch->Add2Floats( "Height", "Font", "Line", &m_FontHeight, &m_LineHeight, 0, 200 );
-    g_pPanelWatch->Add2Floats( "Size", "w", "h", &m_Transform.m11, &m_Transform.m22, 0, 1000 );
+    g_pPanelWatch->AddVector2( "Size", &m_BGSize, 0, 1000 );
     g_pPanelWatch->Add2Floats( "InputSize", "w", "h", &m_InputWidth, &m_InputHeight, 0, 1000 );
     g_pPanelWatch->AddVector2( "BGShadowOffset", &m_DropShadowOffsetBG, -10, 10 );
     g_pPanelWatch->AddVector2( "TextShadowOffset", &m_DropShadowOffsetText, -10, 10 );

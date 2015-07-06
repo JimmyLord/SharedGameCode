@@ -28,10 +28,10 @@ MenuSprite::MenuSprite()
     m_BGSpriteUVs = Vector4( 0, 1, 0, 1 );
     m_ShadowSpriteUVs = Vector4( 0, 1, 0, 1 );
 
-    m_Transform.m11 = 200;
-    m_Transform.m22 = 200;
-    m_Transform.m41 = 400;
-    m_Transform.m42 = 500;
+    m_BGSize.x = 200;
+    m_BGSize.y = 200;
+    m_Position.x = 400;
+    m_Position.y = 500;
 
     for( unsigned int i=0; i<Materials_NumTypes; i++ )
         m_pMaterials[i] = 0;
@@ -101,9 +101,11 @@ void MenuSprite::Draw(MyMatrix* matviewproj)
             //pShadowSprite->SetTint( shadowcolor );
             ////pShadowSprite->SetPosition( posx+bgshadowoffx, posy-bgshadowoffy, 0.1f );
             m_pSprite->SetMaterial( pShadowMaterial );
-            m_pSprite->SetTransform( m_Transform );
-            m_pSprite->m_Position.m41 += bgshadowoffx;
-            m_pSprite->m_Position.m42 += bgshadowoffy;
+            m_pSprite->m_Position.SetIdentity();
+            m_pSprite->m_Position.m11 = m_BGSize.x;
+            m_pSprite->m_Position.m22 = m_BGSize.y;
+            m_pSprite->m_Position.m41 = m_Position.x + bgshadowoffx;
+            m_pSprite->m_Position.m42 = m_Position.y + bgshadowoffy;
 
             m_pSprite->Draw( matviewproj );//&g_pGame->m_OrthoMatrixGameSize );
         }
@@ -115,7 +117,11 @@ void MenuSprite::Draw(MyMatrix* matviewproj)
             m_pSprite->SetMaterial( pMaterial );
             //m_pSprite->SetTint( bgcolor );
             //pSprite->SetPosition( posx, posy, 0 );
-            m_pSprite->SetTransform( m_Transform );
+            m_pSprite->m_Position.SetIdentity();
+            m_pSprite->m_Position.m11 = m_BGSize.x;
+            m_pSprite->m_Position.m22 = m_BGSize.y;
+            m_pSprite->m_Position.m41 = m_Position.x;
+            m_pSprite->m_Position.m42 = m_Position.y;
 
             m_pSprite->Draw( matviewproj );//&g_pGame->m_OrthoMatrixGameSize );
         }
@@ -127,29 +133,28 @@ MyRect MenuSprite::GetBoundingRect()
 {
     MyRect rect;
 
-    rect.x = (int)(m_Transform.m41 + m_PositionOffset.x);
-    rect.w = (int)m_Transform.m11;
-    rect.y = (int)(m_Transform.m42 + m_PositionOffset.y);
-    rect.h = (int)m_Transform.m22;
+    rect.x = (int)(m_Position.x);
+    rect.w = (int)m_BGSize.x;
+    rect.y = (int)(m_Position.y);
+    rect.h = (int)m_BGSize.y;
 
     if( m_Justification & Justify_CenterX )
-        rect.x -= (int)(m_Transform.m11/2);
+        rect.x -= (int)(m_BGSize.x/2);
     if( m_Justification & Justify_Right )
-        rect.x -= (int)m_Transform.m11;
+        rect.x -= (int)m_BGSize.x;
 
     if( m_Justification & Justify_CenterY )
-        rect.y -= (int)(m_Transform.m22/2);
+        rect.y -= (int)(m_BGSize.y/2);
     if( m_Justification & Justify_Top )
-        rect.y -= (int)m_Transform.m22;
+        rect.y -= (int)m_BGSize.y;
 
     return rect;
 }
 
 void MenuSprite::SetPositionAndSize(float x, float y, float w, float h, float inputw, float inputh)
 {
-    m_Transform.SetIdentity();
-    m_Transform.Scale( w, h, 1 );
-    m_Transform.SetTranslation( x, y, 0 );
+    m_Position.Set( x, y );
+    m_BGSize.Set( w, h );
 }
 
 void MenuSprite::SetSprites(MySprite* bgsprite, MySprite* shadowsprite)
@@ -201,7 +206,7 @@ void MenuSprite::FillPropertiesWindow()
 {
     MenuItem::FillPropertiesWindow();
 
-    g_pPanelWatch->Add2Floats( "Size", "w", "h", &m_Transform.m11, &m_Transform.m22, 0, 1000 );
+    g_pPanelWatch->Add2Floats( "Size", "w", "h", &m_BGSize.x, &m_BGSize.y, 0, 1000 );
     g_pPanelWatch->AddVector2( "Shadow Offset", &m_DropShadowOffset, -10, 10 );
 
     for( unsigned int i=0; i<Materials_NumTypes; i++ )

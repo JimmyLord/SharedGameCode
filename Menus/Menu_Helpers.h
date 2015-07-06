@@ -22,8 +22,11 @@ class MenuCheckBox;
 class Menu_ImportExport
 {
 public:
-    static cJSON* ExportMenuLayout(MenuItem** itemarray, unsigned int numitems);
-    static unsigned int ImportMenuLayout(cJSON* layout, MenuItem** itemarray, unsigned int maxitems);
+    static Vector2 GetRelativePositionToAnchorPoint(MenuItemAnchorPoint anchorpointtype, Vector2 pos, Vector4 ExtentsBLTR);
+    static Vector2 GetAbsolutePositionFromAnchorPoint(MenuItemAnchorPoint anchorpointtype, Vector2 pos, Vector4 ExtentsBLTR);
+
+    static cJSON* ExportMenuLayout(MenuItem** itemarray, unsigned int numitems, Vector4 ExtentsBLTR);
+    static unsigned int ImportMenuLayout(cJSON* layout, MenuItem** itemarray, unsigned int maxitems, Vector4 ExtentsBLTR);
 };
 
 #endif //__MenuImportExport_H__

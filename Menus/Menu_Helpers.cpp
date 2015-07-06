@@ -40,7 +40,45 @@ MenuScrollingText* CreateMenuScrollingText(MenuItem** itemarray, int index)     
 MenuInputBox* CreateMenuInputBox(MenuItem** itemarray, int index)                { CREATEMENUTYPE( itemarray, index, MenuInputBox ); }
 MenuCheckBox* CreateMenuCheckBox(MenuItem** itemarray, int index)                { CREATEMENUTYPE( itemarray, index, MenuCheckBox ); }
 
-cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int numitems)
+Vector2 Menu_ImportExport::GetRelativePositionToAnchorPoint(MenuItemAnchorPoint anchorpointtype, Vector2 pos, Vector4 ExtentsBLTR)
+{
+    float bottom = ExtentsBLTR.x;
+    float left = ExtentsBLTR.y;
+    float top = ExtentsBLTR.z;
+    float right = ExtentsBLTR.w;
+
+    if( anchorpointtype == Anchor_TopLeft )
+        pos -= Vector2( left, top );
+    else if( anchorpointtype == Anchor_TopRight )
+        pos -= Vector2( right, top );
+    else if( anchorpointtype == Anchor_BottomLeft )
+        pos -= Vector2( left, bottom );
+    else if( anchorpointtype == Anchor_BottomRight )
+        pos -= Vector2( right, bottom );
+
+    return pos;
+}
+
+Vector2 Menu_ImportExport::GetAbsolutePositionFromAnchorPoint(MenuItemAnchorPoint anchorpointtype, Vector2 pos, Vector4 ExtentsBLTR)
+{
+    float bottom = ExtentsBLTR.x;
+    float left = ExtentsBLTR.y;
+    float top = ExtentsBLTR.z;
+    float right = ExtentsBLTR.w;
+
+    if( anchorpointtype == Anchor_TopLeft )
+        pos += Vector2( left, top );
+    else if( anchorpointtype == Anchor_TopRight )
+        pos += Vector2( right, top );
+    else if( anchorpointtype == Anchor_BottomLeft )
+        pos += Vector2( left, bottom );
+    else if( anchorpointtype == Anchor_BottomRight )
+        pos += Vector2( right, bottom );
+
+    return pos;
+}
+
+cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int numitems, Vector4 ExtentsBLTR)
 {
     cJSON* menuitemarray = cJSON_CreateArray();
 
@@ -55,18 +93,24 @@ cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int nu
 
             cJSON_AddNumberToObject( menuitem, "MIT", pMenuItem->m_MenuItemType );
 
+            cJSON_AddNumberToObject( menuitem, "Anchor", pMenuItem->m_AnchorPoint );
+
             cJSON_AddStringToObject( menuitem, "Name", pMenuItem->m_Name );
             
-            cJSON_AddNumberToObject( menuitem, "X", pMenuItem->m_Transform.m41 );
-            cJSON_AddNumberToObject( menuitem, "Y", pMenuItem->m_Transform.m42 );
+            Vector2 relativepos = pMenuItem->m_Position;
+            if( pMenuItem->m_AnchorPoint != Anchor_None )
+                relativepos = GetRelativePositionToAnchorPoint( pMenuItem->m_AnchorPoint, pMenuItem->m_Position, ExtentsBLTR );
 
-            cJSON_AddNumberToObject( menuitem, "Scale", pMenuItem->m_Scale.x );
+            cJSON_AddNumberToObject( menuitem, "X", relativepos.x );
+            cJSON_AddNumberToObject( menuitem, "Y", relativepos.y );
 
-            cJSON_AddNumberToObject( menuitem, "SX", pMenuItem->m_Size.x );
-            cJSON_AddNumberToObject( menuitem, "SY", pMenuItem->m_Size.y );
+            //cJSON_AddNumberToObject( menuitem, "Scale", pMenuItem->m_Scale.x );
 
-            cJSON_AddNumberToObject( menuitem, "OffX", pMenuItem->m_PositionOffset.x );
-            cJSON_AddNumberToObject( menuitem, "OffY", pMenuItem->m_PositionOffset.y );
+            //cJSON_AddNumberToObject( menuitem, "SX", pMenuItem->m_Size.x );
+            //cJSON_AddNumberToObject( menuitem, "SY", pMenuItem->m_Size.y );
+
+            //cJSON_AddNumberToObject( menuitem, "OffX", pMenuItem->m_PositionOffset.x );
+            //cJSON_AddNumberToObject( menuitem, "OffY", pMenuItem->m_PositionOffset.y );
 
             switch( pMenuItem->m_MenuItemType )
             {
@@ -74,8 +118,8 @@ cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int nu
                 {
                     MenuSprite* pMenuSprite = GetMenuSprite( itemarray, i );
 
-                    cJSON_AddNumberToObject( menuitem, "W", pMenuItem->m_Transform.m11 );
-                    cJSON_AddNumberToObject( menuitem, "H", pMenuItem->m_Transform.m22 );
+                    cJSON_AddNumberToObject( menuitem, "W", pMenuSprite->m_BGSize.x );
+                    cJSON_AddNumberToObject( menuitem, "H", pMenuSprite->m_BGSize.y );
 
                     cJSONExt_AddFloatArrayToObject( menuitem, "Shadow", &pMenuSprite->m_DropShadowOffset.x, 2 );
 
@@ -92,6 +136,9 @@ cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int nu
                     MenuText* pMenuText = GetMenuText( itemarray, i );
 
                     //cJSON_AddNumberToObject( menuitem, "LettersNeeded", pMenuText->m_String );
+
+                    cJSON_AddNumberToObject( menuitem, "W", pMenuText->m_TextSize.x );
+                    cJSON_AddNumberToObject( menuitem, "H", pMenuText->m_TextSize.y );
 
                     cJSON_AddNumberToObject( menuitem, "FontHeight", pMenuText->m_FontHeight );
                     cJSON_AddNumberToObject( menuitem, "LineHeight", pMenuText->m_LineHeight );
@@ -118,8 +165,10 @@ cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int nu
                     else
                         pMenuButton = GetMenuButton( itemarray, i );
 
-                    cJSON_AddNumberToObject( menuitem, "W", pMenuItem->m_Transform.m11 );
-                    cJSON_AddNumberToObject( menuitem, "H", pMenuItem->m_Transform.m22 );
+                    cJSONExt_AddFloatArrayToObject( menuitem, "TextSize", &pMenuButton->m_TextSize.x, 2 );
+
+                    cJSON_AddNumberToObject( menuitem, "W", pMenuButton->m_BGSize.x );
+                    cJSON_AddNumberToObject( menuitem, "H", pMenuButton->m_BGSize.y );
 
                     cJSON_AddNumberToObject( menuitem, "IW", pMenuButton->m_InputWidth );
                     cJSON_AddNumberToObject( menuitem, "IH", pMenuButton->m_InputHeight );
@@ -186,7 +235,7 @@ cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int nu
     return menuitemarray;
 }
 
-unsigned int Menu_ImportExport::ImportMenuLayout(cJSON* layout, MenuItem** itemarray, unsigned int maxitems)
+unsigned int Menu_ImportExport::ImportMenuLayout(cJSON* layout, MenuItem** itemarray, unsigned int maxitems, Vector4 ExtentsBLTR)
 {
     if( layout == 0 )
         return 0;
@@ -221,6 +270,8 @@ unsigned int Menu_ImportExport::ImportMenuLayout(cJSON* layout, MenuItem** itema
 
                     cJSONExt_GetString( jMenuItem, "Name", pMenuItem->m_Name, MenuItem::MAX_MENUITEM_NAME_LENGTH );
 
+                    cJSONExt_GetUnsignedInt( jMenuItem, "Anchor", (unsigned int*)&pMenuItem->m_AnchorPoint );
+
                     float x = 0;
                     float y = 0;
                     float w = 0;
@@ -231,12 +282,12 @@ unsigned int Menu_ImportExport::ImportMenuLayout(cJSON* layout, MenuItem** itema
                     cJSONExt_GetFloat( jMenuItem, "X", &x );
                     cJSONExt_GetFloat( jMenuItem, "Y", &y );
 
-                    cJSONExt_GetFloat( jMenuItem, "Scale", &pMenuItem->m_Scale.x );
-                    cJSONExt_GetFloat( jMenuItem, "Scale", &pMenuItem->m_Scale.y );
-                    cJSONExt_GetFloat( jMenuItem, "Scale", &pMenuItem->m_Scale.z );
+                    //cJSONExt_GetFloat( jMenuItem, "Scale", &pMenuItem->m_Scale.x );
+                    //cJSONExt_GetFloat( jMenuItem, "Scale", &pMenuItem->m_Scale.y );
+                    //cJSONExt_GetFloat( jMenuItem, "Scale", &pMenuItem->m_Scale.z );
 
-                    cJSONExt_GetFloat( jMenuItem, "SX", &pMenuItem->m_Size.x );
-                    cJSONExt_GetFloat( jMenuItem, "SY", &pMenuItem->m_Size.y );
+                    //cJSONExt_GetFloat( jMenuItem, "SX", &pMenuItem->m_Size.x );
+                    //cJSONExt_GetFloat( jMenuItem, "SY", &pMenuItem->m_Size.y );
 
                     cJSONExt_GetFloat( jMenuItem, "W", &w );
                     cJSONExt_GetFloat( jMenuItem, "H", &h );
@@ -244,10 +295,14 @@ unsigned int Menu_ImportExport::ImportMenuLayout(cJSON* layout, MenuItem** itema
                     cJSONExt_GetFloat( jMenuItem, "IW", &iw );
                     cJSONExt_GetFloat( jMenuItem, "IH", &ih );
 
-                    cJSONExt_GetFloat( jMenuItem, "OffX", &pMenuItem->m_PositionOffset.x );
-                    cJSONExt_GetFloat( jMenuItem, "OffY", &pMenuItem->m_PositionOffset.y );
+                    //cJSONExt_GetFloat( jMenuItem, "OffX", &pMenuItem->m_PositionOffset.x );
+                    //cJSONExt_GetFloat( jMenuItem, "OffY", &pMenuItem->m_PositionOffset.y );
 
-                    pMenuItem->SetPositionAndSize( x, y, w, h, iw, ih );
+                    Vector2 absolutepos = Vector2(x,y);
+                    if( pMenuItem->m_AnchorPoint != Anchor_None )
+                        absolutepos = GetAbsolutePositionFromAnchorPoint( pMenuItem->m_AnchorPoint, Vector2(x,y), ExtentsBLTR );
+
+                    pMenuItem->SetPositionAndSize( absolutepos.x, absolutepos.y, w, h, iw, ih );
 
                     switch( pMenuItem->m_MenuItemType )
                     {
@@ -300,6 +355,8 @@ unsigned int Menu_ImportExport::ImportMenuLayout(cJSON* layout, MenuItem** itema
                     case MIT_InputBox:
                         {
                             MenuButton* pMenuButton = (MenuButton*)pMenuItem;
+
+                            cJSONExt_GetFloatArray( jMenuItem, "TextSize", &pMenuButton->m_TextSize.x, 2 );
 
                             cJSONExt_GetFloat( jMenuItem, "FontHeight", &pMenuButton->m_FontHeight );
                             cJSONExt_GetFloat( jMenuItem, "LineHeight", &pMenuButton->m_LineHeight );

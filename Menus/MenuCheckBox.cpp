@@ -178,8 +178,8 @@ float MenuCheckBox::TestCollision(int fingerid, float x, float y, bool fingerwen
 
     if( CheckForCollision( x, y ) )
     {
-        float posx = m_Transform.m41;
-        float posy = m_Transform.m42;
+        float posx = m_Position.x;
+        float posy = m_Position.y;
 
         float dist = (posx - x)*(posx - x) + (posy - y)*(posy - y);
         return dist;

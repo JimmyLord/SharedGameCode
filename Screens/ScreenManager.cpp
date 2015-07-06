@@ -301,34 +301,44 @@ void ScreenManager::OnResized()
 
 bool ScreenManager::OnTouch(int action, int id, float x, float y, float pressure, float size)
 {
-    MyAssert( m_ScreensActive.Count() >= 1 );
+    //MyAssert( m_ScreensActive.Count() >= 1 );
     if( m_ScreensActive.Count() == 0 )
         return false;
 
     int currentindex = m_ScreensActive.Count()-1;
+    bool usedinput = false;
     while( 1 )
     {
         Screen_Base* pScreen = m_ScreensActive[currentindex];
-        bool usedinput = pScreen->OnTouch( action, id, x, y, pressure, size );
+        usedinput = pScreen->OnTouch( action, id, x, y, pressure, size );
 
         if( pScreen->CanInputPassThrough() == false || usedinput || currentindex == 0 )
             break;
 
         currentindex--;
     }
-    return true;
+
+    return usedinput;
 }
 
 bool ScreenManager::OnButtons(GameCoreButtonActions action, GameCoreButtonIDs id)
 {
-    Screen_Base* pScreen = m_ScreensActive[m_ScreensActive.Count()-1];
-    pScreen->OnButtons( action, id );
-    return true;
+    if( m_ScreensActive.Count() > 0 )
+    {
+        Screen_Base* pScreen = m_ScreensActive[m_ScreensActive.Count()-1];
+        return pScreen->OnButtons( action, id );
+    }
+
+    return false;
 }
 
 bool ScreenManager::OnKeyDown(int keycode, int unicodechar)
 {
-    Screen_Base* pScreen = m_ScreensActive[m_ScreensActive.Count()-1];
-    pScreen->OnKeyDown( keycode, unicodechar );
-    return true;
+    if( m_ScreensActive.Count() > 0 )
+    {
+        Screen_Base* pScreen = m_ScreensActive[m_ScreensActive.Count()-1];
+        return pScreen->OnKeyDown( keycode, unicodechar );
+    }
+
+    return false;
 }

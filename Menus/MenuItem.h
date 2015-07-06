@@ -10,6 +10,8 @@
 #ifndef __MenuItem_H__
 #define __MenuItem_H__
 
+class ComponentMenuPage;
+
 enum MenuItemTypes
 {
     MIT_Base,
@@ -21,6 +23,16 @@ enum MenuItemTypes
     MIT_InputBox,
     MIT_CheckBox,
     MIT_NumMenuItemTypes,
+};
+
+enum MenuItemAnchorPoint
+{
+    Anchor_None,
+    Anchor_TopLeft,
+    Anchor_TopRight,
+    Anchor_BottomLeft,
+    Anchor_BottomRight,
+    Anchor_NumTypes,
 };
 
 struct MenuItemDefinition
@@ -79,11 +91,8 @@ public:
 
     bool m_Closing;
 
-    Vector3 m_Scale;
-    MyMatrix m_Transform;
-    Vector2 m_Size;
-
-    Vector2 m_PositionOffset;
+    MenuItemAnchorPoint m_AnchorPoint;
+    Vector2 m_Position;
 
     bool m_UseTweenIn;
     MyTweener m_TweenIn;
@@ -91,6 +100,10 @@ public:
     MyTweener m_TweenOut;
 
     int m_MenuItemNavigation[4];
+
+#if MYFW_USING_MYENGINE
+    ComponentMenuPage* m_pMenuPage;
+#endif
 
 public:
     MenuItem();
@@ -103,9 +116,9 @@ public:
     virtual int CheckForCollisionPosition(float x, float y, bool held);
 
     void SetName(const char* name);
-    void SetPositionOffset(float offx, float offy);
     
     virtual void SetPositionAndSize(float x, float y, float w, float h, float inputw = -1, float inputh = -1);
+    virtual void SetAnchorPoint(MenuItemAnchorPoint anchortype);
 
     virtual void SetVisible(bool visible) { m_Visible = visible; }
     virtual void SetEnabled(bool enabled) { m_Enabled = enabled; }
@@ -132,6 +145,9 @@ public:
 
     static void StaticOnLabelEdit(void* pObjectPtr, wxTreeItemId id, wxString newlabel) { ((MenuItem*)pObjectPtr)->OnLabelEdit( newlabel ); }
     void OnLabelEdit(wxString newlabel);
+
+    static void StaticOnAnchorTypeChanged(void* pObjectPtr, int controlid, bool finishedchanging, double oldvalue) { ((MenuItem*)pObjectPtr)->OnAnchorTypeChanged( controlid, finishedchanging, oldvalue ); }
+    void OnAnchorTypeChanged(int controlid, bool finishedchanging, double oldvalue);    
 #endif //MYFW_USING_WX
 
     void SetMenuItemNavigation(int up, int right, int down, int left);

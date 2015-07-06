@@ -11,6 +11,15 @@
 //#include "Core/ResourceManager.h"
 #include "MenuItem.h"
 
+const char* MenuItemAnchorPointStrings[Anchor_NumTypes] =
+{
+    "None",
+    "Top Left",
+    "Top Right",
+    "Bottom Left",
+    "Bottom Right",
+};
+
 MenuItem::MenuItem()
 {
     m_MenuItemType = MIT_Base;
@@ -22,17 +31,23 @@ MenuItem::MenuItem()
 
     m_Closing = false;
 
-    m_Scale.Set( 1, 1, 1 );
-    m_Transform.SetIdentity();
-    m_Size.Set( 0, 0 );
+    m_AnchorPoint = Anchor_None;
+    m_Position.Set( 0, 0 );
+    //m_Scale.Set( 1, 1, 1 );
+    //m_Transform.SetIdentity();
+    //m_Size.Set( 0, 0 );
 
-    m_PositionOffset.Set( 0, 0 );
+    //m_PositionOffset.Set( 0, 0 );
 
     m_UseTweenIn = false;
     m_UseTweenOut = false;
 
     for( int i=0; i<4; i++ )
         m_MenuItemNavigation[i] = 0;
+
+#if MYFW_USING_MYENGINE
+    m_pMenuPage = 0;
+#endif
 
 #if MYFW_USING_WX
     m_MenuItemDeletedCallbackStruct.pFunc = 0;
@@ -82,7 +97,7 @@ void MenuItem::SetName(const char* name)
     if( charstocopy > MAX_MENUITEM_NAME_LENGTH )
         charstocopy = MAX_MENUITEM_NAME_LENGTH;
 
-    strncpy( m_Name, name, charstocopy );
+    strncpy_s( m_Name, name, charstocopy );
     m_Name[MAX_MENUITEM_NAME_LENGTH-1] = 0;
 
 #if MYFW_USING_WX
@@ -93,16 +108,14 @@ void MenuItem::SetName(const char* name)
 #endif //MYFW_USING_WX
 }
 
-void MenuItem::SetPositionOffset(float offx, float offy)
-{
-    m_PositionOffset.x = offx;
-    m_PositionOffset.y = offy;
-}
-
 void MenuItem::SetPositionAndSize(float x, float y, float w, float h, float inputw, float inputh)
 {
-    m_Transform.m41 = x;
-    m_Transform.m42 = y;
+    m_Position.Set( x, y );
+}
+
+void MenuItem::SetAnchorPoint(MenuItemAnchorPoint anchortype)
+{
+    m_AnchorPoint = anchortype;
 }
 
 float MenuItem::TestCollision(int fingerid, float x, float y, bool fingerwentdown)
@@ -129,11 +142,12 @@ const char* MenuItem::TriggerOnCollision(int fingerid, float x, float y, bool ca
 void MenuItem::FillPropertiesWindow()
 {
     g_pPanelWatch->ClearAllVariables();
-    g_pPanelWatch->AddVector2( "Position", (Vector2*)&m_Transform.m41, -1000, 1000 );
+    g_pPanelWatch->AddVector2( "Position", &m_Position, -1000, 1000 );
+    g_pPanelWatch->AddEnum( "Anchor", (int*)&m_AnchorPoint, Anchor_NumTypes, MenuItemAnchorPointStrings, this, StaticOnAnchorTypeChanged );
     //g_pPanelWatch->AddFloat( "m_PosY", &m_Transform.m42, -1000, 1000 );
-    g_pPanelWatch->AddFloat( "m_Scale", &m_Scale.x, 0, 5 );
-    g_pPanelWatch->AddVector2( "Size", &m_Size, 0, 10 );
-    g_pPanelWatch->AddVector2( "Position Offset", &m_PositionOffset, -1000, 1000 );
+    //g_pPanelWatch->AddFloat( "m_Scale", &m_Scale.x, 0, 5 );
+    //g_pPanelWatch->AddVector2( "Size", &m_Size, 0, 10 );
+    //g_pPanelWatch->AddVector2( "Position Offset", &m_PositionOffset, -1000, 1000 );
 }
 
 void MenuItem::OnRightClick()
@@ -173,6 +187,10 @@ void MenuItem::OnLabelEdit(wxString newlabel)
     {
         SetName( newlabel );
     }
+}
+
+void MenuItem::OnAnchorTypeChanged(int controlid, bool finishedchanging, double oldvalue)
+{
 }
 #endif //MYFW_USING_WX
 

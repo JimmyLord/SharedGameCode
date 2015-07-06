@@ -17,7 +17,7 @@ bool MenuDraggableButton::ReleaseOnNoCollision(int fingerid, float x, float y)
     if( m_FingerHolding != fingerid )
         return false;
 
-    m_Transform.SetTranslation( x, y, 0 );
+    m_Position.Set( x, y );
 
     return false;
 }

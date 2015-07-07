@@ -670,6 +670,10 @@ void MenuButton::SetString(const char* str1, const char* str2, const char* str3)
         sprintf_s( m_Strings[1], MAX_STRING_LENGTH, "%s", str2 );
         //m_Style = MBTS_DoubleLine;
     }
+    else
+    {
+        m_Strings[1][0] = 0;
+    }
 
     if( str3 != 0 )
     {
@@ -679,6 +683,10 @@ void MenuButton::SetString(const char* str1, const char* str2, const char* str3)
             totallen += strlen( str3 );
         sprintf_s( m_Strings[2], MAX_STRING_LENGTH, "%s", str3 );
         //m_Style = MBTS_TripleLine;
+    }
+    else
+    {
+        m_Strings[2][0] = 0;
     }
 
     if( m_pMeshText == 0 )

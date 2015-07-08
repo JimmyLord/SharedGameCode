@@ -446,6 +446,13 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
                     //g_pRTQGlobals->m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
                     g_pRTQGlobals->m_pMaterial->SetTextureColor( pFont->m_pTextureDef );
 
+                    // Enable blending if necessary. TODO: sort draws and only set this once.
+                    if( g_pRTQGlobals->m_pMaterial->IsTransparent( pShader ) )
+                    {
+                        glEnable( GL_BLEND );
+                        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+                    }
+
                     if( pShader->ActivateAndProgramShader(
                         g_pRTQGlobals->m_pVertexBufferIDImmediate, 0, GL_UNSIGNED_SHORT,
                         g_pRTQGlobals->m_pMatViewProj, //&g_pGame->m_OrthoMatrixGameSize,
@@ -461,6 +468,9 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
 #endif
                         pShader->DeactivateShader( g_pRTQGlobals->m_pVertexBufferIDImmediate );
                     }
+
+                    // always disable blending
+                    glDisable( GL_BLEND );
                 }
             }
 
@@ -524,6 +534,13 @@ void RenderTextQuickEndBatch()
     Shader_Base* pShader = 0;//(Shader_Base*)g_pGame->m_pShader_TextureVertexColor->GlobalPass();
     if( pShader )
     {
+        // Enable blending if necessary. TODO: sort draws and only set this once.
+        if( g_pRTQGlobals->m_pMaterial->IsTransparent( pShader ) )
+        {
+            glEnable( GL_BLEND );
+            glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+        }
+
         // TODO: MYENGINE
         //g_pRTQGlobals->m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
         g_pRTQGlobals->m_pMaterial->SetTextureColor( g_pRTQGlobals->m_pBatchTexture );
@@ -542,6 +559,9 @@ void RenderTextQuickEndBatch()
 #endif
             pShader->DeactivateShader( g_pRTQGlobals->m_pVertexBuffer );
         }
+
+        // always disable blending
+        glDisable( GL_BLEND );
     }
 
     g_pRTQGlobals->m_BatchNumLetters = 0;

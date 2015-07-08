@@ -15,6 +15,7 @@ SpeechBubble::SpeechBubble()
 {
     m_pBubble = MyNew MySprite9();
     m_pPoint = MyNew MySprite( false );
+    m_pTextMesh = MyNew MyMeshText( 100, g_pGame->m_pSystemFont ); // 50 chars with shadow
     m_String = 0;
 
     //m_CurrentPos;
@@ -27,10 +28,17 @@ SpeechBubble::SpeechBubble()
     m_DestWidth = 50;
     m_DestHeight = 20;
 
-    m_pTextMesh = MyNew MyMeshText( 100, g_pGame->m_pSystemFont ); // 50 chars with shadow
-    MaterialDefinition* pMaterial = g_pMaterialManager->FindMaterialByFilename( "Data/Materials/Nevis60.mymaterial" );
+    // set materials.
+    MaterialDefinition* pMaterial = 0;
+
+    pMaterial = g_pMaterialManager->FindMaterialByFilename( "Data/Materials/Nevis60.mymaterial" );
     m_pTextMesh->SetMaterial( pMaterial, 0 );
-    //m_pTextMesh->SetShaderAndTexture( g_pGame->m_pShader_TextureVertexColor, g_pGame->m_pSystemFont->m_pTextureDef );
+
+    pMaterial = g_pMaterialManager->FindMaterialByFilename( "Data/Materials/SpeechBubble.mymaterial" );
+    m_pBubble->SetMaterial( pMaterial );
+
+    pMaterial = g_pMaterialManager->FindMaterialByFilename( "Data/Materials/SpeechBubblePoint.mymaterial" );
+    m_pPoint->SetMaterial( pMaterial );
 }
 
 SpeechBubble::~SpeechBubble()

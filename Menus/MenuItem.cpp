@@ -192,6 +192,12 @@ void MenuItem::OnLabelEdit(wxString newlabel)
 void MenuItem::OnAnchorTypeChanged(int controlid, bool finishedchanging, double oldvalue)
 {
 }
+
+void MenuItem::OnDrag()
+{
+    g_DragAndDropStruct.m_Type = DragAndDropType_MenuItem;
+    g_DragAndDropStruct.m_Value = this;
+}
 #endif //MYFW_USING_WX
 
 void MenuItem::SetMenuItemNavigation(int up, int right, int down, int left)

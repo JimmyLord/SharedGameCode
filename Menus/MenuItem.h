@@ -148,6 +148,9 @@ public:
 
     static void StaticOnAnchorTypeChanged(void* pObjectPtr, int controlid, bool finishedchanging, double oldvalue) { ((MenuItem*)pObjectPtr)->OnAnchorTypeChanged( controlid, finishedchanging, oldvalue ); }
     void OnAnchorTypeChanged(int controlid, bool finishedchanging, double oldvalue);    
+
+    static void StaticOnDrag(void* pObjectPtr) { ((MenuItem*)pObjectPtr)->OnDrag(); }
+    void OnDrag();
 #endif //MYFW_USING_WX
 
     void SetMenuItemNavigation(int up, int right, int down, int left);

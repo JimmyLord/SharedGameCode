@@ -93,24 +93,18 @@ cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int nu
 
             cJSON_AddNumberToObject( menuitem, "MIT", pMenuItem->m_MenuItemType );
 
-            cJSON_AddNumberToObject( menuitem, "Anchor", pMenuItem->m_AnchorPoint );
-
             cJSON_AddStringToObject( menuitem, "Name", pMenuItem->m_Name );
-            
+
+            cJSONExt_AddNumberToObjectIfDiffers( menuitem, "Anchor", (int)pMenuItem->m_AnchorPoint, 0 );
+
+            cJSONExt_AddNumberToObjectIfDiffers( menuitem, "Navigable", (int)pMenuItem->m_Navigable, 0 );            
+           
             Vector2 relativepos = pMenuItem->m_Position;
             if( pMenuItem->m_AnchorPoint != Anchor_None )
                 relativepos = GetRelativePositionToAnchorPoint( pMenuItem->m_AnchorPoint, pMenuItem->m_Position, ExtentsBLTR );
 
             cJSON_AddNumberToObject( menuitem, "X", relativepos.x );
             cJSON_AddNumberToObject( menuitem, "Y", relativepos.y );
-
-            //cJSON_AddNumberToObject( menuitem, "Scale", pMenuItem->m_Scale.x );
-
-            //cJSON_AddNumberToObject( menuitem, "SX", pMenuItem->m_Size.x );
-            //cJSON_AddNumberToObject( menuitem, "SY", pMenuItem->m_Size.y );
-
-            //cJSON_AddNumberToObject( menuitem, "OffX", pMenuItem->m_PositionOffset.x );
-            //cJSON_AddNumberToObject( menuitem, "OffY", pMenuItem->m_PositionOffset.y );
 
             switch( pMenuItem->m_MenuItemType )
             {
@@ -137,16 +131,16 @@ cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int nu
 
                     //cJSON_AddNumberToObject( menuitem, "LettersNeeded", pMenuText->m_String );
 
-                    cJSON_AddNumberToObject( menuitem, "W", pMenuText->m_TextSize.x );
-                    cJSON_AddNumberToObject( menuitem, "H", pMenuText->m_TextSize.y );
+                    cJSONExt_AddNumberToObjectIfDiffers( menuitem, "W", pMenuText->m_TextSize.x, 0.0f );
+                    cJSONExt_AddNumberToObjectIfDiffers( menuitem, "H", pMenuText->m_TextSize.y, 0.0f );
 
-                    cJSON_AddNumberToObject( menuitem, "FontHeight", pMenuText->m_FontHeight );
-                    cJSON_AddNumberToObject( menuitem, "LineHeight", pMenuText->m_LineHeight );
+                    cJSONExt_AddNumberToObjectIfDiffers( menuitem, "FontHeight", pMenuText->m_FontHeight, 30.0f );
+                    cJSONExt_AddNumberToObjectIfDiffers( menuitem, "LineHeight", pMenuText->m_LineHeight, 24.0f );
 
-                    cJSON_AddNumberToObject( menuitem, "TextShadowX", pMenuText->m_DropShadowOffsetX );
-                    cJSON_AddNumberToObject( menuitem, "TextShadowY", pMenuText->m_DropShadowOffsetY );
+                    cJSONExt_AddNumberToObjectIfDiffers( menuitem, "TextShadowX", pMenuText->m_DropShadowOffsetX, 3.0f );
+                    cJSONExt_AddNumberToObjectIfDiffers( menuitem, "TextShadowY", pMenuText->m_DropShadowOffsetY, -3.0f );
 
-                    cJSON_AddNumberToObject( menuitem, "Justify", pMenuText->m_Justification );
+                    cJSONExt_AddNumberToObjectIfDiffers( menuitem, "Justify", (unsigned char)pMenuText->m_Justification, (unsigned char)Justify_Center );
 
                     if( pMenuText->GetFont() )
                         cJSON_AddStringToObject( menuitem, "Font", pMenuText->GetFont()->m_pFile->m_FullPath );
@@ -170,11 +164,13 @@ cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int nu
                     cJSON_AddNumberToObject( menuitem, "W", pMenuButton->m_BGSize.x );
                     cJSON_AddNumberToObject( menuitem, "H", pMenuButton->m_BGSize.y );
 
-                    cJSON_AddNumberToObject( menuitem, "IW", pMenuButton->m_InputWidth );
-                    cJSON_AddNumberToObject( menuitem, "IH", pMenuButton->m_InputHeight );
+                    cJSONExt_AddNumberToObjectIfDiffers( menuitem, "IW", pMenuButton->m_InputWidth, 0.0f );
+                    cJSONExt_AddNumberToObjectIfDiffers( menuitem, "IH", pMenuButton->m_InputHeight, 0.0f );
 
-                    cJSON_AddNumberToObject( menuitem, "FontHeight", pMenuButton->m_FontHeight );
-                    cJSON_AddNumberToObject( menuitem, "LineHeight", pMenuButton->m_LineHeight );
+                    cJSONExt_AddNumberToObjectIfDiffers( menuitem, "FontHeight", pMenuButton->m_FontHeight, 30.0f );
+                    cJSONExt_AddNumberToObjectIfDiffers( menuitem, "LineHeight", pMenuButton->m_LineHeight, 24.0f );
+
+                    cJSONExt_AddNumberToObjectIfDiffers( menuitem, "Justify", (unsigned char)pMenuButton->m_Justification, (unsigned char)Justify_Center );
 
                     cJSONExt_AddFloatArrayToObject( menuitem, "BGShadow", &pMenuButton->m_DropShadowOffsetBG.x, 2 );
                     cJSONExt_AddFloatArrayToObject( menuitem, "TextShadow", &pMenuButton->m_DropShadowOffsetText.x, 2 );
@@ -272,6 +268,8 @@ unsigned int Menu_ImportExport::ImportMenuLayout(cJSON* layout, MenuItem** itema
 
                     cJSONExt_GetUnsignedInt( jMenuItem, "Anchor", (unsigned int*)&pMenuItem->m_AnchorPoint );
 
+                    cJSONExt_GetBool( jMenuItem, "Navigable", &pMenuItem->m_Navigable );            
+
                     float x = 0;
                     float y = 0;
                     float w = 0;
@@ -362,6 +360,8 @@ unsigned int Menu_ImportExport::ImportMenuLayout(cJSON* layout, MenuItem** itema
                             cJSONExt_GetFloat( jMenuItem, "LineHeight", &pMenuButton->m_LineHeight );
                             cJSONExt_GetFloatArray( jMenuItem, "BGShadow", &pMenuButton->m_DropShadowOffsetBG.x, 2 );
                             cJSONExt_GetFloatArray( jMenuItem, "TextShadow", &pMenuButton->m_DropShadowOffsetText.x, 2 );
+
+                            cJSONExt_GetUnsignedChar( jMenuItem, "Justify", &pMenuButton->m_Justification );
 
                             // Legacy
                             cJSONExt_GetFloat( jMenuItem, "BGShadowX", &pMenuButton->m_DropShadowOffsetBG.x );

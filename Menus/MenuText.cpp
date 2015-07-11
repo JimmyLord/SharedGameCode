@@ -26,8 +26,8 @@ MenuText::MenuText()
     m_DrawAsPartOfBatch = false;
 
     m_pFont = 0;
-    m_FontHeight = 30;
-    m_LineHeight = 30*0.8f;
+    m_FontHeight = 30.0f; // must default to 30 for save/load
+    m_LineHeight = 24.0f; // must default to 24 for save/load
 
     // set some reasonable defaults.
     m_Position.x = 100;
@@ -37,11 +37,11 @@ MenuText::MenuText()
     if( g_pFontManager )
         m_pFont = g_pFontManager->GetFirstFont();
 
-    m_TextSize.Set( 0, 0 );
+    m_TextSize.Set( 0, 0 ); // must default to 0,0 for save/load
 
-    m_Justification = Justify_CenterX|Justify_CenterY;
-    m_DropShadowOffsetX = 3;
-    m_DropShadowOffsetY = -3;
+    m_Justification = Justify_Center; // must default to Justify_Center for save/load
+    m_DropShadowOffsetX = 3; // must default to 3 for save/load
+    m_DropShadowOffsetY = -3; // must default to -3 for save/load
 }
 
 MenuText::MenuText(int maxletters)

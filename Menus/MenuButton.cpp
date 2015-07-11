@@ -61,6 +61,8 @@ MenuButton::MenuButton(int maxletters)
 
     m_State = MBS_Idle;
 
+    m_Navigable = true;
+
     m_TimeHeld = 0;
     m_FingerHolding = -1;
 
@@ -87,27 +89,25 @@ MenuButton::MenuButton(int maxletters)
     m_Position.y = 300;
 
     m_pFont = 0;
-    m_FontHeight = 30;
-    m_LineHeight = 30*0.8f;
+    m_FontHeight = 30.0f; // must default to 30 for save/load
+    m_LineHeight = 24.0f; // must default to 24 for save/load
 
-    m_Justification = Justify_CenterX|Justify_CenterY;
-    m_InputWidth = -1;
-    m_InputHeight = -1;
+    m_Justification = Justify_Center; // must default to Justify_Center for save/load
+    m_InputWidth = 0; // must default to 0 for save/load
+    m_InputHeight = 0; // must default to 0 for save/load
 
-    m_DropShadowOffsetText.x = 0;
-    m_DropShadowOffsetText.y = 0;
-    m_DropShadowOffsetBG.x = 0;
-    m_DropShadowOffsetBG.y = 0;
+    m_DropShadowOffsetText.Set( 0, 0 );
+    m_DropShadowOffsetBG.Set( 0, 0 );
 
     m_pBGMesh = 0;
     m_pBGMeshCamera = 0;
     m_pBGMeshLight = 0;
 
     m_BGSpriteOn = true;
-    m_BGSpriteUVs = Vector4( 0, 1, 0, 1 );
-    m_DisabledBGSpriteUVs = Vector4( 0, 1, 0, 1 );
+    m_BGSpriteUVs.Set( 0, 1, 0, 1 );
+    m_DisabledBGSpriteUVs.Set( 0, 1, 0, 1 );
 
-    m_ShadowSpriteUVs = Vector4( 0, 1, 0, 1 );
+    m_ShadowSpriteUVs.Set( 0, 1, 0, 1 );
 
     //m_Scale.Set( 1, 1, 1 );
 

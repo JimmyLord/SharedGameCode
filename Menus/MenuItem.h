@@ -94,12 +94,13 @@ public:
     MenuItemAnchorPoint m_AnchorPoint;
     Vector2 m_Position;
 
-    bool m_UseTweenIn;
-    MyTweener m_TweenIn;
-    bool m_UseTweenOut;
-    MyTweener m_TweenOut;
+    bool m_UseTweenIn;      // TODO: save/load
+    MyTweener m_TweenIn;    // TODO: save/load
+    bool m_UseTweenOut;     // TODO: save/load
+    MyTweener m_TweenOut;   // TODO: save/load
 
-    int m_MenuItemNavigation[4];
+    bool m_Navigable;
+    int m_MenuItemNavigation[4]; // TODO: save/load item names, make references to items somehow, handle delete/reorder.
 
 #if MYFW_USING_MYENGINE
     ComponentMenuPage* m_pMenuPage;
@@ -130,6 +131,8 @@ public:
     virtual const char* TriggerOnCollision(int fingerid, float x, float y, bool careifheld, bool releaseifnocollision = true); // returns the action triggered, -1 is no action.
 
     virtual MyRect GetBoundingRect() { return MyRect(0,0,0,0); }
+
+    virtual void SetNavigable(bool navigable) { m_Navigable = navigable; }
 
 #if MYFW_USING_WX
     static void StaticFillPropertiesWindow(void* pObjectPtr, wxTreeItemId id, unsigned int count) { ((MenuItem*)pObjectPtr)->FillPropertiesWindow(); }

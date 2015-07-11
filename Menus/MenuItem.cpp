@@ -31,7 +31,7 @@ MenuItem::MenuItem()
 
     m_Closing = false;
 
-    m_AnchorPoint = Anchor_None;
+    m_AnchorPoint = Anchor_None; // must default to Anchor_None(0) for save/load
     m_Position.Set( 0, 0 );
     //m_Scale.Set( 1, 1, 1 );
     //m_Transform.SetIdentity();
@@ -42,6 +42,7 @@ MenuItem::MenuItem()
     m_UseTweenIn = false;
     m_UseTweenOut = false;
 
+    m_Navigable = false;
     for( int i=0; i<4; i++ )
         m_MenuItemNavigation[i] = 0;
 
@@ -142,12 +143,11 @@ const char* MenuItem::TriggerOnCollision(int fingerid, float x, float y, bool ca
 void MenuItem::FillPropertiesWindow()
 {
     g_pPanelWatch->ClearAllVariables();
+
     g_pPanelWatch->AddVector2( "Position", &m_Position, -1000, 1000 );
     g_pPanelWatch->AddEnum( "Anchor", (int*)&m_AnchorPoint, Anchor_NumTypes, MenuItemAnchorPointStrings, this, StaticOnAnchorTypeChanged );
-    //g_pPanelWatch->AddFloat( "m_PosY", &m_Transform.m42, -1000, 1000 );
-    //g_pPanelWatch->AddFloat( "m_Scale", &m_Scale.x, 0, 5 );
-    //g_pPanelWatch->AddVector2( "Size", &m_Size, 0, 10 );
-    //g_pPanelWatch->AddVector2( "Position Offset", &m_PositionOffset, -1000, 1000 );
+
+    g_pPanelWatch->AddBool( "Navigable", &m_Navigable, 0, 1 );
 }
 
 void MenuItem::OnRightClick()

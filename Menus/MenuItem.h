@@ -118,6 +118,7 @@ public:
 
     void SetName(const char* name);
     
+    virtual void SetPosition(float x, float y);
     virtual void SetPositionAndSize(float x, float y, float w, float h, float inputw = -1, float inputh = -1);
     virtual void SetAnchorPoint(MenuItemAnchorPoint anchortype);
 

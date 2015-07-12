@@ -97,7 +97,10 @@ cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int nu
 
             cJSONExt_AddNumberToObjectIfDiffers( menuitem, "Anchor", (int)pMenuItem->m_AnchorPoint, 0 );
 
-            cJSONExt_AddNumberToObjectIfDiffers( menuitem, "Navigable", (int)pMenuItem->m_Navigable, 0 );            
+            if( pMenuItem->m_MenuItemType == MIT_Button || pMenuItem->m_MenuItemType == MIT_InputBox )
+                cJSONExt_AddNumberToObjectIfDiffers( menuitem, "Navigable", pMenuItem->m_Navigable, true );
+            else
+                cJSONExt_AddNumberToObjectIfDiffers( menuitem, "Navigable", pMenuItem->m_Navigable, false );
            
             Vector2 relativepos = pMenuItem->m_Position;
             if( pMenuItem->m_AnchorPoint != Anchor_None )

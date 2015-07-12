@@ -61,7 +61,7 @@ MenuButton::MenuButton(int maxletters)
 
     m_State = MBS_Idle;
 
-    m_Navigable = true;
+    m_Navigable = true; // for MenuButton/MenuInputBox must default to true for save/load, false for other types.
 
     m_TimeHeld = 0;
     m_FingerHolding = -1;

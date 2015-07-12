@@ -42,7 +42,7 @@ MenuItem::MenuItem()
     m_UseTweenIn = false;
     m_UseTweenOut = false;
 
-    m_Navigable = false;
+    m_Navigable = false; // must default to false for save/load, MenuButton default is true.
     for( int i=0; i<4; i++ )
         m_MenuItemNavigation[i] = 0;
 
@@ -107,6 +107,11 @@ void MenuItem::SetName(const char* name)
         g_pPanelObjectList->RenameObject( this, m_Name );
     }
 #endif //MYFW_USING_WX
+}
+
+void MenuItem::SetPosition(float x, float y)
+{
+    m_Position.Set( x, y );
 }
 
 void MenuItem::SetPositionAndSize(float x, float y, float w, float h, float inputw, float inputh)

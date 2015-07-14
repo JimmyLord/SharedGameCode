@@ -178,12 +178,15 @@ public:
     //void SetDisabled(bool settodisabled);
     //bool IsDisabled();
 
+    virtual void SetSize(float w, float h, float inputw = -1, float inputh = -1);
     virtual void SetPositionAndSize(float x, float y, float w, float h, float inputw = -1, float inputh = -1);
     virtual void SetString(const char* str1, const char* str2 = 0, const char* str3 = 0);
     virtual void SetStringNumber(int stringnumber, const char* str1, ...);
     virtual void SetToolTipString(const char* str);
     //void SetPressedState(const ColorByte& textcolor, const ColorByte& bgcolor, MySprite* sprite, const Vector4& uvs);
     //void SetOverlay(const Vector2& size, const Vector2& offset, const ColorByte& bgcolor, MySprite* sprite, const Vector4& uvs);
+
+    virtual Vector2 GetSize() { return GetBGSize(); }
 
     MenuButtonState GetState() { return m_State; }
     Vector2 GetBGSize() { return m_BGSize; }

@@ -208,8 +208,11 @@ cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int nu
                 {
                     MenuScrollingText* pMenuScrollingText = GetMenuScrollingText( itemarray, i );
 
-                    if( pMenuScrollingText->m_StringToShow )
-                        cJSON_AddStringToObject( menuitem, "StringToShow", pMenuScrollingText->m_StringToShow );
+                    if( pMenuScrollingText->m_pFont )
+                        cJSON_AddStringToObject( menuitem, "Font", pMenuScrollingText->m_pFont->m_pFile->m_FullPath );
+
+                    //if( pMenuScrollingText->m_StringToShow )
+                    //    cJSON_AddStringToObject( menuitem, "StringToShow", pMenuScrollingText->m_StringToShow );
 
                     cJSON_AddNumberToObject( menuitem, "TopFade0", pMenuScrollingText->m_TopFade0 );
                     cJSON_AddNumberToObject( menuitem, "TopFade1", pMenuScrollingText->m_TopFade1 );
@@ -410,6 +413,14 @@ unsigned int Menu_ImportExport::ImportMenuLayout(cJSON* layout, MenuItem** itema
                     case MIT_ScrollingText:
                         {
                             MenuScrollingText* pMenuScrollingText = (MenuScrollingText*)pMenuItem;
+
+                            cJSON* jFont = cJSON_GetObjectItem( jMenuItem, "Font" );
+                            if( jFont )
+                            {
+                                FontDefinition* pFont = g_pFontManager->CreateFont( jFont->valuestring );
+                                pMenuScrollingText->SetFont( pFont );
+                                pFont->Release();
+                            }
 
                             // TODO: need to allocate memory if this is stored...
                             //cJSONExt_GetString( jMenuItem, "StringToShow", pMenuScrollingText->m_StringToShow, size of buffer );

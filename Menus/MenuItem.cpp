@@ -114,6 +114,11 @@ void MenuItem::SetPosition(float x, float y)
     m_Position.Set( x, y );
 }
 
+void MenuItem::SetSize(float w, float h, float inputw, float inputh)
+{
+    SetPositionAndSize( m_Position.x, m_Position.y, w, h, inputw, inputh );
+}
+
 void MenuItem::SetPositionAndSize(float x, float y, float w, float h, float inputw, float inputh)
 {
     m_Position.Set( x, y );

@@ -637,6 +637,14 @@ void MenuButton::PlaySound()
     //}
 }
 
+void MenuButton::SetSize(float w, float h, float inputw, float inputh)
+{
+    m_BGSize.Set( w, h );
+
+    m_InputWidth = inputw;
+    m_InputHeight = inputh;
+}
+
 void MenuButton::SetPositionAndSize(float x, float y, float w, float h, float inputw, float inputh)
 {
     m_Position.Set( x, y );

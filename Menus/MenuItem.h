@@ -119,8 +119,11 @@ public:
     void SetName(const char* name);
     
     virtual void SetPosition(float x, float y);
+    virtual void SetSize(float w, float h, float inputw = -1, float inputh = -1);
     virtual void SetPositionAndSize(float x, float y, float w, float h, float inputw = -1, float inputh = -1);
     virtual void SetAnchorPoint(MenuItemAnchorPoint anchortype);
+
+    virtual Vector2 GetSize() { return Vector2( 0, 0 ); }
 
     virtual void SetVisible(bool visible) { m_Visible = visible; }
     virtual void SetEnabled(bool enabled) { m_Enabled = enabled; }

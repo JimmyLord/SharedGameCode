@@ -32,6 +32,12 @@ public:
     void SetTextMesh(MyMeshText* pMesh);
 
     virtual void Draw(MyMatrix* matviewproj);
+
+#if MYFW_USING_WX
+    // Object panel callbacks.
+    static void StaticFillPropertiesWindow(void* pObjectPtr, wxTreeItemId id, unsigned int count) { ((MenuScrollingText*)pObjectPtr)->FillPropertiesWindow(); }
+    void FillPropertiesWindow();
+#endif //MYFW_USING_WX
 };
 
 #endif //__MenuScrollingText_H__

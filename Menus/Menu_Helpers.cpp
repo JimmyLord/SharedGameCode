@@ -155,10 +155,13 @@ cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int nu
 
             case MIT_Button:
             case MIT_InputBox:
+            case MIT_ScrollingText:
                 {
                     MenuButton* pMenuButton;
                     if( pMenuItem->m_MenuItemType == MIT_InputBox )
                         pMenuButton = (MenuButton*)GetMenuInputBox( itemarray, i );
+                    else if( pMenuItem->m_MenuItemType == MIT_ScrollingText )
+                        pMenuButton = GetMenuScrollingText( itemarray, i );
                     else
                         pMenuButton = GetMenuButton( itemarray, i );
 
@@ -202,14 +205,10 @@ cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int nu
                         cJSON_AddNumberToObject( menuitem, "MaxLength", ((MenuInputBox*)pMenuButton)->m_MaxLength );
                     }
                 }
-                break;
 
-            case MIT_ScrollingText:
+                if( pMenuItem->m_MenuItemType == MIT_ScrollingText )
                 {
                     MenuScrollingText* pMenuScrollingText = GetMenuScrollingText( itemarray, i );
-
-                    if( pMenuScrollingText->m_pFont )
-                        cJSON_AddStringToObject( menuitem, "Font", pMenuScrollingText->m_pFont->m_pFile->m_FullPath );
 
                     //if( pMenuScrollingText->m_StringToShow )
                     //    cJSON_AddStringToObject( menuitem, "StringToShow", pMenuScrollingText->m_StringToShow );
@@ -357,6 +356,7 @@ unsigned int Menu_ImportExport::ImportMenuLayout(cJSON* layout, MenuItem** itema
 
                     case MIT_Button:
                     case MIT_InputBox:
+                    case MIT_ScrollingText:
                         {
                             MenuButton* pMenuButton = (MenuButton*)pMenuItem;
 
@@ -408,19 +408,10 @@ unsigned int Menu_ImportExport::ImportMenuLayout(cJSON* layout, MenuItem** itema
                                 cJSONExt_GetInt( jMenuItem, "MaxLength", &((MenuInputBox*)pMenuButton)->m_MaxLength );
                             }
                         }
-                        break;
 
-                    case MIT_ScrollingText:
+                        if( pMenuItem->m_MenuItemType == MIT_ScrollingText )
                         {
                             MenuScrollingText* pMenuScrollingText = (MenuScrollingText*)pMenuItem;
-
-                            cJSON* jFont = cJSON_GetObjectItem( jMenuItem, "Font" );
-                            if( jFont )
-                            {
-                                FontDefinition* pFont = g_pFontManager->CreateFont( jFont->valuestring );
-                                pMenuScrollingText->SetFont( pFont );
-                                pFont->Release();
-                            }
 
                             // TODO: need to allocate memory if this is stored...
                             //cJSONExt_GetString( jMenuItem, "StringToShow", pMenuScrollingText->m_StringToShow, size of buffer );

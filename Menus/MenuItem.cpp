@@ -60,6 +60,30 @@ MenuItem::~MenuItem()
 {
 }
 
+MenuItem& MenuItem::operator=(const MenuItem& other)
+{
+    MyAssert( &other != this );
+
+    this->m_Visible = other.m_Visible;
+    this->m_Enabled = other.m_Enabled;
+
+    this->m_Closing = other.m_Closing;
+
+    this->m_AnchorPoint = other.m_AnchorPoint;
+    this->m_Position = other.m_Position;
+
+    //bool m_UseTweenIn;      // TODO: save/load
+    //MyTweener m_TweenIn;    // TODO: save/load
+    //bool m_UseTweenOut;     // TODO: save/load
+    //MyTweener m_TweenOut;   // TODO: save/load
+
+    this->m_Navigable = other.m_Navigable;
+    for( int i=0; i<4; i++ )
+        this->m_MenuItemNavigation[i] = other.m_MenuItemNavigation[i];
+
+    return *this;
+}
+
 void MenuItem::StartClosing()
 {
     m_Closing = true;
@@ -166,13 +190,13 @@ void MenuItem::OnRightClick()
     menu.SetClientData( this );
 
     menu.Append( 1000, "Delete Menu Item" );
- 	menu.Connect( wxEVT_COMMAND_MENU_SELECTED, (wxObjectEventFunction)&MenuItem::OnPopupClick );
+ 	menu.Connect( wxEVT_COMMAND_MENU_SELECTED, (wxObjectEventFunction)&MenuItemEventHandler::OnPopupClick );
 
     // blocking call.
     g_pPanelWatch->PopupMenu( &menu ); // there's no reason this is using g_pPanelWatch other than convenience.
 }
 
-void MenuItem::OnPopupClick(wxEvent &evt)
+void MenuItemEventHandler::OnPopupClick(wxEvent &evt)
 {
     MenuItem* pMenuItem = (MenuItem*)static_cast<wxMenu*>(evt.GetEventObject())->GetClientData();
 

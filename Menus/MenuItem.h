@@ -74,10 +74,15 @@ struct MenuItemDeletedCallbackStruct
 };
 #endif
 
-class MenuItem
 #if MYFW_USING_WX
-: public wxEvtHandler
+class MenuItemEventHandler : public wxEvtHandler
+{
+public:
+    void OnPopupClick(wxEvent &evt);
+};
 #endif
+
+class MenuItem
 {
 public:
     static const int MAX_MENUITEM_NAME_LENGTH = 32;
@@ -109,6 +114,8 @@ public:
 public:
     MenuItem();
     virtual ~MenuItem();
+
+    MenuItem& operator=(const MenuItem& other);
 
     virtual void StartClosing();
     virtual void Tick(double timepassed);
@@ -143,9 +150,9 @@ public:
     void FillPropertiesWindow();
 
     // Object panel callbacks.
+    MenuItemEventHandler m_MenuItemEventHandler;
     static void StaticOnRightClick(void* pObjectPtr, wxTreeItemId id) { ((MenuItem*)pObjectPtr)->OnRightClick(); }
     virtual void OnRightClick();
-    void OnPopupClick(wxEvent &evt);
 
     MenuItemDeletedCallbackStruct m_MenuItemDeletedCallbackStruct;
     void RegisterMenuItemDeletedCallback(void* pObj, MenuItemDeletedCallbackFunc pFunc);

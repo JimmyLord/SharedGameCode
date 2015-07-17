@@ -163,6 +163,8 @@ public:
     MenuButton(int maxletters);
     ~MenuButton();
 
+    MenuButton& operator=(const MenuButton& other);
+
     virtual void StartClosing();
     virtual void Tick(double TimePassed);
     virtual void Draw(MyMatrix* matviewproj);
@@ -185,6 +187,8 @@ public:
     virtual void SetToolTipString(const char* str);
     //void SetPressedState(const ColorByte& textcolor, const ColorByte& bgcolor, MySprite* sprite, const Vector4& uvs);
     //void SetOverlay(const Vector2& size, const Vector2& offset, const ColorByte& bgcolor, MySprite* sprite, const Vector4& uvs);
+
+    void SetButtonAction(const char* action);
 
     virtual Vector2 GetSize() { return GetBGSize(); }
 

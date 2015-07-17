@@ -151,6 +151,73 @@ MenuButton::~MenuButton()
         SAFE_RELEASE( m_pMaterials[i] );
 }
 
+MenuButton& MenuButton::operator=(const MenuButton& other)
+{
+    MyAssert( &other != this );
+
+    MenuItem::operator=( other );
+
+    this->m_Justification = other.m_Justification;
+    this->m_DropShadowOffsetText = other.m_DropShadowOffsetText;
+
+    this->m_DropShadowOffsetBG = other.m_DropShadowOffsetBG;
+
+    this->m_BGSize = other.m_BGSize;
+    this->m_TextSize = other.m_TextSize;
+
+    this->SetFont( other.m_pFont );
+    this->SetString( other.m_Strings[0], other.m_Strings[1], other.m_Strings[2] );
+    this->SetToolTipString( other.m_ToolTipString );
+
+    this->SetButtonAction( other.m_ButtonAction );
+
+    this->m_AllowPressWhenDraggedOver = other.m_AllowPressWhenDraggedOver;
+    
+    this->m_FontHeight = other.m_FontHeight;
+    this->m_LineHeight = other.m_LineHeight;
+    
+    this->m_InputWidth = other.m_InputWidth;
+    this->m_InputHeight = other.m_InputHeight;
+    
+    this->m_TextShadowStyle = other.m_TextShadowStyle;
+
+    //this->m_pBGMesh = other.aaaaaa;
+    //this->m_MeshTransform = other.aaaaaa;
+    //this->m_pBGMeshCamera = other.aaaaaa;
+    //this->m_pBGMeshLight = other.aaaaaa;
+    //this->m_BGSpriteOn = other.aaaaaa;
+    //this->m_TextOffset = other.aaaaaa;
+    //this->m_TextColor = other.aaaaaa;
+    //this->m_TextShadowColor = other.aaaaaa;
+    //this->m_BGSpriteUVs = other.aaaaaa;
+    //this->m_BGColor = other.aaaaaa;
+    //this->m_BGShadowColor = other.aaaaaa;
+
+    //this->m_DisabledTextColor = other.aaaaaa;
+    //this->m_DisabledBGSpriteUVs = other.aaaaaa;
+    //this->m_DisabledBGColor = other.aaaaaa;
+    //this->m_UsePressedState = other.aaaaaa;
+    //this->m_PressedTextColor = other.aaaaaa;
+    //this->m_PressedBGColor = other.aaaaaa;
+    //this->m_PressedBGSpriteUVs = other.aaaaaa;
+    //this->m_HasOverlay = other.aaaaaa;
+    //this->m_OverlaySize = other.aaaaaa;
+    //this->m_OverlayOffset = other.aaaaaa;
+    //this->m_OverlayBGColor = other.aaaaaa;
+    //this->m_OverlayBGSpriteUVs = other.aaaaaa;
+    //this->m_ShadowSpriteUVs = other.aaaaaa;
+    //this->m_hack_PasswordHideString2 = other.aaaaaa;
+    
+    this->m_SoundPressed = other.m_SoundPressed;
+
+    //this->m_pSprite = other.aaaaaa;
+
+    for( int i=0; i<Materials_NumTypes; i++ )
+        this->SetMaterial( i, other.m_pMaterials[i] );
+
+    return *this;
+}
+
 void MenuButton::StartClosing()
 {
     MenuItem::StartClosing();
@@ -730,6 +797,11 @@ void MenuButton::SetStringNumber(int stringnumber, const char* str1, ...)
 void MenuButton::SetToolTipString(const char* str)
 {
     sprintf_s( m_ToolTipString, MAX_STRING_LENGTH, "%s", str );
+}
+
+void MenuButton::SetButtonAction(const char* action)
+{
+    sprintf_s( m_ButtonAction, MAX_BUTTON_ACTION_LENGTH, "%s", action );
 }
 
 //void MenuButton::SetPressedState(const ColorByte& textcolor, const ColorByte& bgcolor, MySprite* sprite, const Vector4& uvs)

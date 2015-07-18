@@ -74,6 +74,15 @@ Screen_Base::~Screen_Base()
     free( m_LayoutJSON_Square );
 }
 
+void Screen_Base::LuaRegister(lua_State* luastate)
+{
+    luabridge::getGlobalNamespace( luastate )
+        .beginClass<Screen_Base>( "Screen_Base" )
+            //.addData( "ComponentTransform", &GameObject::m_pComponentTransform )
+            //.addFunction( "StartTutorial", &GameType_InfiniteDung::StartTutorial )
+        .endClass();
+}
+
 void Screen_Base::OnClose()
 {
 }

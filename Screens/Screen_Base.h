@@ -93,6 +93,8 @@ public:
     Screen_Base();
     virtual ~Screen_Base();
 
+    static void LuaRegister(lua_State* luastate);
+
     void SetScreenIsBeingCached() { m_ScreenIsBeingCached = true; }
     virtual void OnClose();
 

@@ -117,6 +117,8 @@ public:
 
     MenuItem& operator=(const MenuItem& other);
 
+    static void LuaRegister(lua_State* luastate);
+
     virtual void StartClosing();
     virtual void Tick(double timepassed);
     virtual void Draw(MyMatrix* matviewproj);

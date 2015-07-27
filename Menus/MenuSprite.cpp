@@ -45,6 +45,27 @@ MenuSprite::~MenuSprite()
         SAFE_RELEASE( m_pMaterials[i] );
 }
 
+MenuSprite& MenuSprite::operator=(const MenuSprite& other)
+{
+    MyAssert( &other != this );
+
+    MenuItem::operator=( other );
+
+    //this->m_Justification = other.m_Justification;
+
+    return *this;
+}
+
+void MenuSprite::LuaRegister(lua_State* luastate)
+{
+    luabridge::getGlobalNamespace( luastate )
+        .beginClass<MenuSprite>( "MenuSprite" )
+            //.addData( "localmatrix", &MenuSprite::m_LocalTransform )
+            
+            .addFunction( "SetPositionAndSize", &MenuSprite::SetPositionAndSize )
+        .endClass();
+}
+
 void MenuSprite::Draw(MyMatrix* matviewproj)
 {
     if( m_Visible == false )

@@ -50,6 +50,10 @@ public:
     MenuText(MyMeshText* pMeshText);
     ~MenuText();
 
+    MenuText& operator=(const MenuText& other);
+
+    static void LuaRegister(lua_State* luastate);
+
     //virtual void StartClosing();
     //virtual void Tick(double TimePassed);
     virtual void Draw(MyMatrix* matviewproj);
@@ -61,7 +65,8 @@ public:
     virtual MyRect GetBoundingRect();
 
     virtual void SetPositionAndSize(float x, float y, float w, float h, float inputw = -1, float inputh = -1);
-    void SetString(const char* str, ...);
+    void SetString(const char* str);
+    void SetStringFormatted(const char* str, ...);
 
     FontDefinition* GetFont() { return m_pFont; }
     void SetFont(FontDefinition* pFont);

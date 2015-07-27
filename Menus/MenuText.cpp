@@ -110,6 +110,35 @@ MenuText::~MenuText()
     SAFE_RELEASE( m_pMaterial );
 }
 
+MenuText& MenuText::operator=(const MenuText& other)
+{
+    MyAssert( &other != this );
+
+    MenuItem::operator=( other );
+
+    //this->m_Justification = other.m_Justification;
+
+    return *this;
+}
+
+MenuText* CastAs_MenuText(MenuItem* pMenuItem)
+{
+    return (MenuText*)pMenuItem;
+}
+
+void MenuText::LuaRegister(lua_State* luastate)
+{
+    luabridge::getGlobalNamespace( luastate ).addFunction( "CastAs_MenuText", CastAs_MenuText );
+
+    luabridge::getGlobalNamespace( luastate )
+        .beginClass<MenuText>( "MenuText" )
+            //.addData( "localmatrix", &MenuText::m_LocalTransform )
+            
+            .addFunction( "SetPositionAndSize", &MenuText::SetPositionAndSize )
+            .addFunction( "SetString", &MenuText::SetString )
+        .endClass();
+}
+
 void MenuText::Draw(MyMatrix* matviewproj)
 {
     if( m_Visible == false )
@@ -195,7 +224,12 @@ void MenuText::SetPositionAndSize(float x, float y, float w, float h, float inpu
     m_TextSize.Set( w, h );
 }
 
-void MenuText::SetString(const char* str, ...)
+void MenuText::SetString(const char* str)
+{
+    SetStringFormatted( str );
+}
+
+void MenuText::SetStringFormatted(const char* str, ...)
 {
     MyAssert( str != 0 );
 

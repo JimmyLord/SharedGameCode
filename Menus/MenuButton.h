@@ -165,6 +165,8 @@ public:
 
     MenuButton& operator=(const MenuButton& other);
 
+    static void LuaRegister(lua_State* luastate);
+
     virtual void StartClosing();
     virtual void Tick(double TimePassed);
     virtual void Draw(MyMatrix* matviewproj);
@@ -183,7 +185,8 @@ public:
     virtual void SetSize(float w, float h, float inputw = -1, float inputh = -1);
     virtual void SetPositionAndSize(float x, float y, float w, float h, float inputw = -1, float inputh = -1);
     virtual void SetString(const char* str1, const char* str2 = 0, const char* str3 = 0);
-    virtual void SetStringNumber(int stringnumber, const char* str1, ...);
+    virtual void SetStringNumber(int stringnumber, const char* str1);
+    virtual void SetStringNumberFormatted(int stringnumber, const char* str1, ...);
     virtual void SetToolTipString(const char* str);
     //void SetPressedState(const ColorByte& textcolor, const ColorByte& bgcolor, MySprite* sprite, const Vector4& uvs);
     //void SetOverlay(const Vector2& size, const Vector2& offset, const ColorByte& bgcolor, MySprite* sprite, const Vector4& uvs);

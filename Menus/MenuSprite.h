@@ -49,6 +49,10 @@ public:
     MenuSprite();
     ~MenuSprite();
 
+    MenuSprite& operator=(const MenuSprite& other);
+
+    static void LuaRegister(lua_State* luastate);
+
     //virtual void StartClosing();
     //virtual void Tick(double TimePassed);
     virtual void Draw(MyMatrix* matviewproj);

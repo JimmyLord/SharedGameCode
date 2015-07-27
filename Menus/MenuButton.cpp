@@ -218,6 +218,22 @@ MenuButton& MenuButton::operator=(const MenuButton& other)
     return *this;
 }
 
+void MenuButton::LuaRegister(lua_State* luastate)
+{
+    luabridge::getGlobalNamespace( luastate )
+        .beginClass<MenuButton>( "MenuButton" )
+            //.addData( "localmatrix", &MenuButton::m_LocalTransform )
+            
+            .addFunction( "SetSize", &MenuButton::SetSize )
+            .addFunction( "SetPositionAndSize", &MenuButton::SetPositionAndSize )
+            .addFunction( "SetString", &MenuButton::SetString )
+            .addFunction( "SetStringNumber", &MenuButton::SetStringNumber )
+            
+            .addFunction( "GetSize", &MenuButton::GetSize )
+            .addFunction( "GetBGSize", &MenuButton::GetBGSize )
+        .endClass();
+}
+
 void MenuButton::StartClosing()
 {
     MenuItem::StartClosing();
@@ -773,7 +789,12 @@ void MenuButton::SetString(const char* str1, const char* str2, const char* str3)
     }
 }
 
-void MenuButton::SetStringNumber(int stringnumber, const char* str1, ...)
+void MenuButton::SetStringNumber(int stringnumber, const char* str1)
+{
+    SetStringNumberFormatted( stringnumber, str1 );
+}
+
+void MenuButton::SetStringNumberFormatted(int stringnumber, const char* str1, ...)
 {
     MyAssert( stringnumber >= 0 && stringnumber < 3 );
 

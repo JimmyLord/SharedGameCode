@@ -144,18 +144,20 @@ int MenuScrollBox::OnTouch(int action, int id, float x, float y, float pressure,
         m_InitialFinger = id;
         m_Momentum.Set( 0, 0 );
 
-        bool found = false;
+        //bool found = false;
         for( int i=m_NumMenuItems-1; i>=0; i-- )
         {
             if( m_pMenuItems[i] )
             {
                 if( m_pMenuItems[i]->HoldOnCollision( id, x, y, true ) )
                 {
-                    found = true;
-                    break;
+                    //found = true;
+                    //break;
                 }
             }
         }
+
+        return true;
     }
 
     if( action == GCBA_Up ) // last finger up... i.e. no fingers still down.
@@ -230,6 +232,8 @@ int MenuScrollBox::OnTouch(int action, int id, float x, float y, float pressure,
                 }
             }
         }
+
+        return true;
     }
 
     //if( newfingerdown )
@@ -252,6 +256,8 @@ int MenuScrollBox::OnTouch(int action, int id, float x, float y, float pressure,
                 }
             }
         }
+
+        return true;
     }
 
     return false;

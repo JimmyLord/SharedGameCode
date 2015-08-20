@@ -149,7 +149,7 @@ void MenuItem::SetName(const char* name)
     if( charstocopy > MAX_MENUITEM_NAME_LENGTH )
         charstocopy = MAX_MENUITEM_NAME_LENGTH;
 
-    strncpy_s( m_Name, name, charstocopy );
+    strncpy_s( m_Name, MAX_MENUITEM_NAME_LENGTH, name, charstocopy );
     m_Name[MAX_MENUITEM_NAME_LENGTH-1] = 0;
 
 #if MYFW_USING_WX

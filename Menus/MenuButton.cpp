@@ -394,8 +394,8 @@ void MenuButton::Draw(MyMatrix* matviewproj)
     //    float gamew = g_pGame->m_GameWidth;
     //    float gameh = g_pGame->m_GameHeight;
 
-    //    float devw = g_pGame->m_GameFullWidth;
-    //    float devh = g_pGame->m_GameFullHeight;
+    //    int devw = (int)g_pGame->m_GameFullWidth;
+    //    int devh = (int)g_pGame->m_GameFullHeight;
 
     //    MyMatrix matfinalmesh = m_MeshTransform;
     //    matfinalmesh.SetTranslation( m_Transform.m41, m_Transform.m42, m_Transform.m43 );

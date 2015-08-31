@@ -101,7 +101,7 @@ cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int nu
 
             cJSONExt_AddNumberToObjectIfDiffers( menuitem, "Anchor", (int)pMenuItem->m_AnchorPoint, 0 );
 
-            if( pMenuItem->m_MenuItemType == MIT_Button || pMenuItem->m_MenuItemType == MIT_InputBox )
+            if( pMenuItem->m_MenuItemType == MIT_Button || pMenuItem->m_MenuItemType == MIT_InputBox || pMenuItem->m_MenuItemType == MIT_ScrollingText )
                 cJSONExt_AddNumberToObjectIfDiffers( menuitem, "Navigable", pMenuItem->m_Navigable, true );
             else
                 cJSONExt_AddNumberToObjectIfDiffers( menuitem, "Navigable", pMenuItem->m_Navigable, false );

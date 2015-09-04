@@ -137,9 +137,9 @@ void MenuScrollingText::FillPropertiesWindow()
 {
     MenuButton::FillPropertiesWindow();
 
-    g_pPanelWatch->AddFloat( "Fade-Top End", &m_TopFade0, 0, 200 );
-    g_pPanelWatch->AddFloat( "Fade-Top Start", &m_TopFade1, 0, 200 );
-    g_pPanelWatch->AddFloat( "Fade-Bottom Start", &m_BottomFade1, 0, 200 );
-    g_pPanelWatch->AddFloat( "Fade-Bottom End", &m_BottomFade0, 0, 200 );
+    g_pPanelWatch->AddFloat( "Fade-Top End", &m_TopFade0, 0, 2000 );
+    g_pPanelWatch->AddFloat( "Fade-Top Start", &m_TopFade1, 0, 2000 );
+    g_pPanelWatch->AddFloat( "Fade-Bottom Start", &m_BottomFade1, 0, 2000 );
+    g_pPanelWatch->AddFloat( "Fade-Bottom End", &m_BottomFade0, 0, 2000 );
 }
 #endif //MYFW_USING_WX

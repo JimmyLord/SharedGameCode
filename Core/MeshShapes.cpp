@@ -28,21 +28,12 @@ MyMeshText::MyMeshText(int maxletters, FontDefinition* pFont)
     unsigned short* pIndices = GetIndices( true );
     for( unsigned short i=0; i<maxletters; i++ )
     {
-#if MYFW_RIGHTHANDED
-        pIndices[i*6+0] = i*4+0;  // 0--1
-        pIndices[i*6+1] = i*4+2;  // |\ |
-        pIndices[i*6+2] = i*4+1;  // | \|
-        pIndices[i*6+3] = i*4+2;  // 3--2
-        pIndices[i*6+4] = i*4+0;
-        pIndices[i*6+5] = i*4+3;
-#else
-        pIndices[i*6+0] = i*4+0;  // 0--1
-        pIndices[i*6+1] = i*4+1;  // |\ |
-        pIndices[i*6+2] = i*4+2;  // | \|
-        pIndices[i*6+3] = i*4+2;  // 3--2
-        pIndices[i*6+4] = i*4+3;
-        pIndices[i*6+5] = i*4+0;
-#endif
+        pIndices[i*6 + 0] = i*4 + g_SpriteVertexIndices[0];
+        pIndices[i*6 + 1] = i*4 + g_SpriteVertexIndices[1];
+        pIndices[i*6 + 2] = i*4 + g_SpriteVertexIndices[2];
+        pIndices[i*6 + 3] = i*4 + g_SpriteVertexIndices[3];
+        pIndices[i*6 + 4] = i*4 + g_SpriteVertexIndices[4];
+        pIndices[i*6 + 5] = i*4 + g_SpriteVertexIndices[5];
     }
     RebuildIndices();
 }

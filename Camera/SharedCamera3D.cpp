@@ -36,7 +36,11 @@ void SharedCamera3D::LookAt(Vector3& eye, Vector3& up, Vector3& lookatpos)
 
 void SharedCamera3D::ResetMatrix(bool calculateinverse)
 {
+#if MYFW_RIGHTHANDED
     m_matView.CreateLookAt( m_Eye, m_Up, m_LookAtPos );
+#else
+    m_matView.CreateLookAtLeftHanded( m_Eye, m_Up, m_LookAtPos );
+#endif
 
     m_matViewProj = m_matProj * m_matView;
 

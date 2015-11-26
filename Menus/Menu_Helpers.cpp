@@ -7,7 +7,7 @@
 // 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
-#if MYFW_USING_MYENGINE
+#ifndef PCHFILE
 #define PCHFILE "EngineCommonHeader.h"
 #endif
 
@@ -253,7 +253,7 @@ unsigned int Menu_ImportExport::ImportMenuLayout(cJSON* layout, MenuItem** itema
         if( jMenuItemArray )
         {
             numitems = cJSON_GetArraySize( jMenuItemArray );
-            assert( numitems <= maxitems );
+            MyAssert( numitems <= maxitems );
 
             for( unsigned int i=0; i<numitems; i++ )
             {

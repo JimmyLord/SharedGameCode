@@ -52,7 +52,9 @@ public:
 
     MenuText& operator=(const MenuText& other);
 
+#if MYFW_USING_LUA
     static void LuaRegister(lua_State* luastate);
+#endif //MYFW_USING_LUA
 
     //virtual void StartClosing();
     //virtual void Tick(double TimePassed);

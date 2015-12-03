@@ -88,6 +88,7 @@ MenuItem& MenuItem::operator=(const MenuItem& other)
     return *this;
 }
 
+#if MYFW_USING_LUA
 void MenuItem::LuaRegister(lua_State* luastate)
 {
     luabridge::getGlobalNamespace( luastate )
@@ -110,6 +111,7 @@ void MenuItem::LuaRegister(lua_State* luastate)
             .addFunction( "GetBoundingRect", &MenuItem::GetBoundingRect )
         .endClass();
 }
+#endif //MYFW_USING_LUA
 
 void MenuItem::StartClosing()
 {

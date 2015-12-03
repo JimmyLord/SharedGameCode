@@ -60,6 +60,7 @@ MenuSprite& MenuSprite::operator=(const MenuSprite& other)
     return *this;
 }
 
+#if MYFW_USING_LUA
 void MenuSprite::LuaRegister(lua_State* luastate)
 {
     luabridge::getGlobalNamespace( luastate )
@@ -69,6 +70,7 @@ void MenuSprite::LuaRegister(lua_State* luastate)
             .addFunction( "SetPositionAndSize", &MenuSprite::SetPositionAndSize )
         .endClass();
 }
+#endif //MYFW_USING_LUA
 
 void MenuSprite::Draw(MyMatrix* matviewproj)
 {

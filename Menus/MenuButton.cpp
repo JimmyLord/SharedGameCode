@@ -222,6 +222,7 @@ MenuButton& MenuButton::operator=(const MenuButton& other)
     return *this;
 }
 
+#if MYFW_USING_LUA
 void MenuButton::LuaRegister(lua_State* luastate)
 {
     luabridge::getGlobalNamespace( luastate )
@@ -237,6 +238,7 @@ void MenuButton::LuaRegister(lua_State* luastate)
             .addFunction( "GetBGSize", &MenuButton::GetBGSize )
         .endClass();
 }
+#endif //MYFW_USING_LUA
 
 void MenuButton::StartClosing()
 {

@@ -130,6 +130,7 @@ MenuText* CastAs_MenuText(MenuItem* pMenuItem)
     return (MenuText*)pMenuItem;
 }
 
+#if MYFW_USING_LUA
 void MenuText::LuaRegister(lua_State* luastate)
 {
     luabridge::getGlobalNamespace( luastate ).addFunction( "CastAs_MenuText", CastAs_MenuText );
@@ -142,6 +143,7 @@ void MenuText::LuaRegister(lua_State* luastate)
             .addFunction( "SetString", &MenuText::SetString )
         .endClass();
 }
+#endif //MYFW_USING_LUA
 
 void MenuText::Draw(MyMatrix* matviewproj)
 {

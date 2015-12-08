@@ -533,6 +533,8 @@ void MenuButton::Draw(MyMatrix* matviewproj)
         pTempMaterial.RemoveFinalRefIfCreatedOnStackToAvoidAssertInDestructor();
 #endif
     }
+
+    checkGlError( "end of MenuButton::Draw()" );
 }
 
 bool MenuButton::CheckForCollision(float x, float y)

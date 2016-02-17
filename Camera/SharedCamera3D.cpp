@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2012-2014 Jimmy Lord http://www.flatheadgames.com
+// Copyright (c) 2012-2016 Jimmy Lord http://www.flatheadgames.com
 //
 // This software is provided 'as-is', without any express or implied warranty.  In no event will the authors be held liable for any damages arising from the use of this software.
 // Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
@@ -37,9 +37,9 @@ void SharedCamera3D::LookAt(Vector3& eye, Vector3& up, Vector3& lookatpos)
 void SharedCamera3D::ResetMatrix(bool calculateinverse)
 {
 #if MYFW_RIGHTHANDED
-    m_matView.CreateLookAt( m_Eye, m_Up, m_LookAtPos );
+    m_matView.CreateLookAtView( m_Eye, m_Up, m_LookAtPos );
 #else
-    m_matView.CreateLookAtLeftHanded( m_Eye, m_Up, m_LookAtPos );
+    m_matView.CreateLookAtViewLeftHanded( m_Eye, m_Up, m_LookAtPos );
 #endif
 
     m_matViewProj = m_matProj * m_matView;

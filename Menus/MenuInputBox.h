@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2012-2014 Jimmy Lord http://www.flatheadgames.com
+// Copyright (c) 2012-2016 Jimmy Lord http://www.flatheadgames.com
 //
 // This software is provided 'as-is', without any express or implied warranty.  In no event will the authors be held liable for any damages arising from the use of this software.
 // Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
@@ -28,7 +28,7 @@ public:
 
     virtual const char* TriggerOnCollision(int fingerid, float x, float y, bool careifheld, bool releaseifnocollision = true); // returns the action triggered, -1 is no action.
 
-    virtual bool OnKeyDown(int keycode, int unicodechar);
+    virtual bool OnKeys(GameCoreButtonActions action, int keycode, int unicodechar);
 
     virtual void SetString(const char* str1, const char* str2 = 0, const char* str3 = 0);
     virtual void SetInputString(const char* str, ...);

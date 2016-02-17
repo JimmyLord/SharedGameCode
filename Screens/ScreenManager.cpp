@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2012-2014 Jimmy Lord http://www.flatheadgames.com
+// Copyright (c) 2012-2016 Jimmy Lord http://www.flatheadgames.com
 //
 // This software is provided 'as-is', without any express or implied warranty.  In no event will the authors be held liable for any damages arising from the use of this software.
 // Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
@@ -332,12 +332,12 @@ bool ScreenManager::OnButtons(GameCoreButtonActions action, GameCoreButtonIDs id
     return false;
 }
 
-bool ScreenManager::OnKeyDown(int keycode, int unicodechar)
+bool ScreenManager::OnKeys(GameCoreButtonActions action, int keycode, int unicodechar)
 {
     if( m_ScreensActive.Count() > 0 )
     {
         Screen_Base* pScreen = m_ScreensActive[m_ScreensActive.Count()-1];
-        return pScreen->OnKeyDown( keycode, unicodechar );
+        return pScreen->OnKeys( action, keycode, unicodechar );
     }
 
     return false;

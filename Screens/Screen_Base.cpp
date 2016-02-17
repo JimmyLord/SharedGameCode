@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2012-2015 Jimmy Lord http://www.flatheadgames.com
+// Copyright (c) 2012-2016 Jimmy Lord http://www.flatheadgames.com
 //
 // This software is provided 'as-is', without any express or implied warranty.  In no event will the authors be held liable for any damages arising from the use of this software.
 // Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
@@ -74,6 +74,7 @@ Screen_Base::~Screen_Base()
     free( m_LayoutJSON_Square );
 }
 
+#if MYFW_USING_LUA
 void Screen_Base::LuaRegister(lua_State* luastate)
 {
     luabridge::getGlobalNamespace( luastate )
@@ -82,6 +83,7 @@ void Screen_Base::LuaRegister(lua_State* luastate)
             //.addFunction( "StartTutorial", &GameType_InfiniteDung::StartTutorial )
         .endClass();
 }
+#endif
 
 void Screen_Base::OnClose()
 {
@@ -672,7 +674,7 @@ bool Screen_Base::OnButtons(GameCoreButtonActions action, GameCoreButtonIDs id)
     return false;
 }
 
-bool Screen_Base::OnKeyDown(int keycode, int unicodechar)
+bool Screen_Base::OnKeys(GameCoreButtonActions action, int keycode, int unicodechar)
 {
 #if MYFW_WINDOWS && MYFW_USING_WX && _DEBUG
     //if( keycode == 'R' && g_pGameCore->m_KeysHeld[MYKEYCODE_LCTRL] )

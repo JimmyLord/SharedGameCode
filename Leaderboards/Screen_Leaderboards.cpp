@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2012-2014 Jimmy Lord http://www.flatheadgames.com
+// Copyright (c) 2012-2016 Jimmy Lord http://www.flatheadgames.com
 //
 // This software is provided 'as-is', without any express or implied warranty.  In no event will the authors be held liable for any damages arising from the use of this software.
 // Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
@@ -66,7 +66,7 @@ void Screen_Leaderboards::Init()
         pButton->m_FontHeight = 40;
         pButton->m_LineHeight = 40 * 0.8f;
 
-        pButton->m_pFont = g_pGame->m_pResources->m_pFontText;
+        pButton->SetFont( g_pGame->m_pResources->m_pFontText );
         pButton->SetTextShadow( 5, -5 );
         pButton->SetBGShadow( 6, -6 );
 
@@ -78,15 +78,23 @@ void Screen_Leaderboards::Init()
 
         //pButton->m_SoundPressed = GameAudioCue_Explode;
 
-        pButton->m_ButtonAction = i;
+        pButton->m_ButtonAction[0] = (char)i;
     }
 
     // set up the login button
     {
         pButton = GetMenuButton( LeaderboardActions_Login );
 
-        pButton->SetSprites( g_DefaultEnabledBGSprite, 0, 0, 0, 0 );
-        sprintf_s( pButton->m_Strings[0], MAX_MENUBUTTON_STRING, "Login" );
+        //pButton->SetSprites( g_DefaultEnabledBGSprite, 0, 0, 0, 0 );
+        MaterialDefinition* pMatGray = g_pMaterialManager->LoadMaterial( "Data/Materials/Gray.mymaterial" );
+        pButton->SetMaterial( MenuButton::Material_BG, pMatGray );
+        pButton->SetMaterial( MenuButton::Material_BGDisabled, pMatGray );
+        pButton->SetMaterial( MenuButton::Material_BGOverlay, pMatGray );
+        pButton->SetMaterial( MenuButton::Material_BGPressed, pMatGray );
+        pButton->SetMaterial( MenuButton::Material_Shadow, pMatGray );
+        pMatGray->Release();
+
+        sprintf_s( pButton->m_Strings[0], MenuButton::MAX_STRING_LENGTH, "Login" );
         pButton->m_FontHeight = 30;
         pButton->SetPositionAndSize( 640-90, 900, 120, 40 );
     }
@@ -128,7 +136,15 @@ void Screen_Leaderboards::Init()
     // set up the back and clear buttons
     {
         MenuButton* pButton = GetMenuButton( LeaderboardActions_Back );
-        pButton->SetSprites( g_pGame->m_pResources->m_pSprites[SL_Button_Back], 0, 0, 0, 0 );
+        //pButton->SetSprites( g_pGame->m_pResources->m_pSprites[SL_Button_Back], 0, 0, 0, 0 );
+        MaterialDefinition* pMatGray = g_pMaterialManager->LoadMaterial( "Data/Materials/Gray.mymaterial" );
+        pButton->SetMaterial( MenuButton::Material_BG, pMatGray );
+        pButton->SetMaterial( MenuButton::Material_BGDisabled, pMatGray );
+        pButton->SetMaterial( MenuButton::Material_BGOverlay, pMatGray );
+        pButton->SetMaterial( MenuButton::Material_BGPressed, pMatGray );
+        pButton->SetMaterial( MenuButton::Material_Shadow, pMatGray );
+        pMatGray->Release();
+
         pButton->m_BGColor = ColorByte( 255, 255, 255, 255 );
         pButton->SetPositionAndSize( scrw - 42, 42, 64, 64 );
         pButton->SetString( " " );
@@ -137,7 +153,15 @@ void Screen_Leaderboards::Init()
     // set up the game center button
     {
         MenuButton* pButton = GetMenuButton( LeaderboardActions_GameCenter );
-        pButton->SetSprites( g_pGame->m_pResources->m_pSprites[SL_WhiteSquare], 0, 0, 0, g_pGame->m_pResources->m_pSprites[SL_WhiteSquare] );
+        //pButton->SetSprites( g_pGame->m_pResources->m_pSprites[SL_WhiteSquare], 0, 0, 0, g_pGame->m_pResources->m_pSprites[SL_WhiteSquare] );
+        MaterialDefinition* pMatGray = g_pMaterialManager->LoadMaterial( "Data/Materials/Gray.mymaterial" );
+        pButton->SetMaterial( MenuButton::Material_BG, pMatGray );
+        pButton->SetMaterial( MenuButton::Material_BGDisabled, pMatGray );
+        pButton->SetMaterial( MenuButton::Material_BGOverlay, pMatGray );
+        pButton->SetMaterial( MenuButton::Material_BGPressed, pMatGray );
+        pButton->SetMaterial( MenuButton::Material_Shadow, pMatGray );
+        pMatGray->Release();
+
         //pButton->m_pBGSprite = g_pGame->m_pResources->m_pSprites[SL_WhiteSquare]; //SL_GameCenter];
         //pButton->m_pShadowSprite = g_pGame->m_pResources->m_pSprites[SL_WhiteSquare]; //SL_GameCenter];
 
@@ -370,7 +394,7 @@ void Screen_Leaderboards::Draw()
     }
 
     // draw the buttons.
-    DrawAllMenuItems();
+    DrawAllMenuItems( &g_pGame->m_OrthoMatrix );
 
     pFont = g_pGame->m_pResources->m_pFontText;
     if( g_pGame->m_pProfileManager->m_CurrentProfile->m_UserIndex == -1 )
@@ -486,7 +510,8 @@ bool Screen_Leaderboards::OnTouch(int action, int id, float x, float y, float pr
             {
                 if( GetMenuItem(i) )
                 {
-                    int action = GetMenuItem(i)->TriggerOnCollision( id, x, y, true );
+                    const char* actionstr = GetMenuItem(i)->TriggerOnCollision( id, x, y, true );
+                    int action = actionstr[0];
 
                     if( action != -1 && OnMenuAction( action ) )
                     {

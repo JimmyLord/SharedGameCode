@@ -234,15 +234,7 @@ void ScreenManager::Tick(double timepassed)
     {
         m_ScreensActive[i]->Tick( timepassed );
 
-        if( m_ScreensActive[i]->GetState() == SS_DoneClosing )
-        {
-            MyAssert( false ); // should already be in closing list when closing.
-            Screen_Base* pScreen = m_ScreensActive.RemoveIndex_MaintainOrder( i );
-            i--;
-
-            if( pScreen->m_ScreenIsBeingCached == false )
-                SAFE_DELETE( pScreen );
-        }
+        // TODO: fix this trash, if the m_ScreensActive[i]->Tick() call removed screen from list, who knows what will be ticked next.
     }
 
     for( unsigned int i=0; i<m_ScreensClosing.Count(); i++ )

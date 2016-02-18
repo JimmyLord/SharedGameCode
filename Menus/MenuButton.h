@@ -51,7 +51,8 @@ enum MenuButtonTextStyle
 
 class MenuButton : public MenuItem
 {
-    friend class Screen_Base;
+    //friend class Screen_Base;
+    friend class Menu_ImportExport; // for import/export of menu page layout
 
 public:
     static const int MAX_STRING_LENGTH = 64;
@@ -66,13 +67,10 @@ public:
         Material_Shadow,
         Materials_NumTypes,
     };
+
 protected:
     static const char* m_MaterialNames[Materials_NumTypes];
 
-    //friend class Screen_Base; // for import/export of menu page layout
-    friend class Menu_ImportExport; // for import/export of menu page layout
-
-protected:
     MenuButtonState m_State;
 
     double m_TimeHeld;

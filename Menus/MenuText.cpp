@@ -39,7 +39,7 @@ MenuText::MenuText()
 
     strcpy_s( m_String, MAX_MenuText_STRING, "Text Item" );
     if( g_pFontManager )
-        m_pFont = g_pFontManager->GetFirstFont();
+        SetFont( g_pFontManager->GetFirstFont() );
 
     m_TextSize.Set( 0, 0 ); // must default to 0,0 for save/load
 

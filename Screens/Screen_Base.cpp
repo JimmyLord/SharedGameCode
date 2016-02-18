@@ -337,9 +337,11 @@ void Screen_Base::CreateMenuItems(int numitems, MenuItemDefinition* menuitems)
                 pMenuSprite->SetName( menuitems[i].name );
 
                 MySprite* pSprite = g_pGame->m_pResources->m_pSprites[menuitems[i].spriteindex];
+                pMenuSprite->SetMaterial( MenuSprite::Material_Sprite, menuitems[i].pMaterials[MenuSprite::Material_Sprite] );
+                pMenuSprite->SetMaterial( MenuSprite::Material_Shadow, menuitems[i].pMaterials[MenuSprite::Material_Shadow] );
                 //pMenuSprite->SetSprites( pSprite, pSprite );
 
-                pMenuSprite->m_BGColor = menuitems[i].BGColor;
+                //pMenuSprite->m_BGColor = menuitems[i].BGColor;
             }
             break;
 
@@ -362,11 +364,16 @@ void Screen_Base::CreateMenuItems(int numitems, MenuItemDefinition* menuitems)
                 pButton->SetName( menuitems[i].name );
 
                 MySprite* pSprite = g_pGame->m_pResources->m_pSprites[menuitems[i].spriteindex];
+                pButton->SetMaterial( MenuButton::Material_BG,          menuitems[i].pMaterials[MenuButton::Material_BG] );
+                pButton->SetMaterial( MenuButton::Material_BGDisabled,  menuitems[i].pMaterials[MenuButton::Material_BGDisabled] );
+                pButton->SetMaterial( MenuButton::Material_BGPressed,   menuitems[i].pMaterials[MenuButton::Material_BGPressed] );
+                pButton->SetMaterial( MenuButton::Material_BGOverlay,   menuitems[i].pMaterials[MenuButton::Material_BGOverlay] );
+                pButton->SetMaterial( MenuButton::Material_Shadow,      menuitems[i].pMaterials[MenuButton::Material_Shadow] );
                 //pButton->SetSprites( pSprite, pSprite, pSprite, 0, pSprite );
 
-                pButton->m_BGColor = menuitems[i].BGColor;
+                //pButton->m_BGColor = menuitems[i].BGColor;
 
-                pButton->m_pFont = menuitems[i].font;
+                pButton->SetFont( menuitems[i].font );
                 if( menuitems[i].string1 || menuitems[i].string2 || menuitems[i].string3 )
                     pButton->SetString( menuitems[i].string1, menuitems[i].string2, menuitems[i].string3 );
 

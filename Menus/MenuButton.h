@@ -111,7 +111,7 @@ public:
 public:
     MyMesh* m_pBGMesh;
     MyMatrix m_MeshTransform;
-    SharedCamera3D* m_pBGMeshCamera;
+    //SharedCamera3D* m_pBGMeshCamera;
     MyLight* m_pBGMeshLight;
 
     bool m_BGSpriteOn;

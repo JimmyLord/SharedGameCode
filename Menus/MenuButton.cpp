@@ -104,7 +104,7 @@ MenuButton::MenuButton(int maxletters)
     m_DropShadowOffsetBG.Set( 0, 0 );
 
     m_pBGMesh = 0;
-    m_pBGMeshCamera = 0;
+    //m_pBGMeshCamera = 0;
     m_pBGMeshLight = 0;
 
     m_BGSpriteOn = true;

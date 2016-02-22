@@ -11,6 +11,7 @@
 #define __MenuItem_H__
 
 class ComponentMenuPage;
+class MenuItem;
 
 enum MenuItemTypes
 {

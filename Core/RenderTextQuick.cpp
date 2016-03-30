@@ -470,7 +470,7 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
                         MyDrawArrays( GL_TRIANGLES, 0, textstrlen*6 );
                         //MyDrawElements( GL_TRIANGLES, textstrlen*6, GL_UNSIGNED_SHORT, 0 );   //The starting point of the IBO
 #endif
-                        pShader->DeactivateShader( g_pRTQGlobals->m_pVertexBufferIDImmediate );
+                        pShader->DeactivateShader( g_pRTQGlobals->m_pVertexBufferIDImmediate, true );
                     }
 
                     // always disable blending
@@ -561,7 +561,7 @@ void RenderTextQuickEndBatch()
             MyDrawArrays( GL_TRIANGLES, 0, g_pRTQGlobals->m_BatchNumLetters*6 );
             //MyDrawElements( GL_TRIANGLES, textstrlen*6, GL_UNSIGNED_SHORT, 0 );   //The starting point of the IBO
 #endif
-            pShader->DeactivateShader( g_pRTQGlobals->m_pVertexBuffer );
+            pShader->DeactivateShader( g_pRTQGlobals->m_pVertexBuffer, true );
         }
 
         // always disable blending

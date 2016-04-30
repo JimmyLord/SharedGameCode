@@ -189,7 +189,7 @@ void MenuText::Draw(MyMatrix* matviewproj)
             pTempMaterial.SetBlendType( MaterialBlendType_On );
             pTempMaterial.SetTextureColor( m_pFont->m_pTextureDef );
             m_pMeshText->SetMaterial( &pTempMaterial, 0 );
-            m_pMeshText->Draw( matviewproj, 0, 0, 0, 0, 0, 0, 0 );
+            m_pMeshText->Draw( 0, matviewproj, 0, 0, 0, 0, 0, 0, 0 );
             m_pMeshText->SetMaterial( 0, 0 );
 #if _DEBUG
             pTempMaterial.RemoveFinalRefIfCreatedOnStackToAvoidAssertInDestructor();

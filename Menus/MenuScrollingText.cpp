@@ -129,7 +129,7 @@ void MenuScrollingText::Draw(MyMatrix* matviewproj)
     m_pMaterial->SetTextureColor( m_pFont->m_pTextureDef );
     m_peTextMesh->SetMaterial( m_pMaterial, 0 );
     //m_peTextMesh->Draw( &g_pGame->m_OrthoMatrixGameSize, 0, 0, 0, 0, 0, 0, 0 );
-    m_peTextMesh->Draw( 0, matviewproj, 0, 0, 0, 0, 0, 0, 0 );
+    m_peTextMesh->Draw( 0, matviewproj, 0, 0, 0, 0, 0, 0, 0, 0 );
 }
 
 #if MYFW_USING_WX

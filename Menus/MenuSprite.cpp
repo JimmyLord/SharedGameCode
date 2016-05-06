@@ -128,13 +128,14 @@ void MenuSprite::Draw(MyMatrix* matviewproj)
             //pShadowSprite->SetTint( shadowcolor );
             ////pShadowSprite->SetPosition( posx+bgshadowoffx, posy-bgshadowoffy, 0.1f );
             m_pSprite->SetMaterial( pShadowMaterial );
-            m_pSprite->m_Position.SetIdentity();
-            m_pSprite->m_Position.m11 = m_BGSize.x;
-            m_pSprite->m_Position.m22 = m_BGSize.y;
-            m_pSprite->m_Position.m41 = m_Position.x + bgshadowoffx;
-            m_pSprite->m_Position.m42 = m_Position.y + bgshadowoffy;
+            MyMatrix world;
+            world.SetIdentity();
+            world.m11 = m_BGSize.x;
+            world.m22 = m_BGSize.y;
+            world.m41 = m_Position.x + bgshadowoffx;
+            world.m42 = m_Position.y + bgshadowoffy;
 
-            m_pSprite->Draw( matviewproj );//&g_pGame->m_OrthoMatrixGameSize );
+            m_pSprite->Draw( &world, matviewproj );//&g_pGame->m_OrthoMatrixGameSize );
         }
 
         //pSprite->Create( bgwidth, bgheight, uvs.x, uvs.y, uvs.z, uvs.w, m_Justification );
@@ -144,13 +145,14 @@ void MenuSprite::Draw(MyMatrix* matviewproj)
             m_pSprite->SetMaterial( pMaterial );
             //m_pSprite->SetTint( bgcolor );
             //pSprite->SetPosition( posx, posy, 0 );
-            m_pSprite->m_Position.SetIdentity();
-            m_pSprite->m_Position.m11 = m_BGSize.x;
-            m_pSprite->m_Position.m22 = m_BGSize.y;
-            m_pSprite->m_Position.m41 = m_Position.x;
-            m_pSprite->m_Position.m42 = m_Position.y;
+            MyMatrix world;
+            world.SetIdentity();
+            world.m11 = m_BGSize.x;
+            world.m22 = m_BGSize.y;
+            world.m41 = m_Position.x;
+            world.m42 = m_Position.y;
 
-            m_pSprite->Draw( matviewproj );//&g_pGame->m_OrthoMatrixGameSize );
+            m_pSprite->Draw( &world, matviewproj );//&g_pGame->m_OrthoMatrixGameSize );
         }
     }
 

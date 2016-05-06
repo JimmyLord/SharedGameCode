@@ -353,8 +353,8 @@ void MenuButton::Draw(MyMatrix* matviewproj)
                 MyMatrix shadowmat = transform;
                 shadowmat.Translate( buttonshadowoffx, buttonshadowoffy, 0 );
 
-                m_pSprite->SetTransform( shadowmat );
-                m_pSprite->Draw( matviewproj ); //&g_pGame->m_OrthoMatrixGameSize );
+                //m_pSprite->SetTransform( shadowmat );
+                m_pSprite->Draw( &shadowmat, matviewproj ); //&g_pGame->m_OrthoMatrixGameSize );
             }
 
             if( pMaterial != 0 )
@@ -362,8 +362,8 @@ void MenuButton::Draw(MyMatrix* matviewproj)
                 m_pSprite->SetMaterial( pMaterial );
                 ////m_pSprite->SetTint( bgcolor );
 
-                m_pSprite->SetTransform( transform );
-                m_pSprite->Draw( matviewproj ); //&g_pGame->m_OrthoMatrixGameSize );
+                //m_pSprite->SetTransform( transform );
+                m_pSprite->Draw( &transform, matviewproj ); //&g_pGame->m_OrthoMatrixGameSize );
             }
         }
     }

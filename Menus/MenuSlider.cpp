@@ -76,14 +76,16 @@ void MenuSlider::Draw(MyMatrix* matviewproj)
     if( m_pSprite )
     {
         m_pSprite->Create( "MenuSlider", m_BarThickness, m_VisualRange, 0, 1, 0, 1, Justify_CenterX|Justify_Top );
-        m_pSprite->SetPosition( centerx, top, 0 );
+        MyMatrix world;
+        world.SetIdentity();
+        world.SetTranslation( centerx, top, 0 );
         m_pSprite->SetTint( m_Colors[MSCT_BarColor] );
-        m_pSprite->Draw( matviewproj ); //&g_pGame->m_OrthoMatrix );
+        m_pSprite->Draw( &world, matviewproj ); //&g_pGame->m_OrthoMatrix );
 
         m_pSprite->Create( "MenuSlider", m_HandleWidth, m_HandleHeight, 0, 1, 0, 1, Justify_CenterX|Justify_Top );
-        m_pSprite->SetPosition( centerx, emptypos + m_ValuePerc*m_VisualRange, 0 );
+        world.SetTranslation( centerx, emptypos + m_ValuePerc*m_VisualRange, 0 );
         m_pSprite->SetTint( m_Colors[MSCT_HandleColor] );
-        m_pSprite->Draw( matviewproj ); //&g_pGame->m_OrthoMatrix );
+        m_pSprite->Draw( &world, matviewproj ); //&g_pGame->m_OrthoMatrix );
     }
 }
 

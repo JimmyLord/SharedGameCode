@@ -833,6 +833,12 @@ void MenuButton::SetButtonAction(const char* action)
     sprintf_s( m_ButtonAction, MAX_BUTTON_ACTION_LENGTH, "%s", action );
 }
 
+void MenuButton::SetButtonActionAsChar(char action)
+{
+    m_ButtonAction[0] = action;
+    m_ButtonAction[1] = 0;
+}
+
 //void MenuButton::SetPressedState(const ColorByte& textcolor, const ColorByte& bgcolor, MySprite* sprite, const Vector4& uvs)
 //{
 //    MyAssert( m_pPressedBGSprite == 0 );

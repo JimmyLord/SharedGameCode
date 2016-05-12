@@ -158,7 +158,7 @@ void Effect_ParticleBurst::Tick(double TimePassed)
 
 void Effect_ParticleBurst::Draw()
 {
-    m_pRenderer->Draw( 0 );
+    m_pRenderer->Draw( 0,0,0,0,0,0,0,0,0,0,0 );
 }
 
 bool Effect_ParticleBurst::OnTouch(int action, int id, float x, float y, float pressure, float size)

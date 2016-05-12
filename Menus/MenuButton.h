@@ -192,6 +192,7 @@ public:
     //void SetOverlay(const Vector2& size, const Vector2& offset, const ColorByte& bgcolor, MySprite* sprite, const Vector4& uvs);
 
     void SetButtonAction(const char* action);
+    void SetButtonActionAsChar(char action); // hack for old games
 
     virtual Vector2 GetSize() { return GetBGSize(); }
 

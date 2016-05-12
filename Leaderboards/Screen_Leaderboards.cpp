@@ -282,11 +282,13 @@ void Screen_Leaderboards::Draw()
 {
     Screen_Base::Draw();
 
+    MyMatrix matworld;
+
     // half black
     g_pGame->m_pResources->m_pSprites[SL_WhiteSquare]->Create( 1.125f, 1.234f, 0, 1, 0, 1, Justify_CenterX|Justify_CenterY );
-    g_pGame->m_pResources->m_pSprites[SL_WhiteSquare]->SetPosition( 0.5f, 0.5f, 0 );
     g_pGame->m_pResources->m_pSprites[SL_WhiteSquare]->SetTint( ColorByte(0,0,0,240) );
-    g_pGame->m_pResources->m_pSprites[SL_WhiteSquare]->Draw( &g_pGame->m_OrthoMatrix );
+    matworld.CreateTranslation( 0.5f, 0.5f, 0 );
+    g_pGame->m_pResources->m_pSprites[SL_WhiteSquare]->Draw( &matworld, &g_pGame->m_OrthoMatrix );
 
     FontDefinition* pFont = g_pGame->m_pSystemFont;
     float scrw = g_pGame->m_GameWidth;
@@ -362,8 +364,8 @@ void Screen_Leaderboards::Draw()
             }
 
             g_pGame->m_pResources->m_pSprites[SL_WhiteSquare]->Create( (float)scrw, sep*0.8f, 0, 1, 0, 1, Justify_CenterX|Justify_CenterY );
-            g_pGame->m_pResources->m_pSprites[SL_WhiteSquare]->SetPosition( scrw*0.5f, y, 0 );
-            g_pGame->m_pResources->m_pSprites[SL_WhiteSquare]->Draw( &g_pGame->m_OrthoMatrixGameSize );
+            matworld.CreateTranslation( scrw*0.5f, y, 0 );
+            g_pGame->m_pResources->m_pSprites[SL_WhiteSquare]->Draw( &matworld, &g_pGame->m_OrthoMatrixGameSize );
         
             if( blockid != -1 )
             {

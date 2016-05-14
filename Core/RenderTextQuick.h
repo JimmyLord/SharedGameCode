@@ -70,7 +70,7 @@ int RenderTextQuickWithColorShadowStyleZAndRot(FontDefinition* pFont, float font
 
 int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float x, float y, float z, float rotz, unsigned char justificationflags, ColorByte color, const char* text);
 
-void RenderTextQuickStartBatch(FontDefinition* pFont);
-void RenderTextQuickEndBatch();
+void RenderTextQuickBatchStart(FontDefinition* pFont);
+void RenderTextQuickBatchEnd();
 
 #endif //__RenderTextQuick_H__

@@ -104,7 +104,7 @@ MenuButton::MenuButton(int maxletters)
     m_DropShadowOffsetBG.Set( 0, 0 );
 
     m_pBGMesh = 0;
-    //m_pBGMeshCamera = 0;
+    m_pBGMeshCamera = 0;
     m_pBGMeshLight = 0;
 
     m_BGSpriteOn = true;
@@ -360,9 +360,11 @@ void MenuButton::Draw(MyMatrix* matviewproj)
             if( pMaterial != 0 )
             {
                 m_pSprite->SetMaterial( pMaterial );
-                ////m_pSprite->SetTint( bgcolor );
+                //m_pSprite->SetTint( bgcolor );
 
                 //m_pSprite->SetTransform( transform );
+                //transform.m41 = 300;
+                //transform.m42 = 300;
                 m_pSprite->Draw( &transform, matviewproj ); //&g_pGame->m_OrthoMatrixGameSize );
             }
         }
@@ -391,37 +393,39 @@ void MenuButton::Draw(MyMatrix* matviewproj)
     //}
 
     // TODO: MYENGINE
-    //if( pMesh && m_pBGMeshCamera )
-    //{
-    //    float gamew = g_pGame->m_GameWidth;
-    //    float gameh = g_pGame->m_GameHeight;
+    if( pMesh && m_pBGMeshCamera )
+    {
+        float gamew = g_pGame->m_GameWidth;
+        float gameh = g_pGame->m_GameHeight;
 
-    //    int devw = (int)g_pGame->m_GameFullWidth;
-    //    int devh = (int)g_pGame->m_GameFullHeight;
+        int devw = (int)g_pGame->m_GameFullWidth;
+        int devh = (int)g_pGame->m_GameFullHeight;
 
-    //    MyMatrix matfinalmesh = m_MeshTransform;
-    //    matfinalmesh.SetTranslation( m_Transform.m41, m_Transform.m42, m_Transform.m43 );
-    //    matfinalmesh.m41 = (((-g_pGame->m_OrthoLeft + matfinalmesh.m41) / devw) - 0.5f) * m_pBGMeshCamera->m_FrustumRightEdgeZ0*2;
-    //    matfinalmesh.m42 = (((-g_pGame->m_OrthoBottom + matfinalmesh.m42) / devh) - 0.5f) * m_pBGMeshCamera->m_FrustumTopEdgeZ0*2;
-    //    matfinalmesh.m43 = matfinalmesh.m43;
-    //    
-    //    pMesh->SetTransform( matfinalmesh );
+        MyMatrix matfinalmesh = m_MeshTransform;
+        // TODO, fix z position
+        matfinalmesh.SetTranslation( m_Position.x, m_Position.y, 0 );//m_Position.z );
+        matfinalmesh.m41 = (((-g_pGame->m_OrthoLeft + matfinalmesh.m41) / devw) - 0.5f) * m_pBGMeshCamera->m_FrustumRightEdgeZ0*2;
+        matfinalmesh.m42 = (((-g_pGame->m_OrthoBottom + matfinalmesh.m42) / devh) - 0.5f) * m_pBGMeshCamera->m_FrustumTopEdgeZ0*2;
+        matfinalmesh.m43 = matfinalmesh.m43;
+        
+        //pMesh->SetTransform( matfinalmesh );
 
-    //    int numlights = 0;
-    //    if( m_pBGMeshLight )
-    //    {
-    //        Vector3 lightpos = m_pBGMeshLight->m_Position;
-    //        lightpos.x = ((lightpos.x / gamew) - 0.5f) * m_pBGMeshCamera->m_FrustumRightEdgeZ0*2;
-    //        lightpos.y = ((lightpos.y / gameh) - 0.5f) * m_pBGMeshCamera->m_FrustumTopEdgeZ0*2;
-    //        //lightpos.z = lightpos.z;
+        int numlights = 0;
+        if( m_pBGMeshLight )
+        {
+            Vector3 lightpos = m_pBGMeshLight->m_Position;
+            lightpos.x = ((lightpos.x / gamew) - 0.5f) * m_pBGMeshCamera->m_FrustumRightEdgeZ0*2;
+            lightpos.y = ((lightpos.y / gameh) - 0.5f) * m_pBGMeshCamera->m_FrustumTopEdgeZ0*2;
+            //lightpos.z = lightpos.z;
 
-    //        m_pBGMeshLight->m_Position = lightpos;
+            m_pBGMeshLight->m_Position = lightpos;
 
-    //        numlights = 1;
-    //    }
+            numlights = 1;
+        }
 
-    //    pMesh->Draw( &m_pBGMeshCamera->m_matViewProj, &m_pBGMeshCamera->m_Eye, m_pBGMeshLight, numlights, 0, 0, 0, 0 );
-    //}
+        pMesh->Draw( &matfinalmesh, &m_pBGMeshCamera->m_matViewProj, &m_pBGMeshCamera->m_Eye, 0,
+                     m_pBGMeshLight, numlights, 0, 0, 0, 0 );
+    }
 
     float y;
 

@@ -398,8 +398,8 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
                     (g_pRTQGlobals->m_BatchNumLetters + textstrlen)*6 > g_pRTQGlobals->m_VBONumVerts )
                 {
                     LOGInfo( LOGTag, "RenderTextQuick Batch Forced to render, look into it\n" );
-                    RenderTextQuickEndBatch();
-                    RenderTextQuickStartBatch( pFont );
+                    RenderTextQuickBatchEnd();
+                    RenderTextQuickBatchStart( pFont );
                 }
 
                 int offset = sizeof(Vertex_XYZUV_RGBA)*g_pRTQGlobals->m_BatchNumLetters*6;
@@ -436,45 +436,50 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
                 //}
 
                 // TODO: MYENGINE
-                Shader_Base* pShader = 0; //(Shader_Base*)g_pGame->m_pShader_TextureVertexColor->GlobalPass();
-                if( pShader )
-                {   
-                    int size = sizeof(Vertex_XYZUV_RGBA)*textstrlen*6;
-                    memcpy( &g_pRTQGlobals->m_pVertexBufferIDImmediate->m_pData[0], pVertToDraws, size );
-                    //(Vertex_XYZUV_RGBA*)g_pRTQGlobals->m_pVertexBufferIDImmediate->m_pData,6
+                //Shader_Base* pShader = 0; //(Shader_Base*)g_pGame->m_pShader_TextureVertexColor->GlobalPass();
+                ShaderGroup* pShaderGroup = g_pRTQGlobals->m_pMaterial->GetShader();
+                if( pShaderGroup )
+                {
+                    Shader_Base* pShader = (Shader_Base*)pShaderGroup->GlobalPass();
+                    if( pShader )
+                    {   
+                        int size = sizeof(Vertex_XYZUV_RGBA)*textstrlen*6;
+                        memcpy( &g_pRTQGlobals->m_pVertexBufferIDImmediate->m_pData[0], pVertToDraws, size );
+                        //(Vertex_XYZUV_RGBA*)g_pRTQGlobals->m_pVertexBufferIDImmediate->m_pData,6
 
-                    g_pRTQGlobals->m_pVertexBufferIDImmediate->m_Dirty = true;
-                    g_pRTQGlobals->m_pVertexBufferIDImmediate->Rebuild( 0, sizeof(Vertex_XYZUV_RGBA)*textstrlen*6 );
+                        g_pRTQGlobals->m_pVertexBufferIDImmediate->m_Dirty = true;
+                        g_pRTQGlobals->m_pVertexBufferIDImmediate->Rebuild( 0, sizeof(Vertex_XYZUV_RGBA)*textstrlen*6 );
 
-                    // TODO: MYENGINE
-                    //g_pRTQGlobals->m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
-                    g_pRTQGlobals->m_pMaterial->SetTextureColor( pFont->m_pTextureDef );
+                        // TODO: MYENGINE
+                        //g_pRTQGlobals->m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
+                        g_pRTQGlobals->m_pMaterial->SetTextureColor( pFont->m_pTextureDef );
 
-                    // Enable blending if necessary. TODO: sort draws and only set this once.
-                    if( g_pRTQGlobals->m_pMaterial->IsTransparent( pShader ) )
-                    {
-                        glEnable( GL_BLEND );
-                        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+                        // Enable blending if necessary. TODO: sort draws and only set this once.
+                        if( g_pRTQGlobals->m_pMaterial->IsTransparent( pShader ) )
+                        {
+                            glEnable( GL_BLEND );
+                            glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+                        }
+
+                        if( pShader->ActivateAndProgramShader(
+                            g_pRTQGlobals->m_pVertexBufferIDImmediate, 0, GL_UNSIGNED_SHORT,
+                            g_pRTQGlobals->m_pMatViewProj, //&g_pGame->m_OrthoMatrixGameSize,
+                            &position, g_pRTQGlobals->m_pMaterial ) )
+                        //if( pShader->ActivateAndProgramShader( &g_pGame->m_OrthoMatrixGameSize,
+                        //    &position, pVertToDraws, pFont->m_pTextureDef->m_TextureID ) )
+                        {
+    #if USE_D3D
+                            g_pD3DContext->Draw( textstrlen*6, 0 );
+    #else
+                            MyDrawArrays( GL_TRIANGLES, 0, textstrlen*6 );
+                            //MyDrawElements( GL_TRIANGLES, textstrlen*6, GL_UNSIGNED_SHORT, 0 );   //The starting point of the IBO
+    #endif
+                            pShader->DeactivateShader( g_pRTQGlobals->m_pVertexBufferIDImmediate, true );
+                        }
+
+                        // always disable blending
+                        glDisable( GL_BLEND );
                     }
-
-                    if( pShader->ActivateAndProgramShader(
-                        g_pRTQGlobals->m_pVertexBufferIDImmediate, 0, GL_UNSIGNED_SHORT,
-                        g_pRTQGlobals->m_pMatViewProj, //&g_pGame->m_OrthoMatrixGameSize,
-                        &position, g_pRTQGlobals->m_pMaterial ) )
-                    //if( pShader->ActivateAndProgramShader( &g_pGame->m_OrthoMatrixGameSize,
-                    //    &position, pVertToDraws, pFont->m_pTextureDef->m_TextureID ) )
-                    {
-#if USE_D3D
-                        g_pD3DContext->Draw( textstrlen*6, 0 );
-#else
-                        MyDrawArrays( GL_TRIANGLES, 0, textstrlen*6 );
-                        //MyDrawElements( GL_TRIANGLES, textstrlen*6, GL_UNSIGNED_SHORT, 0 );   //The starting point of the IBO
-#endif
-                        pShader->DeactivateShader( g_pRTQGlobals->m_pVertexBufferIDImmediate, true );
-                    }
-
-                    // always disable blending
-                    glDisable( GL_BLEND );
                 }
             }
 
@@ -488,7 +493,7 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
     return numlines;
 }
 
-void RenderTextQuickStartBatch(FontDefinition* pFont)
+void RenderTextQuickBatchStart(FontDefinition* pFont)
 {
     MyAssert( g_pRTQGlobals );
     MyAssert( pFont );
@@ -499,12 +504,12 @@ void RenderTextQuickStartBatch(FontDefinition* pFont)
     {
         if( g_pRTQGlobals->m_pBatchTexture == pFont->m_pTextureDef )
         {
-            LOGInfo( LOGTag, "RenderTextQuickStartBatch called without endbatch and with same texture\n" );
+            LOGInfo( LOGTag, "RenderTextQuickBatchStart called without endbatch and with same texture\n" );
         }
         else
         {
-            LOGInfo( LOGTag, "RenderTextQuickStartBatch called without an endbatch\n" );
-            RenderTextQuickEndBatch();
+            LOGInfo( LOGTag, "RenderTextQuickBatchStart called without an endbatch\n" );
+            RenderTextQuickBatchEnd();
         }
     }
 
@@ -513,7 +518,7 @@ void RenderTextQuickStartBatch(FontDefinition* pFont)
     g_pRTQGlobals->m_BatchNumLetters = 0;
 }
 
-void RenderTextQuickEndBatch()
+void RenderTextQuickBatchEnd()
 {
     MyAssert( g_pRTQGlobals );
     MyAssert( g_pRTQGlobals->m_pMaterial );
@@ -535,37 +540,42 @@ void RenderTextQuickEndBatch()
     MyAssert( g_pRTQGlobals->m_pVertexBuffer->m_Dirty == false );
 
     // TODO: MYENGINE
-    Shader_Base* pShader = 0;//(Shader_Base*)g_pGame->m_pShader_TextureVertexColor->GlobalPass();
-    if( pShader )
+    //Shader_Base* pShader = 0;//(Shader_Base*)g_pGame->m_pShader_TextureVertexColor->GlobalPass();
+    ShaderGroup* pShaderGroup = g_pRTQGlobals->m_pMaterial->GetShader();
+    if( pShaderGroup )
     {
-        // Enable blending if necessary. TODO: sort draws and only set this once.
-        if( g_pRTQGlobals->m_pMaterial->IsTransparent( pShader ) )
+        Shader_Base* pShader = (Shader_Base*)pShaderGroup->GlobalPass();
+        if( pShader )
         {
-            glEnable( GL_BLEND );
-            glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+            // Enable blending if necessary. TODO: sort draws and only set this once.
+            if( g_pRTQGlobals->m_pMaterial->IsTransparent( pShader ) )
+            {
+                glEnable( GL_BLEND );
+                glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+            }
+
+            // TODO: MYENGINE
+            //g_pRTQGlobals->m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
+            g_pRTQGlobals->m_pMaterial->SetTextureColor( g_pRTQGlobals->m_pBatchTexture );
+
+            if( pShader->ActivateAndProgramShader(
+                    g_pRTQGlobals->m_pVertexBuffer, 0, GL_UNSIGNED_SHORT,
+                    g_pRTQGlobals->m_pMatViewProj, //&g_pGame->m_OrthoMatrixGameSize,
+                    &position, g_pRTQGlobals->m_pMaterial ) )
+            {
+    #if USE_D3D
+                //g_pD3DContext->Draw( textstrlen*6, 0 );
+                MyDrawArrays( GL_TRIANGLES, 0, g_pRTQGlobals->m_BatchNumLetters*6 );
+    #else
+                MyDrawArrays( GL_TRIANGLES, 0, g_pRTQGlobals->m_BatchNumLetters*6 );
+                //MyDrawElements( GL_TRIANGLES, textstrlen*6, GL_UNSIGNED_SHORT, 0 );   //The starting point of the IBO
+    #endif
+                pShader->DeactivateShader( g_pRTQGlobals->m_pVertexBuffer, true );
+            }
+
+            // always disable blending
+            glDisable( GL_BLEND );
         }
-
-        // TODO: MYENGINE
-        //g_pRTQGlobals->m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
-        g_pRTQGlobals->m_pMaterial->SetTextureColor( g_pRTQGlobals->m_pBatchTexture );
-
-        if( pShader->ActivateAndProgramShader(
-                g_pRTQGlobals->m_pVertexBuffer, 0, GL_UNSIGNED_SHORT,
-                g_pRTQGlobals->m_pMatViewProj, //&g_pGame->m_OrthoMatrixGameSize,
-                &position, g_pRTQGlobals->m_pMaterial ) )
-        {
-#if USE_D3D
-            //g_pD3DContext->Draw( textstrlen*6, 0 );
-            MyDrawArrays( GL_TRIANGLES, 0, g_pRTQGlobals->m_BatchNumLetters*6 );
-#else
-            MyDrawArrays( GL_TRIANGLES, 0, g_pRTQGlobals->m_BatchNumLetters*6 );
-            //MyDrawElements( GL_TRIANGLES, textstrlen*6, GL_UNSIGNED_SHORT, 0 );   //The starting point of the IBO
-#endif
-            pShader->DeactivateShader( g_pRTQGlobals->m_pVertexBuffer, true );
-        }
-
-        // always disable blending
-        glDisable( GL_BLEND );
     }
 
     g_pRTQGlobals->m_BatchNumLetters = 0;

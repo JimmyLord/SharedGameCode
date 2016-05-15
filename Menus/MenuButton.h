@@ -110,7 +110,7 @@ public:
 
 public:
     MyMesh* m_pBGMesh;
-    MyMatrix m_MeshTransform;
+    MyMatrix m_BGMeshTransform;
     SharedCamera3D* m_pBGMeshCamera;
     MyLight* m_pBGMeshLight;
 

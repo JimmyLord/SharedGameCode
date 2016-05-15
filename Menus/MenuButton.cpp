@@ -186,7 +186,7 @@ MenuButton& MenuButton::operator=(const MenuButton& other)
     this->m_TextShadowStyle = other.m_TextShadowStyle;
 
     //this->m_pBGMesh = other.aaaaaa;
-    //this->m_MeshTransform = other.aaaaaa;
+    //this->m_BGMeshTransform = other.aaaaaa;
     //this->m_pBGMeshCamera = other.aaaaaa;
     //this->m_pBGMeshLight = other.aaaaaa;
     //this->m_BGSpriteOn = other.aaaaaa;
@@ -392,7 +392,6 @@ void MenuButton::Draw(MyMatrix* matviewproj)
     //    }
     //}
 
-    // TODO: MYENGINE
     if( pMesh && m_pBGMeshCamera )
     {
         float gamew = g_pGame->m_GameWidth;
@@ -401,22 +400,17 @@ void MenuButton::Draw(MyMatrix* matviewproj)
         int devw = (int)g_pGame->m_GameFullWidth;
         int devh = (int)g_pGame->m_GameFullHeight;
 
-        MyMatrix matfinalmesh = m_MeshTransform;
-        // TODO, fix z position
-        matfinalmesh.SetTranslation( m_Position.x, m_Position.y, 0 );//m_Position.z );
-        matfinalmesh.m41 = (((-g_pGame->m_OrthoLeft + matfinalmesh.m41) / devw) - 0.5f) * m_pBGMeshCamera->m_FrustumRightEdgeZ0*2;
-        matfinalmesh.m42 = (((-g_pGame->m_OrthoBottom + matfinalmesh.m42) / devh) - 0.5f) * m_pBGMeshCamera->m_FrustumTopEdgeZ0*2;
-        matfinalmesh.m43 = matfinalmesh.m43;
+        MyMatrix matfinalmesh = m_BGMeshTransform;
+        matfinalmesh.m41 = (((-g_pGame->m_OrthoLeft + m_Position.x) / devw) - 0.5f) * m_pBGMeshCamera->m_FrustumRightEdgeZ0*2;
+        matfinalmesh.m42 = (((-g_pGame->m_OrthoBottom + m_Position.y) / devh) - 0.5f) * m_pBGMeshCamera->m_FrustumTopEdgeZ0*2;
+        matfinalmesh.m43 = 0;
         
-        //pMesh->SetTransform( matfinalmesh );
-
         int numlights = 0;
         if( m_pBGMeshLight )
         {
             Vector3 lightpos = m_pBGMeshLight->m_Position;
             lightpos.x = ((lightpos.x / gamew) - 0.5f) * m_pBGMeshCamera->m_FrustumRightEdgeZ0*2;
             lightpos.y = ((lightpos.y / gameh) - 0.5f) * m_pBGMeshCamera->m_FrustumTopEdgeZ0*2;
-            //lightpos.z = lightpos.z;
 
             m_pBGMeshLight->m_Position = lightpos;
 

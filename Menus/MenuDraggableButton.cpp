@@ -11,7 +11,7 @@
 //#define PCHFILE "EngineCommonHeader.h"
 //#endif
 
-#include PCHFILE
+#include "GameCommonHeader.h"
 #include "MenuDraggableButton.h"
 
 bool MenuDraggableButton::ReleaseOnNoCollision(int fingerid, float x, float y)

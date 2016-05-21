@@ -11,7 +11,7 @@
 //#define PCHFILE "EngineCommonHeader.h"
 //#endif
 
-#include PCHFILE
+#include "GameCommonHeader.h"
 #include "MenuButton.h"
 
 ColorByte MenuButtonColors[MBCT_NumColors] = 
@@ -87,10 +87,10 @@ MenuButton::MenuButton(int maxletters)
     m_AllowPressWhenDraggedOver = false;
 
     // setup a decently sized button
-    m_BGSize.x = 300;
-    m_BGSize.y = 200;
-    m_Position.x = 300;
-    m_Position.y = 300;
+    m_BGSize.Set( 300, 200 );
+    m_TextSize.Set( 0, 0 ); // no size on text, so it won't wrap
+
+    m_Position.Set( 300, 300 );
 
     m_pFont = 0;
     m_FontHeight = 30.0f; // must default to 30 for save/load

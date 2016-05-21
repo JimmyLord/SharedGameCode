@@ -11,7 +11,7 @@
 //#define PCHFILE "EngineCommonHeader.h"
 //#endif
 
-#include PCHFILE
+#include "GameCommonHeader.h"
 
 #include "RenderTextQuick.h"
 

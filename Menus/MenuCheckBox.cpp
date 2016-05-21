@@ -11,7 +11,7 @@
 //#define PCHFILE "EngineCommonHeader.h"
 //#endif
 
-#include PCHFILE
+#include "GameCommonHeader.h"
 //#include "../GameSliders.h"
 //#include "../Core/ResourceManager.h"
 //#include "../GravityBalls/GravityBalls_Resources.h"
@@ -106,7 +106,7 @@ void MenuCheckBox::Draw(MyMatrix* matviewproj)
         //pSprite = g_pGame->m_pResources->m_pSprites[SL_WhiteSquareResizable];
     }
 
-    pSprite->SetTint( bgcolor );
+    //FIX pSprite->SetTint( bgcolor );
 
     MySprite* pShadowSprite = pSprite; //m_pShadowSprite;
     Vector4 shuvs = uvs;
@@ -123,7 +123,7 @@ void MenuCheckBox::Draw(MyMatrix* matviewproj)
         {
             pShadowSprite->Create( "MenuCheckBox", bgwidth, bgheight, shuvs.x, shuvs.y, shuvs.z, shuvs.w, Justify_CenterX|Justify_CenterY );
 
-            pShadowSprite->SetTint( ColorByte(0,0,0,64) );
+            //FIX pShadowSprite->SetTint( ColorByte(0,0,0,64) );
             MyMatrix world;
             world.SetIdentity();
             world.SetTranslation( m_PosX+CheckBoxshadowoffx, m_PosY+CheckBoxshadowoffy, 0.1f );
@@ -132,10 +132,10 @@ void MenuCheckBox::Draw(MyMatrix* matviewproj)
 
         pSprite->Create( "MenuCheckBox", bgwidth, bgheight, uvs.x, uvs.y, uvs.z, uvs.w, Justify_CenterX|Justify_CenterY );
 
-        pSprite->SetTint( bgcolor );
+        //FIX pSprite->SetTint( bgcolor );
         if( m_State == MCBS_HeldDown )
         {
-            pSprite->SetTint( ColorByte(200,200,200,255) );
+            //FIX pSprite->SetTint( ColorByte(200,200,200,255) );
         }
         MyMatrix world;
         world.SetIdentity();

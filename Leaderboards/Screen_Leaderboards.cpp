@@ -286,7 +286,7 @@ void Screen_Leaderboards::Draw()
 
     // half black
     g_pGame->m_pResources->m_pSprites[SL_WhiteSquare]->Create( 1.125f, 1.234f, 0, 1, 0, 1, Justify_CenterX|Justify_CenterY );
-    g_pGame->m_pResources->m_pSprites[SL_WhiteSquare]->SetTint( ColorByte(0,0,0,240) );
+    //FIX g_pGame->m_pResources->m_pSprites[SL_WhiteSquare]->SetTint( ColorByte(0,0,0,240) );
     matworld.CreateTranslation( 0.5f, 0.5f, 0 );
     g_pGame->m_pResources->m_pSprites[SL_WhiteSquare]->Draw( &matworld, &g_pGame->m_OrthoMatrix );
 
@@ -294,7 +294,7 @@ void Screen_Leaderboards::Draw()
     float scrw = g_pGame->m_GameWidth;
     float scrh = g_pGame->m_GameHeight;
 
-    g_pGame->m_pResources->m_pSprites[SL_WhiteSquare]->SetTint( ColorByte(0,150,0,255) );
+    //FIX g_pGame->m_pResources->m_pSprites[SL_WhiteSquare]->SetTint( ColorByte(0,150,0,255) );
 
     float sep = 100;
     
@@ -352,15 +352,15 @@ void Screen_Leaderboards::Draw()
 
             if( m_FilterPlayers == LeaderboardFilterPlayers_User && g_pGame->m_pLeaderboardStorage->m_UserIndices[m_Board] == i )
             {
-                g_pGame->m_pResources->m_pSprites[SL_WhiteSquare]->SetTint( ColorByte(0,120,0,255) );
+                //FIX g_pGame->m_pResources->m_pSprites[SL_WhiteSquare]->SetTint( ColorByte(0,120,0,255) );
             }
             else if( blockid != -1 )
             {
-                g_pGame->m_pResources->m_pSprites[SL_WhiteSquare]->SetTint( ColorByte(0,70,0,255) );
+                //FIX g_pGame->m_pResources->m_pSprites[SL_WhiteSquare]->SetTint( ColorByte(0,70,0,255) );
             }
             else
             {
-                g_pGame->m_pResources->m_pSprites[SL_WhiteSquare]->SetTint( ColorByte(0,20,0,255) );
+                //FIX g_pGame->m_pResources->m_pSprites[SL_WhiteSquare]->SetTint( ColorByte(0,20,0,255) );
             }
 
             g_pGame->m_pResources->m_pSprites[SL_WhiteSquare]->Create( (float)scrw, sep*0.8f, 0, 1, 0, 1, Justify_CenterX|Justify_CenterY );

@@ -395,24 +395,24 @@ void MenuButton::Draw(MyMatrix* matviewproj)
 
     if( pMesh && m_pBGMeshCamera )
     {
-        // FIXME
-        //float gamew = g_pGame->m_GameWidth;
-        //float gameh = g_pGame->m_GameHeight;
+        MyRect devicerect = g_pScreenManager->GetDeviceRect();
 
-        //int devw = (int)g_pGame->m_GameFullWidth;
-        //int devh = (int)g_pGame->m_GameFullHeight;
+        int ortholeft = devicerect.x;   //g_pGame->m_OrthoLeft
+        int orthobttm = devicerect.y;   //g_pGame->m_OrthoBottom
+        int devw = devicerect.w;        //g_pGame->m_GameFullWidth
+        int devh = devicerect.h;        //g_pGame->m_GameFullHeight
 
         MyMatrix matfinalmesh = m_BGMeshTransform;
-        //matfinalmesh.m41 = (((-g_pGame->m_OrthoLeft + m_Position.x) / devw) - 0.5f) * m_pBGMeshCamera->m_FrustumRightEdgeZ0*2;
-        //matfinalmesh.m42 = (((-g_pGame->m_OrthoBottom + m_Position.y) / devh) - 0.5f) * m_pBGMeshCamera->m_FrustumTopEdgeZ0*2;
+        matfinalmesh.m41 = (((-ortholeft + m_Position.x) / devw) - 0.5f) * m_pBGMeshCamera->m_FrustumRightEdgeZ0*2;
+        matfinalmesh.m42 = (((-orthobttm + m_Position.y) / devh) - 0.5f) * m_pBGMeshCamera->m_FrustumTopEdgeZ0*2;
         matfinalmesh.m43 = 0;
         
         int numlights = 0;
         if( m_pBGMeshLight )
         {
             Vector3 lightpos = m_pBGMeshLight->m_Position;
-            //lightpos.x = ((lightpos.x / gamew) - 0.5f) * m_pBGMeshCamera->m_FrustumRightEdgeZ0*2;
-            //lightpos.y = ((lightpos.y / gameh) - 0.5f) * m_pBGMeshCamera->m_FrustumTopEdgeZ0*2;
+            lightpos.x = (((-ortholeft + lightpos.x) / devw) - 0.5f) * m_pBGMeshCamera->m_FrustumRightEdgeZ0*2;
+            lightpos.y = (((-orthobttm + lightpos.y) / devh) - 0.5f) * m_pBGMeshCamera->m_FrustumTopEdgeZ0*2;
 
             m_pBGMeshLight->m_Position = lightpos;
 

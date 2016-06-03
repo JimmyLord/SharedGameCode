@@ -18,6 +18,7 @@ ScreenManager::ScreenManager()
 : m_ScreensActive(MAX_SCREENS)
 , m_ScreensClosing(MAX_SCREENS)
 {
+    m_DeviceRect.Set( 0, 0, 640, 960 );
 }
 
 ScreenManager::~ScreenManager()
@@ -278,16 +279,21 @@ void ScreenManager::Draw()
     }
 }
 
-void ScreenManager::OnResized()
+void ScreenManager::OnResized(int x, int y, int w, int h)
 {
+    m_DeviceRect.x = x;
+    m_DeviceRect.y = y;
+    m_DeviceRect.w = w;
+    m_DeviceRect.h = h;
+
     for( unsigned int i=0; i<m_ScreensActive.Count(); i++ )
     {
-        m_ScreensActive[i]->OnResized();
+        m_ScreensActive[i]->OnResized( x, y, w, h );
     }
 
     for( unsigned int i=0; i<m_ScreensClosing.Count(); i++ )
     {
-        m_ScreensClosing[i]->OnResized();
+        m_ScreensClosing[i]->OnResized( x, y, w, h );
     }
 }
 

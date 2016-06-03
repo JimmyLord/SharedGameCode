@@ -12,6 +12,7 @@
 
 class ComponentMenuPage;
 class MenuItem;
+class Screen_Base;
 
 enum MenuItemTypes
 {
@@ -107,6 +108,8 @@ public:
 
     bool m_Navigable;
     int m_MenuItemNavigation[4]; // TODO: save/load item names, make references to items somehow, handle delete/reorder.
+
+    Screen_Base* m_pParentScreen;
 
 #if MYFW_USING_MYENGINE
     ComponentMenuPage* m_pMenuPage;

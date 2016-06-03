@@ -50,6 +50,8 @@ MenuItem::MenuItem()
     for( int i=0; i<4; i++ )
         m_MenuItemNavigation[i] = 0;
 
+    m_pParentScreen = 0;
+
 #if MYFW_USING_MYENGINE
     m_pMenuPage = 0;
 #endif

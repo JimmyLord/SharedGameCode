@@ -458,7 +458,7 @@ void Screen_Base::OnDisplay()
     UpdateMenuItems( false );
 }
 
-void Screen_Base::OnResized()
+void Screen_Base::OnResized(int x, int y, int w, int h)
 {
     UpdateMenuItems( false );
 }

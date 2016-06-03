@@ -114,7 +114,7 @@ public:
 
     virtual void Init(); // one time init when first created.
     virtual void OnDisplay(); // reset to an initial state each time it's displayed.
-    virtual void OnResized(); // window was resized, change the layout if aspect ratio requires.
+    virtual void OnResized(int x, int y, int w, int h); // window was resized, change the layout if aspect ratio requires.
     virtual void UpdateMenuItems(bool initialsetup);
     virtual bool IsSettled();
     virtual void Tick(double TimePassed);

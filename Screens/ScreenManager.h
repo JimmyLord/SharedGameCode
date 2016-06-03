@@ -23,6 +23,9 @@ protected:
     MyList<Screen_Base*> m_ScreensActive;
     MyList<Screen_Base*> m_ScreensClosing;
 
+    // rect matching ortho matrix uses to draw menu page, used by menubutton mesh drawing.
+    MyRect m_DeviceRect;
+
 public:
     ScreenManager();
     virtual ~ScreenManager();
@@ -42,6 +45,8 @@ public:
     virtual void CloseTopScreen();
     virtual bool IsScreenBeingManaged(Screen_Base* screen);
 
+    MyRect GetDeviceRect() { return m_DeviceRect; }
+
 protected:
     virtual void InsertUnderTop(Screen_Base* screen);
     virtual Screen_Base* PopScreen();
@@ -51,7 +56,7 @@ public:
     virtual void Tick(double timepassed);
     virtual void Draw();
 
-    virtual void OnResized();
+    virtual void OnResized(int x, int y, int w, int h);
     virtual bool OnTouch(int action, int id, float x, float y, float pressure, float size);
     virtual bool OnButtons(GameCoreButtonActions action, GameCoreButtonIDs id);
     virtual bool OnKeys(GameCoreButtonActions action, int keycode, int unicodechar);

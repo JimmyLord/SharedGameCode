@@ -110,6 +110,7 @@ public:
     TextShadowStyles m_TextShadowStyle;
 
 public:
+    // variables related to using a 3d mesh as a button graphic
     MyMesh* m_pBGMesh;
     MyMatrix m_BGMeshTransform;
     SharedCamera3D* m_pBGMeshCamera;

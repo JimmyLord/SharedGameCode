@@ -11,7 +11,7 @@
 //#define PCHFILE "EngineCommonHeader.h"
 //#endif
 
-#include "GameCommonHeader.h"
+//#include "GameCommonHeader.h"
 //#include "Core/ResourceManager.h"
 #include "MenuSlider.h"
 

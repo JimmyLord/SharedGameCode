@@ -11,8 +11,7 @@
 //#define PCHFILE "EngineCommonHeader.h"
 //#endif
 
-#include "GameCommonHeader.h"
-
+//#include "GameCommonHeader.h"
 #include "RenderTextQuick.h"
 
 int g_TextShadowStyleLetterCount[TextShadowStyle_NumStyles] = 
@@ -581,4 +580,3 @@ void RenderTextQuickBatchEnd()
     g_pRTQGlobals->m_BatchNumLetters = 0;
     g_pRTQGlobals->m_pBatchTexture = 0;
 }
-

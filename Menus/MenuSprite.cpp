@@ -11,7 +11,7 @@
 //#define PCHFILE "EngineCommonHeader.h"
 //#endif
 
-#include "GameCommonHeader.h"
+//#include "GameCommonHeader.h"
 #include "MenuSprite.h"
 
 const char* MenuSprite::m_MaterialNames[Materials_NumTypes] =

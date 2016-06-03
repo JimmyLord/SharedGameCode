@@ -11,7 +11,7 @@
 //#define PCHFILE "EngineCommonHeader.h"
 //#endif
 
-#include "GameCommonHeader.h"
+//#include "GameCommonHeader.h"
 
 MyMeshText::MyMeshText(int maxletters, FontDefinition* pFont)
 {

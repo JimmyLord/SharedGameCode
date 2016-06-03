@@ -13,6 +13,7 @@
 #include "MenuItem.h"
 
 class MyMeshText;
+class SharedCamera3D;
 
 //MenuButtonColorSelectable = ColorByte(255,81,205,255);
 

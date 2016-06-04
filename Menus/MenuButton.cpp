@@ -395,7 +395,12 @@ void MenuButton::Draw(MyMatrix* matviewproj)
 
     if( pMesh && m_pBGMeshCamera )
     {
+#if MYFW_USING_MYENGINE
+        MyAssert( false );
+        MyRect devicerect( 0, 0, 640, 960 );
+#else
         MyRect devicerect = g_pScreenManager->GetDeviceRect();
+#endif
 
         int ortholeft = devicerect.x;   //g_pGame->m_OrthoLeft
         int orthobttm = devicerect.y;   //g_pGame->m_OrthoBottom

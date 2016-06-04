@@ -11,8 +11,9 @@
 //#define PCHFILE "EngineCommonHeader.h"
 //#endif
 
-//#include "GameCommonHeader.h"
+#include "../../Framework/MyFramework/SourceCommon/CommonHeader.h"
 //#include "Core/ResourceManager.h"
+#include "../Core/RenderTextQuick.h"
 #include "MenuInputBox.h"
 
 MenuInputBox::MenuInputBox()

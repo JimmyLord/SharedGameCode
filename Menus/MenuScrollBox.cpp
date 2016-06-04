@@ -11,12 +11,19 @@
 //#define PCHFILE "EngineCommonHeader.h"
 //#endif
 
-//#include "GameCommonHeader.h"
+#include "../../Framework/MyFramework/SourceCommon/CommonHeader.h"
 //#include "Core/ResourceManager.h"
 //#include "../Screens/Screen_Base.h"
+#include "../Core/RenderTextQuick.h"
+#include "../Core/MeshShapes.h"
+#include "../Screens/ScreenManager.h"
+#include "../Menus/LanguageTable.h"
+#include "Core/InputFinger.h"
 #include "MenuItem.h"
 #include "MenuScrollBox.h"
 #include "MenuScrollingText.h"
+#include "MenuSprite.h"
+#include "MenuText.h"
 #include "MenuInputBox.h"
 
 MenuScrollBox::MenuScrollBox()
@@ -58,7 +65,7 @@ void MenuScrollBox::Tick(double timepassed)
     if( m_InitialFinger == -1 && m_Momentum.LengthSquared() != 0 )
     {
         m_Momentum *= 0.99f;
-        
+
         m_ScrollAmount.x -= m_Momentum.x * (float)timepassed * 30;
         m_ScrollAmount.y += m_Momentum.y * (float)timepassed * 30;
     }
@@ -237,7 +244,7 @@ int MenuScrollBox::OnTouch(int action, int id, float x, float y, float pressure,
     }
 
     //if( newfingerdown )
-    //{   
+    //{
     //}
 
     if( newfingerup )

@@ -11,13 +11,14 @@
 //#define PCHFILE "EngineCommonHeader.h"
 //#endif
 
-//#include "GameCommonHeader.h"
+#include "../../Framework/MyFramework/SourceCommon/CommonHeader.h"
 //#include "../GameSliders.h"
 //#include "../Core/ResourceManager.h"
 //#include "../GravityBalls/GravityBalls_Resources.h"
+#include "../Core/RenderTextQuick.h"
 #include "MenuCheckBox.h"
 
-ColorByte DefaultMenuCheckBoxColors[MCBCT_NumColors] = 
+ColorByte DefaultMenuCheckBoxColors[MCBCT_NumColors] =
 {
     ColorByte(255,255,255,255), // MCBCT_CheckedBG
     ColorByte(128,128,128,128), // MCBCT_UncheckedBG
@@ -75,7 +76,7 @@ void MenuCheckBox::Draw(MyMatrix* matviewproj)
 {
     if( m_Visible == false )
         return;
-    
+
     if( m_State == MCBS_Disabled )
         return;
 

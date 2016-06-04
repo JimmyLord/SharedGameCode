@@ -11,7 +11,7 @@
 //#define PCHFILE "EngineCommonHeader.h"
 //#endif
 
-//#include "GameCommonHeader.h"
+#include "../../Framework/MyFramework/SourceCommon/CommonHeader.h"
 //#include "Core/ResourceManager.h"
 #include "MenuItem.h"
 
@@ -96,20 +96,20 @@ void MenuItem::LuaRegister(lua_State* luastate)
     luabridge::getGlobalNamespace( luastate )
         .beginClass<MenuItem>( "MenuItem" )
             //.addData( "localmatrix", &ComponentMenuPage::m_LocalTransform )
-            
+
             .addFunction( "SetName", &MenuItem::SetName )
 
             .addFunction( "SetPosition", &MenuItem::SetPosition )
             .addFunction( "SetSize", &MenuItem::SetSize )
             .addFunction( "SetPositionAndSize", &MenuItem::SetPositionAndSize )
             .addFunction( "SetAnchorPoint", &MenuItem::SetAnchorPoint )
-            
+
             .addFunction( "GetSize", &MenuItem::GetSize )
 
             .addFunction( "SetVisible", &MenuItem::SetVisible )
             .addFunction( "SetEnabled", &MenuItem::SetEnabled )
             .addFunction( "SetVisibleAndEnabled", &MenuItem::SetVisibleAndEnabled )
-            
+
             .addFunction( "GetBoundingRect", &MenuItem::GetBoundingRect )
         .endClass();
 }

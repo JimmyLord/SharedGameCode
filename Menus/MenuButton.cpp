@@ -11,11 +11,15 @@
 //#define PCHFILE "EngineCommonHeader.h"
 //#endif
 
-//#include "GameCommonHeader.h"
+#include "../../Framework/MyFramework/SourceCommon/CommonHeader.h"
+#include "../Core/RenderTextQuick.h"
+#include "../Core/MeshShapes.h"
+#include "../Screens/ScreenManager.h"
+#include "../Menus/LanguageTable.h"
 #include "MenuButton.h"
 #include "../Camera/SharedCamera3D.h"
 
-ColorByte MenuButtonColors[MBCT_NumColors] = 
+ColorByte MenuButtonColors[MBCT_NumColors] =
 {
     ColorByte(255,255,255,255), //100,100,150,255), //255,81,205,255),  // MBCT_SelectableBG
     ColorByte(255,255,255,255),    // MBCT_SelectableText
@@ -24,7 +28,7 @@ ColorByte MenuButtonColors[MBCT_NumColors] =
     ColorByte(255,255,255,200), // MBCT_DisabledText
 };
 
-ColorByte MenuButtonColorsPlain[MBCT_NumColors] = 
+ColorByte MenuButtonColorsPlain[MBCT_NumColors] =
 {
     ColorByte(100,100,100,255), //100,100,150,255), //255,81,205,255),  // MBCT_SelectableBG
     ColorByte(255,255,255,255),    // MBCT_SelectableText
@@ -117,7 +121,7 @@ MenuButton::MenuButton(int maxletters)
     //m_Scale.Set( 1, 1, 1 );
 
     m_hack_PasswordHideString2 = false;
-    
+
     m_SoundPressed = 0; //GameAudioCue_None;
 #if SOUNDHACK_USE_CLICK_AS_DEFAULT
     m_SoundPressed = GameAudioCue_Click;
@@ -177,13 +181,13 @@ MenuButton& MenuButton::operator=(const MenuButton& other)
     this->SetButtonAction( other.m_ButtonAction );
 
     this->m_AllowPressWhenDraggedOver = other.m_AllowPressWhenDraggedOver;
-    
+
     this->m_FontHeight = other.m_FontHeight;
     this->m_LineHeight = other.m_LineHeight;
-    
+
     this->m_InputWidth = other.m_InputWidth;
     this->m_InputHeight = other.m_InputHeight;
-    
+
     this->m_TextShadowStyle = other.m_TextShadowStyle;
 
     //this->m_pBGMesh = other.aaaaaa;
@@ -212,7 +216,7 @@ MenuButton& MenuButton::operator=(const MenuButton& other)
     //this->m_OverlayBGSpriteUVs = other.aaaaaa;
     //this->m_ShadowSpriteUVs = other.aaaaaa;
     //this->m_hack_PasswordHideString2 = other.aaaaaa;
-    
+
     this->m_SoundPressed = other.m_SoundPressed;
 
     //this->m_pSprite = other.aaaaaa;
@@ -229,12 +233,12 @@ void MenuButton::LuaRegister(lua_State* luastate)
     luabridge::getGlobalNamespace( luastate )
         .beginClass<MenuButton>( "MenuButton" )
             //.addData( "localmatrix", &MenuButton::m_LocalTransform )
-            
+
             .addFunction( "SetSize", &MenuButton::SetSize )
             .addFunction( "SetPositionAndSize", &MenuButton::SetPositionAndSize )
             .addFunction( "SetString", &MenuButton::SetString )
             .addFunction( "SetStringNumber", &MenuButton::SetStringNumber )
-            
+
             .addFunction( "GetSize", &MenuButton::GetSize )
             .addFunction( "GetBGSize", &MenuButton::GetBGSize )
         .endClass();
@@ -411,7 +415,7 @@ void MenuButton::Draw(MyMatrix* matviewproj)
         matfinalmesh.m41 = (((-ortholeft + m_Position.x) / devw) - 0.5f) * m_pBGMeshCamera->m_FrustumRightEdgeZ0*2;
         matfinalmesh.m42 = (((-orthobttm + m_Position.y) / devh) - 0.5f) * m_pBGMeshCamera->m_FrustumTopEdgeZ0*2;
         matfinalmesh.m43 = 0;
-        
+
         int numlights = 0;
         if( m_pBGMeshLight )
         {
@@ -1035,7 +1039,7 @@ void MenuButton::OnDropMaterial(int controlid, wxCoord x, wxCoord y)
     {
         MaterialDefinition* pMaterial = (MaterialDefinition*)g_DragAndDropStruct.m_Value;
         MyAssert( pMaterial );
-        
+
         unsigned int i;
         for( i=0; i<Materials_NumTypes; i++ )
         {

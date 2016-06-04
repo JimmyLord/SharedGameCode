@@ -11,7 +11,10 @@
 //#define PCHFILE "EngineCommonHeader.h"
 //#endif
 
-//#include "GameCommonHeader.h"
+#include "../../Framework/MyFramework/SourceCommon/CommonHeader.h"
+#include "../Core/RenderTextQuick.h"
+#include "../Core/MeshShapes.h"
+#include "../Menus/LanguageTable.h"
 
 MyMeshText::MyMeshText(int maxletters, FontDefinition* pFont)
 {
@@ -84,7 +87,7 @@ int MyMeshText::CreateStringWhite(bool concat, float fontheight, float x, float 
     va_end(arg);
 
     ColorByte color(255, 255, 255, 255);
-    
+
     return CreateString( concat, fontheight, x, y, 0, 0, justificationflags, color, size, tempbuffer );
 }
 
@@ -103,7 +106,7 @@ int MyMeshText::CreateStringColor(bool concat, float fontheight, float x, float 
     va_start( arg, text );
     vsnprintf_s( tempbuffer, sizeof(g_pRTQGlobals->m_TempBuffer), _TRUNCATE, stringtodraw, arg );
     va_end(arg);
-    
+
     return CreateString( concat, fontheight, x, y, 0, 0, justificationflags, color, size, tempbuffer );
 }
 
@@ -122,7 +125,7 @@ int MyMeshText::CreateStringColorAndShadow(bool concat, float fontheight, float 
     va_start( arg, text );
     vsnprintf_s( tempbuffer, sizeof(g_pRTQGlobals->m_TempBuffer), _TRUNCATE, stringtodraw, arg );
     va_end(arg);
-    
+
     CreateString( concat, fontheight, x+shadowoffx, y+shadowoffy, 0, 0, justificationflags, shadowcolor, size, tempbuffer );
     concat = true;
     return CreateString( concat, fontheight, x, y, 0, 0, justificationflags, color, size, tempbuffer );
@@ -143,7 +146,7 @@ int MyMeshText::CreateStringColorAndShadowStyle(bool concat, float fontheight, f
     va_start( arg, text );
     vsnprintf_s( tempbuffer, sizeof(g_pRTQGlobals->m_TempBuffer), _TRUNCATE, stringtodraw, arg );
     va_end(arg);
-    
+
     if( shadowstyle == TextShadowStyle_None )
     {
     }
@@ -208,7 +211,7 @@ int MyMeshText::CreateStringColorAndZ(bool concat, float fontheight, float x, fl
     va_start( arg, text );
     vsnprintf_s( tempbuffer, sizeof(g_pRTQGlobals->m_TempBuffer), _TRUNCATE, stringtodraw, arg );
     va_end(arg);
-    
+
     return CreateString( concat, fontheight, x, y, 0, 0, justificationflags, color, size, tempbuffer );
 }
 
@@ -227,7 +230,7 @@ int MyMeshText::CreateStringColorZAndRot(bool concat, float fontheight, float x,
     va_start( arg, text );
     vsnprintf_s( tempbuffer, sizeof(g_pRTQGlobals->m_TempBuffer), _TRUNCATE, stringtodraw, arg );
     va_end(arg);
-    
+
     return CreateString( concat, fontheight, x, y, z, rotz, justificationflags, color, size, tempbuffer );
 }
 
@@ -246,7 +249,7 @@ int MyMeshText::CreateStringColorShadowZAndRot(bool concat, float fontheight, fl
     va_start( arg, text );
     vsnprintf_s( tempbuffer, sizeof(g_pRTQGlobals->m_TempBuffer), _TRUNCATE, stringtodraw, arg );
     va_end(arg);
-    
+
     CreateString( concat, fontheight, x+shadowoffx, y+shadowoffy, z, rotz, justificationflags, shadowcolor, size, tempbuffer );
     concat = true;
     return CreateString( concat, fontheight, x, y, z, rotz, justificationflags, color, size, tempbuffer );
@@ -267,7 +270,7 @@ int MyMeshText::CreateStringColorShadowStyleZAndRot(bool concat, float fontheigh
     va_start( arg, text );
     vsnprintf_s( tempbuffer, sizeof(g_pRTQGlobals->m_TempBuffer), _TRUNCATE, stringtodraw, arg );
     va_end(arg);
-    
+
     if( shadowstyle == TextShadowStyle_None )
     {
     }
@@ -312,7 +315,7 @@ int MyMeshText::CreateString(bool concat, float fontheight, float x, float y, fl
     MyAssert( m_pFont );
     if( m_pFont->m_FullyLoaded == false )
         return 0;
-    
+
     MyAssert( m_pFont->m_pBMFont );
 
     if( strlen( text ) == 0 )
@@ -380,7 +383,7 @@ int MyMeshText::CreateString(bool concat, float fontheight, float x, float y, fl
         {
             moretexttocome = false;
         }
-            
+
         //// don't bother drawing if fontheight is zero... still doing logic above so the currect number of lines will be returned.
         //if( g_pRTQGlobals->m_WordWrapCountLinesOnly )
         //    continue;

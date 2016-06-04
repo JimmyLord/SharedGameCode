@@ -11,7 +11,7 @@
 //#define PCHFILE "EngineCommonHeader.h"
 //#endif
 
-//#include "GameCommonHeader.h"
+#include "../../Framework/MyFramework/SourceCommon/CommonHeader.h"
 #include "MenuSprite.h"
 
 const char* MenuSprite::m_MaterialNames[Materials_NumTypes] =
@@ -66,7 +66,7 @@ void MenuSprite::LuaRegister(lua_State* luastate)
     luabridge::getGlobalNamespace( luastate )
         .beginClass<MenuSprite>( "MenuSprite" )
             //.addData( "localmatrix", &MenuSprite::m_LocalTransform )
-            
+
             .addFunction( "SetPositionAndSize", &MenuSprite::SetPositionAndSize )
         .endClass();
 }
@@ -253,7 +253,7 @@ void MenuSprite::OnDropMaterial(int controlid, wxCoord x, wxCoord y)
     {
         MaterialDefinition* pMaterial = (MaterialDefinition*)g_DragAndDropStruct.m_Value;
         MyAssert( pMaterial );
-        
+
         unsigned int i;
         for( i=0; i<Materials_NumTypes; i++ )
         {

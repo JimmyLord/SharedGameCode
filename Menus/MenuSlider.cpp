@@ -11,11 +11,11 @@
 //#define PCHFILE "EngineCommonHeader.h"
 //#endif
 
-//#include "GameCommonHeader.h"
+#include "../../Framework/MyFramework/SourceCommon/CommonHeader.h"
 //#include "Core/ResourceManager.h"
 #include "MenuSlider.h"
 
-ColorByte MenuSliderColors[MSCT_NumColors] = 
+ColorByte MenuSliderColors[MSCT_NumColors] =
 {
     ColorByte(255,255,255,255), // MSCT_BarColor
     ColorByte(200,200,200,255), // MSCT_HandleColor

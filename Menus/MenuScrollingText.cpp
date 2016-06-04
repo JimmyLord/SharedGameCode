@@ -11,9 +11,12 @@
 //#define PCHFILE "EngineCommonHeader.h"
 //#endif
 
-//#include "GameCommonHeader.h"
+#include "../../Framework/MyFramework/SourceCommon/CommonHeader.h"
 //#include "Core/ResourceManager.h"
 //#include "../Screens/Screen_Base.h"
+#include "../Core/RenderTextQuick.h"
+#include "../Menus/LanguageTable.h"
+#include "../Core/MeshShapes.h"
 #include "MenuItem.h"
 #include "MenuScrollingText.h"
 

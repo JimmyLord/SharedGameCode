@@ -11,10 +11,11 @@
 //#define PCHFILE "EngineCommonHeader.h"
 //#endif
 
-//#include "GameCommonHeader.h"
+#include "../../Framework/MyFramework/SourceCommon/CommonHeader.h"
+#include "../Menus/LanguageTable.h"
 #include "RenderTextQuick.h"
 
-int g_TextShadowStyleLetterCount[TextShadowStyle_NumStyles] = 
+int g_TextShadowStyleLetterCount[TextShadowStyle_NumStyles] =
 {
     1,
     2,
@@ -90,7 +91,7 @@ int RenderTextQuick(FontDefinition* pFont, float fontheight, float x, float y, u
     va_end(arg);
 
     ColorByte color(255, 255, 255, 255);
-    
+
     return RenderTextQuickWithEverything( pFont, fontheight, x, y, 0, 0, justificationflags, color, tempbuffer );
 }
 
@@ -105,7 +106,7 @@ int RenderTextQuickWithColor(FontDefinition* pFont, float fontheight, float x, f
     va_start( arg, text );
     vsnprintf_s( tempbuffer, sizeof(g_pRTQGlobals->m_TempBuffer), _TRUNCATE, stringtodraw, arg );
     va_end(arg);
-    
+
     return RenderTextQuickWithEverything( pFont, fontheight, x, y, 0, 0, justificationflags, color, tempbuffer );
 }
 
@@ -120,7 +121,7 @@ int RenderTextQuickWithColorAndShadow(FontDefinition* pFont, float fontheight, f
     va_start( arg, text );
     vsnprintf_s( tempbuffer, sizeof(g_pRTQGlobals->m_TempBuffer), _TRUNCATE, stringtodraw, arg );
     va_end(arg);
-    
+
     RenderTextQuickWithEverything( pFont, fontheight, x+shadowoffx, y+shadowoffy, 0, 0, justificationflags, shadowcolor, tempbuffer );
     return RenderTextQuickWithEverything( pFont, fontheight, x, y, 0, 0, justificationflags, color, tempbuffer );
 }
@@ -136,7 +137,7 @@ int RenderTextQuickWithColorAndShadowStyle(FontDefinition* pFont, float fontheig
     va_start( arg, text );
     vsnprintf_s( tempbuffer, sizeof(g_pRTQGlobals->m_TempBuffer), _TRUNCATE, stringtodraw, arg );
     va_end(arg);
-    
+
     if( shadowstyle == TextShadowStyle_None )
     {
     }
@@ -181,7 +182,7 @@ int RenderTextQuickWithColorAndZ(FontDefinition* pFont, float fontheight, float 
     va_start( arg, text );
     vsnprintf_s( tempbuffer, sizeof(g_pRTQGlobals->m_TempBuffer), _TRUNCATE, stringtodraw, arg );
     va_end(arg);
-    
+
     return RenderTextQuickWithEverything( pFont, fontheight, x, y, 0, 0, justificationflags, color, tempbuffer );
 }
 
@@ -196,7 +197,7 @@ int RenderTextQuickWithColorZAndRot(FontDefinition* pFont, float fontheight, flo
     va_start( arg, text );
     vsnprintf_s( tempbuffer, sizeof(g_pRTQGlobals->m_TempBuffer), _TRUNCATE, stringtodraw, arg );
     va_end(arg);
-    
+
     return RenderTextQuickWithEverything( pFont, fontheight, x, y, z, rotz, justificationflags, color, tempbuffer );
 }
 
@@ -211,7 +212,7 @@ int RenderTextQuickWithColorShadowZAndRot(FontDefinition* pFont, float fontheigh
     va_start( arg, text );
     vsnprintf_s( tempbuffer, sizeof(g_pRTQGlobals->m_TempBuffer), _TRUNCATE, stringtodraw, arg );
     va_end(arg);
-    
+
     RenderTextQuickWithEverything( pFont, fontheight, x+shadowoffx, y+shadowoffy, z, rotz, justificationflags, shadowcolor, tempbuffer );
     return RenderTextQuickWithEverything( pFont, fontheight, x, y, z, rotz, justificationflags, color, tempbuffer );
 }
@@ -227,7 +228,7 @@ int RenderTextQuickWithColorShadowStyleZAndRot(FontDefinition* pFont, float font
     va_start( arg, text );
     vsnprintf_s( tempbuffer, sizeof(g_pRTQGlobals->m_TempBuffer), _TRUNCATE, stringtodraw, arg );
     va_end(arg);
-    
+
     if( shadowstyle == TextShadowStyle_None )
     {
     }
@@ -319,7 +320,7 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
             {
                 moretexttocome = false;
             }
-            
+
             // don't bother drawing if fontheight is zero... still doing logic above so the currect number of lines will be returned.
             if( g_pRTQGlobals->m_WordWrapCountLinesOnly )
                 continue;
@@ -392,7 +393,7 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
                     pVertToDraws[i].y = out.y;
                     pVertToDraws[i].z = out.z;
                 }
-                
+
                 if( g_pRTQGlobals->m_pBatchTexture != pFont->m_pTextureDef ||
                     (g_pRTQGlobals->m_BatchNumLetters + textstrlen)*6 > g_pRTQGlobals->m_VBONumVerts )
                 {
@@ -441,7 +442,7 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
                 {
                     Shader_Base* pShader = (Shader_Base*)pShaderGroup->GlobalPass();
                     if( pShader )
-                    {   
+                    {
                         int size = sizeof(Vertex_XYZUV_RGBA)*textstrlen*6;
                         memcpy( &g_pRTQGlobals->m_pVertexBufferIDImmediate->m_pData[0], pVertToDraws, size );
                         //(Vertex_XYZUV_RGBA*)g_pRTQGlobals->m_pVertexBufferIDImmediate->m_pData,6

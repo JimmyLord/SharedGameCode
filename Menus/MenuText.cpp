@@ -11,7 +11,9 @@
 //#define PCHFILE "EngineCommonHeader.h"
 //#endif
 
-//#include "GameCommonHeader.h"
+#include "../../Framework/MyFramework/SourceCommon/CommonHeader.h"
+#include "../Core/RenderTextQuick.h"
+#include "../Core/MeshShapes.h"
 #include "MenuText.h"
 
 MenuText::MenuText()
@@ -138,7 +140,7 @@ void MenuText::LuaRegister(lua_State* luastate)
     luabridge::getGlobalNamespace( luastate )
         .beginClass<MenuText>( "MenuText" )
             //.addData( "localmatrix", &MenuText::m_LocalTransform )
-            
+
             .addFunction( "SetPositionAndSize", &MenuText::SetPositionAndSize )
             .addFunction( "SetString", &MenuText::SetString )
         .endClass();
@@ -266,7 +268,7 @@ void MenuText::FillPropertiesWindow()
 
     g_pPanelWatch->Add2Floats( "Height", "Font", "Line", &m_FontHeight, &m_LineHeight, 0, 200 );
     g_pPanelWatch->Add2Floats( "Shadow Offset", "x", "y", &m_DropShadowOffsetX, &m_DropShadowOffsetY, -10, 10 );
-    g_pPanelWatch->AddUnsignedChar( "Justify", &m_Justification, -5, 5 );    
+    g_pPanelWatch->AddUnsignedChar( "Justify", &m_Justification, -5, 5 );
 
     if( m_pFont && m_pFont->m_pFile )
         g_pPanelWatch->AddPointerWithDescription( "Font", &m_pFont, m_pFont->m_pFile->m_FullPath, this, MenuText::StaticOnDropFont );

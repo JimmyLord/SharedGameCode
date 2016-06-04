@@ -11,7 +11,7 @@
 //#define PCHFILE "EngineCommonHeader.h"
 //#endif
 
-//#include "GameCommonHeader.h"
+#include "../../Framework/MyFramework/SourceCommon/CommonHeader.h"
 //#include "Core/ProfileManager.h"
 #include "LanguageTable.h"
 
@@ -69,7 +69,7 @@ bool LanguageTable::StringExists(const char* stringtofind, int languagetosearch,
         lang = m_ActiveLanguage;
 
     cJSON* languageblock = 0;
-    
+
     if( lang == 0 )
         languageblock = cJSON_GetObjectItem( m_pJSON, "English" );
     if( lang == 1 )
@@ -121,7 +121,7 @@ const char* LanguageTable::LookUp(const char* stringtofind, int languagetosearch
         lang = m_ActiveLanguage;
 
     cJSON* languageblock = 0;
-    
+
     if( lang == 0 )
         languageblock = cJSON_GetObjectItem( m_pJSON, "English" );
     if( lang == 1 )

@@ -7,12 +7,11 @@
 // 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
-#include "GameCommonHeader.h"
+#include "SharedCommonHeader.h"
 
 #include "Screen_Leaderboards.h"
 #include "LeaderboardStorage.h"
 #include "../../../SharedGameCode/Menus/MenuButton.h"
-#include "Core/ProfileManager.h"
 
 Screen_Leaderboards* g_pScreen_Leaderboards = 0;
 

@@ -12,7 +12,7 @@
 
 // part of LEGACYHACK to allow screen menu items to be imported into a ComponentMenuPage.
 //#include "../../GameInfiniteDung/Game/SourceCommon/Core/ScreenOverlays.h"
-#include "Core/ScreenOverlays.h"
+//#include "Core/ScreenOverlays.h"
 
 class Screen_Base;
 

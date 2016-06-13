@@ -14,7 +14,7 @@
 #include "../Core/MeshShapes.h"
 #include "../Screens/ScreenManager.h"
 #include "../Menus/LanguageTable.h"
-#include "Core/InputFinger.h"
+//#include "Core/InputFinger.h"
 #include "MenuItem.h"
 #include "MenuScrollBox.h"
 #include "MenuScrollingText.h"

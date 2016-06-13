@@ -11,7 +11,6 @@
 #define __Screen_Leaderboards_H__
 
 #include "../../../SharedGameCode/Screens/Screen_Base.h"
-#include "Core/LeaderboardsConfig.h"
 
 class Screen_Leaderboards;
 extern Screen_Leaderboards* g_pScreen_Leaderboards;

@@ -10,8 +10,6 @@
 #ifndef __LeaderboardStorage_H__
 #define __LeaderboardStorage_H__
 
-#include "Core/LeaderboardsConfig.h"
-
 #define LeaderboardStorageBlockSize           50   // can't change without changing php files.
 #define NumLeaderboardStorageBlocksCached     5
 

@@ -22,7 +22,8 @@ MyMeshText::MyMeshText(int maxletters, FontDefinition* pFont)
 #endif
 
     // Create buffers and base set of indices.
-    CreateBuffers( VertexFormat_XYZUV_RGBA, (unsigned short)maxletters*4, maxletters*6, true );
+    VertexFormat_Dynamic_Desc* pVertFormat = g_pVertexFormatManager->GetDynamicVertexFormat( 1, false, false, false, true, 0 );
+    CreateBuffers( pVertFormat, (unsigned short)maxletters*4, 2, maxletters*6, true );
 
     unsigned short* pIndices = GetIndices( true );
     for( unsigned short i=0; i<maxletters; i++ )

@@ -127,6 +127,7 @@ const char* MenuScrollBox::TriggerOnCollision(int fingerid, float x, float y, bo
 
 int MenuScrollBox::OnTouch(int action, int id, float x, float y, float pressure, float size)
 {
+#if 0 // disabled to make NaCl build work
     //if( m_FingerHolding != fingerid )
     //    return false;
 
@@ -262,6 +263,7 @@ int MenuScrollBox::OnTouch(int action, int id, float x, float y, float pressure,
 
         return true;
     }
+#endif // 0 // disabled to make NaCl build work
 
     return false;
 }

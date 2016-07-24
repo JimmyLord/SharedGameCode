@@ -299,7 +299,7 @@ void MenuText::OnDropFont(int controlid, wxCoord x, wxCoord y)
         }
 
         // update the panel so new Shader name shows up.
-        g_pPanelWatch->m_pVariables[g_DragAndDropStruct.m_ID].m_Description = pFile->m_FullPath;
+        g_pPanelWatch->GetVariableProperties( g_DragAndDropStruct.m_ID )->m_Description = pFile->m_FullPath;
     }
 }
 #endif //MYFW_USING_WX

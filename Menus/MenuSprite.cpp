@@ -259,7 +259,7 @@ void MenuSprite::OnDropMaterial(int controlid, wxCoord x, wxCoord y)
         SetMaterial( i, pMaterial );
 
         // update the panel so new Material name shows up.
-        g_pPanelWatch->m_pVariables[g_DragAndDropStruct.m_ID].m_Description = pMaterial->GetName();
+        g_pPanelWatch->GetVariableProperties( g_DragAndDropStruct.m_ID )->m_Description = pMaterial->GetName();
     }
 }
 #endif //MYFW_USING_WX

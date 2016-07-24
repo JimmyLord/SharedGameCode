@@ -1025,7 +1025,7 @@ void MenuButton::OnDropFont(int controlid, wxCoord x, wxCoord y)
         }
 
         // update the panel so new Shader name shows up.
-        g_pPanelWatch->m_pVariables[g_DragAndDropStruct.m_ID].m_Description = pFile->m_FullPath;
+        g_pPanelWatch->GetVariableProperties( g_DragAndDropStruct.m_ID )->m_Description = pFile->m_FullPath;
     }
 }
 
@@ -1045,7 +1045,7 @@ void MenuButton::OnDropMaterial(int controlid, wxCoord x, wxCoord y)
         SetMaterial( i, pMaterial );
 
         // update the panel so new Material name shows up.
-        g_pPanelWatch->m_pVariables[g_DragAndDropStruct.m_ID].m_Description = pMaterial->GetName();
+        g_pPanelWatch->GetVariableProperties( g_DragAndDropStruct.m_ID )->m_Description = pMaterial->GetName();
     }
 }
 
@@ -1058,11 +1058,11 @@ void MenuButton::OnValueChanged(int controlid, bool finishedchanging)
     {
         if( controlid == m_CONTROLID_Materials[i] )
         {
-            wxString text = g_pPanelWatch->m_pVariables[controlid].m_Handle_TextCtrl->GetValue();
+            wxString text = g_pPanelWatch->GetVariableProperties( controlid )->m_Handle_TextCtrl->GetValue();
             if( text == "" )
             {
                 // if blank, then remove the material.
-                MyAssert( g_pPanelWatch->m_pVariables[controlid].m_Handle_TextCtrl != 0 );
+                MyAssert( g_pPanelWatch->GetVariableProperties( controlid )->m_Handle_TextCtrl != 0 );
                 g_pPanelWatch->ChangeDescriptionForPointerWithDescription( controlid, "no material" );
                 SetMaterial( i, 0 );
             }

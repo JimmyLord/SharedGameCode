@@ -425,7 +425,7 @@ void MenuButton::Draw(MyMatrix* matviewproj)
         }
 
         pMesh->Draw( &matfinalmesh, &m_pBGMeshCamera->m_matViewProj, &m_pBGMeshCamera->m_Eye, 0,
-                     m_pBGMeshLight, numlights, 0, 0, 0, 0 );
+                     &m_pBGMeshLight, numlights, 0, 0, 0, 0 );
     }
 
     float y;

@@ -146,7 +146,7 @@ void MenuItem::SetName(const char* name)
     MyAssert( name );
 
     unsigned int charstocopy = strlen( name )+1;
-    if( charstocopy > MAX_MENUITEM_NAME_LENGTH )
+    if( charstocopy > (unsigned int)MAX_MENUITEM_NAME_LENGTH )
         charstocopy = MAX_MENUITEM_NAME_LENGTH;
 
     strncpy_s( m_Name, MAX_MENUITEM_NAME_LENGTH, name, charstocopy );

@@ -26,6 +26,8 @@ RenderTextQuickGlobals::RenderTextQuickGlobals()
 {
     MyAssert( g_pMaterialManager );
 
+    m_pMatViewProj = 0;
+
     m_BatchMode = false;
     m_pBatchTexture = 0;
     m_BatchNumLetters = 0;

@@ -17,6 +17,9 @@ SharedCamera3D::SharedCamera3D()
 , m_Width(0)
 , m_Height(0)
 {
+    m_FrustumRightEdgeZ0 = 0;
+    m_FrustumTopEdgeZ0 = 0;
+
     m_matView.SetIdentity();
     m_matProj.SetIdentity();
     m_matViewProj.SetIdentity();

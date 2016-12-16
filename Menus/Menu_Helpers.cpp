@@ -123,7 +123,7 @@ cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int nu
                     for( unsigned int i=0; i<MenuSprite::Materials_NumTypes; i++ )
                     {
                         if( pMenuSprite->m_pMaterials[i] )
-                            cJSON_AddStringToObject( menuitem, MenuSprite::m_MaterialNames[i], pMenuSprite->m_pMaterials[i]->m_pFile->m_FullPath );
+                            cJSON_AddStringToObject( menuitem, MenuSprite::m_MaterialNames[i], pMenuSprite->m_pMaterials[i]->GetMaterialDescription() );
                     }
                 }
                 break;
@@ -184,7 +184,7 @@ cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int nu
                     for( unsigned int i=0; i<MenuButton::Materials_NumTypes; i++ )
                     {
                         if( pMenuButton->m_pMaterials[i] )
-                            cJSON_AddStringToObject( menuitem, MenuButton::m_MaterialNames[i], pMenuButton->m_pMaterials[i]->m_pFile->m_FullPath );
+                            cJSON_AddStringToObject( menuitem, MenuButton::m_MaterialNames[i], pMenuButton->m_pMaterials[i]->GetMaterialDescription() );
                     }
 
                     if( pMenuButton->m_pFont )

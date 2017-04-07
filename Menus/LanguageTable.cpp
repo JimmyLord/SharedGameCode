@@ -50,11 +50,11 @@ bool LanguageTable::StringExists(const char* stringtofind, int languagetosearch,
     if( m_pJSON == 0 )
     {
         MyAssert( m_pFile ); // don't call StringExists before requesting the file.
-        if( m_pFile == 0 || m_pFile->m_FileLoadStatus != FileLoadStatus_Success )
+        if( m_pFile == 0 || m_pFile->GetFileLoadStatus() != FileLoadStatus_Success )
             return false;
 
         // parse file.
-        m_pJSON = cJSON_Parse( m_pFile->m_pBuffer );
+        m_pJSON = cJSON_Parse( m_pFile->GetBuffer() );
         MyAssert( m_pJSON );
         g_pFileManager->FreeFile( m_pFile ); // we don't need the file anymore.
         m_pFile = 0;
@@ -102,11 +102,11 @@ const char* LanguageTable::LookUp(const char* stringtofind, int languagetosearch
     if( m_pJSON == 0 )
     {
         MyAssert( m_pFile ); // don't call LookUp before requesting the file.
-        if( m_pFile == 0 || m_pFile->m_FileLoadStatus != FileLoadStatus_Success )
+        if( m_pFile == 0 || m_pFile->GetFileLoadStatus() != FileLoadStatus_Success )
             return "!language file not ready!";
 
         // parse file.
-        m_pJSON = cJSON_Parse( m_pFile->m_pBuffer );
+        m_pJSON = cJSON_Parse( m_pFile->GetBuffer() );
         MyAssert( m_pJSON );
         g_pFileManager->FreeFile( m_pFile ); // we don't need the file anymore.
         m_pFile = 0;

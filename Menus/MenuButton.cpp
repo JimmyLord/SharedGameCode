@@ -981,7 +981,7 @@ void MenuButton::FillPropertiesWindow()
     g_pPanelWatch->AddVector2( "TextShadowOffset", &m_DropShadowOffsetText, -10, 10 );
 
     if( m_pFont && m_pFont->m_pFile )
-        g_pPanelWatch->AddPointerWithDescription( "Font", &m_pFont, m_pFont->m_pFile->m_FullPath, this, MenuButton::StaticOnDropFont );
+        g_pPanelWatch->AddPointerWithDescription( "Font", &m_pFont, m_pFont->m_pFile->GetFullPath(), this, MenuButton::StaticOnDropFont );
     else
         g_pPanelWatch->AddPointerWithDescription( "Font", &m_pFont, "no font", this, MenuButton::StaticOnDropFont );
 
@@ -1007,8 +1007,9 @@ void MenuButton::OnDropFont(int controlid, wxCoord x, wxCoord y)
         MyFileObject* pFile = (MyFileObject*)g_DragAndDropStruct.m_Value;
         MyAssert( pFile );
 
-        size_t len = strlen( pFile->m_FullPath );
-        const char* filenameext = &pFile->m_FullPath[len-4];
+        const char* pPath = pFile->GetFullPath();
+        size_t len = strlen( pPath );
+        const char* filenameext = &pPath[len-4];
 
         if( strcmp( filenameext, ".fnt" ) == 0 )
         {
@@ -1025,7 +1026,7 @@ void MenuButton::OnDropFont(int controlid, wxCoord x, wxCoord y)
         }
 
         // update the panel so new Shader name shows up.
-        g_pPanelWatch->GetVariableProperties( g_DragAndDropStruct.m_ID )->m_Description = pFile->m_FullPath;
+        g_pPanelWatch->GetVariableProperties( g_DragAndDropStruct.m_ID )->m_Description = pFile->GetFullPath();
     }
 }
 

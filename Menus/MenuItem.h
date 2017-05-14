@@ -168,7 +168,7 @@ public:
     static void StaticOnLabelEdit(void* pObjectPtr, wxTreeItemId id, wxString newlabel) { ((MenuItem*)pObjectPtr)->OnLabelEdit( newlabel ); }
     void OnLabelEdit(wxString newlabel);
 
-    static void StaticOnAnchorTypeChanged(void* pObjectPtr, int controlid, bool finishedchanging, double oldvalue) { ((MenuItem*)pObjectPtr)->OnAnchorTypeChanged( controlid, finishedchanging, oldvalue ); }
+    static void StaticOnAnchorTypeChanged(void* pObjectPtr, int controlid, bool directlychanged, bool finishedchanging, double oldvalue) { ((MenuItem*)pObjectPtr)->OnAnchorTypeChanged( controlid, finishedchanging, oldvalue ); }
     void OnAnchorTypeChanged(int controlid, bool finishedchanging, double oldvalue);    
 
     static void StaticOnDrag(void* pObjectPtr) { ((MenuItem*)pObjectPtr)->OnDrag(); }

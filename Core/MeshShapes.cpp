@@ -44,6 +44,8 @@ MyMeshText::~MyMeshText()
 
 void MyMeshText::ClearText()
 {
+    MyAssert( m_SubmeshList.Count() > 0 );
+
     m_SubmeshList[0]->m_NumVertsToDraw = 0;
     m_SubmeshList[0]->m_NumIndicesToDraw = 0;
 
@@ -393,6 +395,8 @@ int MyMeshText::CreateString(bool concat, float fontheight, float x, float y, fl
         if( m_MostLettersAttemptedToDrawThisFrame > m_MostLettersAttemptedToDrawEver )
             m_MostLettersAttemptedToDrawEver = m_MostLettersAttemptedToDrawThisFrame;
 #endif
+
+        MyAssert( m_SubmeshList.Count() > 0 );
 
         if( m_SubmeshList[0]->m_NumVertsToDraw + newverts > GetNumVerts() )
         {

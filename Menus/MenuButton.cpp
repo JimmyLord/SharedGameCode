@@ -267,6 +267,8 @@ void MenuButton::Draw(MyMatrix* matviewproj)
 
     if( m_pMeshText )
     {
+        MyAssert( m_pMeshText->m_SubmeshList.Count() > 0 );
+
         m_pMeshText->m_SubmeshList[0]->m_NumVertsToDraw = 0;
         m_pMeshText->m_SubmeshList[0]->m_NumIndicesToDraw = 0;
     }

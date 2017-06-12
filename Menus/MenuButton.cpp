@@ -1061,11 +1061,13 @@ void MenuButton::OnValueChanged(int controlid, bool finishedchanging)
     {
         if( controlid == m_CONTROLID_Materials[i] )
         {
-            wxString text = g_pPanelWatch->GetVariableProperties( controlid )->m_Handle_TextCtrl->GetValue();
+            wxTextCtrl* pTextCtrl = g_pPanelWatch->GetVariableProperties( controlid )->GetTextCtrl();
+
+            wxString text = pTextCtrl->GetValue();
             if( text == "" )
             {
                 // if blank, then remove the material.
-                MyAssert( g_pPanelWatch->GetVariableProperties( controlid )->m_Handle_TextCtrl != 0 );
+                MyAssert( pTextCtrl != 0 );
                 g_pPanelWatch->ChangeDescriptionForPointerWithDescription( controlid, "no material" );
                 SetMaterial( i, 0 );
             }

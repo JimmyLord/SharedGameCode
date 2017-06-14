@@ -256,8 +256,7 @@ void MenuItem::OnAnchorTypeChanged(int controlid, bool finishedchanging, double 
 
 void MenuItem::OnDrag()
 {
-    g_DragAndDropStruct.m_Type = DragAndDropType_MenuItem;
-    g_DragAndDropStruct.m_Value = this;
+    g_DragAndDropStruct.Add( DragAndDropType_MenuItem, this );
 }
 #endif //MYFW_USING_WX
 

@@ -1004,9 +1004,11 @@ void MenuButton::FillPropertiesWindow()
 
 void MenuButton::OnDropFont(int controlid, wxCoord x, wxCoord y)
 {
-    if( g_DragAndDropStruct.m_Type == DragAndDropType_FileObjectPointer )
+    DragAndDropItem* pDropItem = g_DragAndDropStruct.GetItem( 0 );
+
+    if( pDropItem->m_Type == DragAndDropType_FileObjectPointer )
     {
-        MyFileObject* pFile = (MyFileObject*)g_DragAndDropStruct.m_Value;
+        MyFileObject* pFile = (MyFileObject*)pDropItem->m_Value;
         MyAssert( pFile );
 
         const char* pPath = pFile->GetFullPath();
@@ -1028,15 +1030,17 @@ void MenuButton::OnDropFont(int controlid, wxCoord x, wxCoord y)
         }
 
         // update the panel so new Shader name shows up.
-        g_pPanelWatch->GetVariableProperties( g_DragAndDropStruct.m_ID )->m_Description = pFile->GetFullPath();
+        g_pPanelWatch->GetVariableProperties( g_DragAndDropStruct.GetControlID() )->m_Description = pFile->GetFullPath();
     }
 }
 
 void MenuButton::OnDropMaterial(int controlid, wxCoord x, wxCoord y)
 {
-    if( g_DragAndDropStruct.m_Type == DragAndDropType_MaterialDefinitionPointer )
+    DragAndDropItem* pDropItem = g_DragAndDropStruct.GetItem( 0 );
+
+    if( pDropItem->m_Type == DragAndDropType_MaterialDefinitionPointer )
     {
-        MaterialDefinition* pMaterial = (MaterialDefinition*)g_DragAndDropStruct.m_Value;
+        MaterialDefinition* pMaterial = (MaterialDefinition*)pDropItem->m_Value;
         MyAssert( pMaterial );
 
         unsigned int i;
@@ -1048,7 +1052,7 @@ void MenuButton::OnDropMaterial(int controlid, wxCoord x, wxCoord y)
         SetMaterial( i, pMaterial );
 
         // update the panel so new Material name shows up.
-        g_pPanelWatch->GetVariableProperties( g_DragAndDropStruct.m_ID )->m_Description = pMaterial->GetName();
+        g_pPanelWatch->GetVariableProperties( g_DragAndDropStruct.GetControlID() )->m_Description = pMaterial->GetName();
     }
 }
 

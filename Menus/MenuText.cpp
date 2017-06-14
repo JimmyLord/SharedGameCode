@@ -276,9 +276,11 @@ void MenuText::FillPropertiesWindow()
 
 void MenuText::OnDropFont(int controlid, wxCoord x, wxCoord y)
 {
-    if( g_DragAndDropStruct.m_Type == DragAndDropType_FileObjectPointer )
+    DragAndDropItem* pDropItem = g_DragAndDropStruct.GetItem( 0 );
+
+    if( pDropItem->m_Type == DragAndDropType_FileObjectPointer )
     {
-        MyFileObject* pFile = (MyFileObject*)g_DragAndDropStruct.m_Value;
+        MyFileObject* pFile = (MyFileObject*)pDropItem->m_Value;
         MyAssert( pFile );
 
         const char* pPath = pFile->GetFullPath();
@@ -300,7 +302,7 @@ void MenuText::OnDropFont(int controlid, wxCoord x, wxCoord y)
         }
 
         // update the panel so new Shader name shows up.
-        g_pPanelWatch->GetVariableProperties( g_DragAndDropStruct.m_ID )->m_Description = pFile->GetFullPath();
+        g_pPanelWatch->GetVariableProperties( g_DragAndDropStruct.GetControlID() )->m_Description = pFile->GetFullPath();
     }
 }
 #endif //MYFW_USING_WX

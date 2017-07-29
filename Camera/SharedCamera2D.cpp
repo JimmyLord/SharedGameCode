@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2012-2014 Jimmy Lord http://www.flatheadgames.com
+// Copyright (c) 2012-2017 Jimmy Lord http://www.flatheadgames.com
 //
 // This software is provided 'as-is', without any express or implied warranty.  In no event will the authors be held liable for any damages arising from the use of this software.
 // Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
@@ -26,6 +26,14 @@ SharedCamera2D::SharedCamera2D()
     m_matView.SetIdentity();
     m_matProj.SetIdentity();
     m_matViewProj.SetIdentity();
+
+    MyAssert( false ); // set these 6 vars with real values.
+    m_GameWidth = 0;
+    m_GameHeight = 0;
+    m_ScreenOffsetX = 0;
+    m_ScreenOffsetY = 0;
+    m_ScreenWidth = 0;
+    m_ScreenHeight = 0;
 }
 
 SharedCamera2D::~SharedCamera2D()
@@ -82,11 +90,11 @@ void SharedCamera2D::ResetMatrix()
 
     QueryOffsetAndSize( &offx, &offy, &width, &height );
 
-    float scrw = g_pGame->m_GameWidth;
-    float scrh = g_pGame->m_GameHeight;
+    float scrw = m_GameWidth;
+    float scrh = m_GameHeight;
 
-    //float zoomoffsetx = 0;//(g_pGame->m_ScreenWidth - scrw/m_Zoom)/2;
-    //float zoomoffsety = 0;//(g_pGame->m_ScreenWidth - scrh/m_Zoom)/2;
+    //float zoomoffsetx = 0;//(m_ScreenWidth - scrw/m_Zoom)/2;
+    //float zoomoffsety = 0;//(m_ScreenWidth - scrh/m_Zoom)/2;
 
     m_matView.SetIdentity();
     //m_matView.Scale( m_Zoom, m_Zoom, 1 );
@@ -102,13 +110,13 @@ void SharedCamera2D::ResetMatrix()
     //                       (-m_OffsetY + m_Height/2)*m_Zoom - zoomoffsety, 0 );
 
     {
-        float ortholeft = - g_pGame->m_ScreenOffsetX/g_pGame->m_ScreenWidth * scrw;
-        float orthoright = scrw + g_pGame->m_ScreenOffsetX/g_pGame->m_ScreenWidth * scrw;
-        float orthobottom = - g_pGame->m_ScreenOffsetY/g_pGame->m_ScreenHeight * scrh;
-        float orthotop = scrh + g_pGame->m_ScreenOffsetY/g_pGame->m_ScreenHeight * scrh;
+        float ortholeft = - m_ScreenOffsetX/m_ScreenWidth * scrw;
+        float orthoright = scrw + m_ScreenOffsetX/m_ScreenWidth * scrw;
+        float orthobottom = - m_ScreenOffsetY/m_ScreenHeight * scrh;
+        float orthotop = scrh + m_ScreenOffsetY/m_ScreenHeight * scrh;
 
-        //float zoomoffsetx = (g_pGame->m_GameWidth - scrw);
-        //float zoomoffsety = (g_pGame->m_GameHeight - scrh);
+        //float zoomoffsetx = (m_GameWidth - scrw);
+        //float zoomoffsety = (m_GameHeight - scrh);
 
         //m_matProj.SetOrtho( ortholeft+zoomoffsetx, orthoright+zoomoffsetx,
         //                    orthobottom+zoomoffsety, orthotop+zoomoffsety, 1, -1 );

@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2012-2015 Jimmy Lord http://www.flatheadgames.com
+// Copyright (c) 2012-2017 Jimmy Lord http://www.flatheadgames.com
 //
 // This software is provided 'as-is', without any express or implied warranty.  In no event will the authors be held liable for any damages arising from the use of this software.
 // Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
@@ -9,8 +9,6 @@
 
 #include "SharedCommonHeader.h"
 #include "Effect_SunRay.h"
-
-#if Effect_SunRay_Enabled
 
 Effect_SunRay::Effect_SunRay()
 {
@@ -28,13 +26,13 @@ Effect_SunRay::Effect_SunRay()
     
     m_AngleOffset = 0;
 
+    m_Position.Set( 320.0f, 480.0f, 0.0f );
+
     m_pSpriteRayColor1->Create( "Effect_SunRay", 1000, 20, 0, 1, 0, 1, Justify_Bottom | Justify_Left );
     //m_pSpriteRayColor1->SetShaderAndTexture( g_pGame->m_pShader_TextureVertexColor, g_pGame->m_pResources->m_pSpriteTextures[SL_WhiteSquare] );
-    m_pSpriteRayColor1->SetPosition( 320.0f, 480.0f, 0.0f );
 
     m_pSpriteRayColor2->Create( "Effect_SunRay", 1000, 20, 0, 1, 0, 1, Justify_Bottom | Justify_Left );
     //m_pSpriteRayColor2->SetShaderAndTexture( g_pGame->m_pShader_TextureVertexColor, g_pGame->m_pResources->m_pSpriteTextures[SL_WhiteSquare] );
-    m_pSpriteRayColor2->SetPosition( 320.0f, 480.0f, 0.0f );
 }
 
 Effect_SunRay::~Effect_SunRay()
@@ -82,13 +80,12 @@ void Effect_SunRay::Tick(double TimePassed)
     m_AngleOffset += (float)(m_Speed * TimePassed);
 }
 
-void Effect_SunRay::Draw()
+void Effect_SunRay::Draw(MyMatrix* matviewproj)
 {
     if( m_Length == 0 )
         return;
 
-    m_pSpriteRayColor1->SetPosition( m_Center.x, m_Center.y, 0.0f );
-    m_pSpriteRayColor2->SetPosition( m_Center.x, m_Center.y, 0.0f );
+    m_Position.Set( m_Center.x, m_Center.y, 0.0f );
 
     ColorByte color, coloralpha;
 
@@ -106,14 +103,20 @@ void Effect_SunRay::Draw()
     float angleoffset = m_AngleOffset;
     for( int i=0; i<m_NumSlices; i+=2 )
     {
-        m_pSpriteRayColor1->SetZRotation( angleoffset + i * degreesperslice );
-        m_pSpriteRayColor1->Draw( &g_pGame->m_OrthoMatrixGameSize );
+        MyMatrix matworld;
+        matworld.CreateRotation( Vector3(0,0,angleoffset + i * degreesperslice) );
+        matworld.Translate( m_Position );
+
+        m_pSpriteRayColor1->Draw( &matworld, matviewproj );
     }
 
     for( int i=1; i<m_NumSlices; i+=2 )
     {
-        m_pSpriteRayColor2->SetZRotation( angleoffset + i * degreesperslice );
-        m_pSpriteRayColor2->Draw( &g_pGame->m_OrthoMatrixGameSize );
+        MyMatrix matworld;
+        matworld.CreateRotation( Vector3(0,0,angleoffset + i * degreesperslice) );
+        matworld.Translate( m_Position );
+
+        m_pSpriteRayColor2->Draw( &matworld, matviewproj );
     }
 }
 
@@ -126,5 +129,3 @@ bool Effect_SunRay::OnButtons(GameCoreButtonActions action, GameCoreButtonIDs id
 {
     return false;
 }
-
-#endif // EFFECT_SunRay_Enabled

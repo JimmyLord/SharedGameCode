@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2014-2015 Jimmy Lord http://www.flatheadgames.com
+// Copyright (c) 2014-2017 Jimmy Lord http://www.flatheadgames.com
 //
 // This software is provided 'as-is', without any express or implied warranty.  In no event will the authors be held liable for any damages arising from the use of this software.
 // Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
@@ -7,15 +7,17 @@
 // 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
-#include "GameCommonHeader.h"
+#include "SharedCommonHeader.h"
 #include "SpeechBubble.h"
 #include "../../Framework/MyFramework/SourceCommon/Sprites/MySprite9.h"
 
-SpeechBubble::SpeechBubble()
+SpeechBubble::SpeechBubble(FontDefinition* pFont)
 {
+    m_pFont = pFont;
+
     m_pBubble = MyNew MySprite9();
     m_pPoint = MyNew MySprite( false );
-    m_pTextMesh = MyNew MyMeshText( 100, g_pGame->m_pSystemFont ); // 50 chars with shadow
+    m_pTextMesh = MyNew MyMeshText( 100, m_pFont ); // 50 chars with shadow
     m_String = 0;
 
     //m_CurrentPos;
@@ -117,7 +119,7 @@ void SpeechBubble::SetString(const char* string)
         return;
     }
 
-    Vector2 size = g_pGame->m_pSystemFont->m_pBMFont->GetSize( m_String, 20 );
+    Vector2 size = m_pFont->m_pBMFont->GetSize( m_String, 20 );
 
     SetSize( size.x + 4, size.y + 20 - 14 );
 
@@ -137,14 +139,16 @@ void SpeechBubble::Draw(MyMatrix* matviewproj)
         m_pBubble->SetTint( m_CurrentColor );
         m_pBubble->Draw( matviewproj );
 
-        m_pPoint->SetPosition( m_CurrentPos.x + m_CurrentWidth/2, m_CurrentPos.y + 10-2, 0 );
-        m_pPoint->SetTint( m_CurrentColor );
-        m_pPoint->Draw( matviewproj );
+        //m_pPoint->SetPosition( m_CurrentPos.x + m_CurrentWidth/2, m_CurrentPos.y + 10-2, 0 );
+        //m_pPoint->SetTint( m_CurrentColor );
+        MyMatrix matworld;
+        matworld.CreateTranslation( m_CurrentPos.x + m_CurrentWidth/2, m_CurrentPos.y + 10-2, 0 );
+        m_pPoint->Draw( &matworld, matviewproj );
 
-        Vector2 size = g_pGame->m_pSystemFont->m_pBMFont->GetSize( stringtoshow, 20 );
+        Vector2 size = m_pFont->m_pBMFont->GetSize( stringtoshow, 20 );
 
         m_pTextMesh->CreateStringColorAndShadow( false, 20, m_CurrentPos.x + 12, m_CurrentPos.y + 10 + size.y + 5, Justify_Left|Justify_Top,
             ColorByte(255,255,255,m_CurrentColor.a), ColorByte(0,0,0,m_CurrentColor.a), 2, -2, size, stringtoshow );
-        m_pTextMesh->Draw( &g_pGame->m_OrthoMatrixGameSize, 0, 0, 0, 0, 0, 0, 0 );
+        m_pTextMesh->Draw( 0, matviewproj, 0, 0, 0, 0, 0, 0, 0, 0 );
     }
 }

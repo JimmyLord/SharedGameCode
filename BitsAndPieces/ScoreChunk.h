@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2012-2014 Jimmy Lord http://www.flatheadgames.com
+// Copyright (c) 2012-2017 Jimmy Lord http://www.flatheadgames.com
 //
 // This software is provided 'as-is', without any express or implied warranty.  In no event will the authors be held liable for any damages arising from the use of this software.
 // Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
@@ -22,6 +22,8 @@ class ScoreChunk
 {
     static const int MaxString = 64;
 public:
+    MyActivePool<ScoreChunk*>* m_pScoreChunkPool;
+
     FontDefinition* m_pFont;
     MyMeshText* m_pTextMesh;
     char m_String[MaxString];
@@ -50,11 +52,13 @@ public:
     float m_TimeAlive;
     float m_TimeToLive;
 
-    ScoreChunk()
+    ScoreChunk(MyActivePool<ScoreChunk*>* pPool)
     : m_Color(255, 255, 255, 255)
     , m_ShadowColor(0, 0, 0, 128)
     {
         Reset();
+
+        m_pScoreChunkPool = pPool;
     }
 
     void Reset();

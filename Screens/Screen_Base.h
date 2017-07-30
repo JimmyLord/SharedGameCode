@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2012-2016 Jimmy Lord http://www.flatheadgames.com
+// Copyright (c) 2012-2017 Jimmy Lord http://www.flatheadgames.com
 //
 // This software is provided 'as-is', without any express or implied warranty.  In no event will the authors be held liable for any damages arising from the use of this software.
 // Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
@@ -39,11 +39,22 @@ enum ScreenStates
     SS_DoneClosing,
 };
 
+enum ScreenOverlayBaseValues
+{
+    ScreenOverlay_DontChange,
+    ScreenOverlay_Destroy,
+    ScreenOverlay_RemoveDontDestroy,
+
+    ScreenOverlay_Last,
+};
+
 class Screen_Base
 {
     friend class ScreenManager;
 
 protected:
+    float m_GameHeight;
+
     char m_ScreenName[MAX_SCREENNAME_LENGTH];
     int m_ScreenOverlayIndex;
 
@@ -51,7 +62,7 @@ protected:
     bool m_ScreenHasBeenInitialized;
     bool m_ScreenIsBeingCached;
 
-    ScreenOverlays m_ScreenToShow;
+    int m_ScreenToShow;
     Screen_Base* m_ScreenToShowParentPage;
     void* m_ScreenToShowParam1;
     void* m_ScreenToShowParam2;
@@ -92,6 +103,8 @@ protected:
 public:
     Screen_Base();
     virtual ~Screen_Base();
+
+    void SetGameHeight(float height) { m_GameHeight = height; }
 
 #if MYFW_USING_LUA
     static void LuaRegister(lua_State* luastate);
@@ -137,8 +150,8 @@ public:
 
     int GetMenuButtonHeldCount();
 
-    void SetScreenOverlayToShow(ScreenOverlays screen, Screen_Base* pParent = 0, void* pPtr = 0, void* pPtr2 = 0);
-    void ReplaceCurrentScreenOverlayWith(ScreenOverlays screen, Screen_Base* pParent = 0, void* pPtr = 0, void* pPtr2 = 0);
+    void SetScreenOverlayToShow(int screen, Screen_Base* pParent = 0, void* pPtr = 0, void* pPtr2 = 0);
+    void ReplaceCurrentScreenOverlayWith(int screen, Screen_Base* pParent = 0, void* pPtr = 0, void* pPtr2 = 0);
 
     void DrawAllMenuItems(MyMatrix* matviewproj);
     void DrawMenuItem(int index);

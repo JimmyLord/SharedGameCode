@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2012-2016 Jimmy Lord http://www.flatheadgames.com
+// Copyright (c) 2012-2017 Jimmy Lord http://www.flatheadgames.com
 //
 // This software is provided 'as-is', without any express or implied warranty.  In no event will the authors be held liable for any damages arising from the use of this software.
 // Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
@@ -9,6 +9,7 @@
 
 #include "SharedCommonHeader.h"
 #include "Screen_Base.h"
+#include "ScreenManager.h"
 #include "../../../SharedGameCode/Menus/MenuButton.h"
 #include "../../../SharedGameCode/Menus/MenuScrollingText.h"
 #include "../../../SharedGameCode/Menus/MenuInputBox.h"
@@ -336,7 +337,7 @@ void Screen_Base::CreateMenuItems(int numitems, MenuItemDefinition* menuitems)
 
                 pMenuSprite->SetName( menuitems[i].name );
 
-                MySprite* pSprite = g_pGame->m_pResources->m_pSprites[menuitems[i].spriteindex];
+                MySprite* pSprite = menuitems[i].pSprite; //g_pGame->m_pResources->m_pSprites[menuitems[i].spriteindex];
                 pMenuSprite->SetMaterial( MenuSprite::Material_Sprite, menuitems[i].pMaterials[MenuSprite::Material_Sprite] );
                 pMenuSprite->SetMaterial( MenuSprite::Material_Shadow, menuitems[i].pMaterials[MenuSprite::Material_Shadow] );
                 //pMenuSprite->SetSprites( pSprite, pSprite );
@@ -363,7 +364,7 @@ void Screen_Base::CreateMenuItems(int numitems, MenuItemDefinition* menuitems)
 
                 pButton->SetName( menuitems[i].name );
 
-                MySprite* pSprite = g_pGame->m_pResources->m_pSprites[menuitems[i].spriteindex];
+                MySprite* pSprite = menuitems[i].pSprite; //g_pGame->m_pResources->m_pSprites[menuitems[i].spriteindex];
                 pButton->SetMaterial( MenuButton::Material_BG,          menuitems[i].pMaterials[MenuButton::Material_BG] );
                 pButton->SetMaterial( MenuButton::Material_BGDisabled,  menuitems[i].pMaterials[MenuButton::Material_BGDisabled] );
                 pButton->SetMaterial( MenuButton::Material_BGPressed,   menuitems[i].pMaterials[MenuButton::Material_BGPressed] );
@@ -583,7 +584,7 @@ InputFinger* Screen_Base::GetFingerInfo(int id)
 bool Screen_Base::BasicMenuTouchFunc(int action, int id, float x, float y, float pressure, float size)
 {
     // flip y to make it start at bottom left.
-    y = g_pGame->m_GameHeight - y;
+    y = m_GameHeight - y;
 
     switch( action )
     {
@@ -726,7 +727,7 @@ bool Screen_Base::OnKeys(GameCoreButtonActions action, int keycode, int unicodec
     return false;
 }
 
-void Screen_Base::SetScreenOverlayToShow(ScreenOverlays screen, Screen_Base* pParentScreen, void* pPtr1, void* pPtr2)
+void Screen_Base::SetScreenOverlayToShow(int screen, Screen_Base* pParentScreen, void* pPtr1, void* pPtr2)
 {
     m_ScreenToShow = screen;
     m_ScreenToShowParentPage = pParentScreen;
@@ -734,7 +735,7 @@ void Screen_Base::SetScreenOverlayToShow(ScreenOverlays screen, Screen_Base* pPa
     m_ScreenToShowParam2 = pPtr2;
 }
 
-void Screen_Base::ReplaceCurrentScreenOverlayWith(ScreenOverlays screen, Screen_Base* pParent, void* pPtr, void* pPtr2)
+void Screen_Base::ReplaceCurrentScreenOverlayWith(int screen, Screen_Base* pParent, void* pPtr, void* pPtr2)
 {
     m_DestroyCurrentScreen = true;
     SetScreenOverlayToShow( screen, pParent, pPtr, pPtr2 );
@@ -763,7 +764,7 @@ void Screen_Base::SwitchScreenOverlay()
         default:
             if( m_DestroyCurrentScreen )
                 g_pScreenManager->CloseScreen( this );
-            newscreen = g_pScreenOverlayManager->CreateScreen( m_ScreenToShow, m_ScreenToShowParentPage, m_ScreenToShowParam1, m_ScreenToShowParam2 );
+            //newscreen = g_pScreenOverlayManager->CreateScreen( m_ScreenToShow, m_ScreenToShowParentPage, m_ScreenToShowParam1, m_ScreenToShowParam2 );
             break;
         }
 

@@ -10,8 +10,6 @@
 #include "SharedCommonHeader.h"
 #include "Effect_ParticleRisingGlow.h"
 
-#if Effect_ParticleRisingGlow_Enabled
-
 Effect_ParticleRisingGlow::Effect_ParticleRisingGlow(ParticleRenderer* pRenderer)
 {
     m_TimeAlive = 0;
@@ -141,5 +139,3 @@ bool Effect_ParticleRisingGlow::OnButtons(GameCoreButtonActions action, GameCore
 {
     return false;
 }
-
-#endif // Effect_ParticleRisingGlow_Enabled

@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2012-2014 Jimmy Lord http://www.flatheadgames.com
+// Copyright (c) 2012-2017 Jimmy Lord http://www.flatheadgames.com
 //
 // This software is provided 'as-is', without any express or implied warranty.  In no event will the authors be held liable for any damages arising from the use of this software.
 // Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
@@ -9,8 +9,6 @@
 
 #ifndef __Effect_ParticleGeneric_H__
 #define __Effect_ParticleGeneric_H__
-
-#if Effect_ParticleGeneric_Enabled
 
 struct ParticleGeneric
 {
@@ -78,12 +76,10 @@ public:
     void FastForward(double TimeToPass);
     void AddParticles(int numtoadd);
     virtual void Tick(double TimePassed);
-    virtual void Draw();
+    virtual void Draw(MyMatrix* matviewproj);
 
     virtual bool OnTouch(int action, int id, float x, float y, float pressure, float size);
     virtual bool OnButtons(GameCoreButtonActions action, GameCoreButtonIDs id);
 };
-
-#endif // Effect_ParticleGeneric_Enabled
 
 #endif //__Effect_ParticleGeneric_H__

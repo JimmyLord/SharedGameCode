@@ -10,8 +10,6 @@
 #ifndef __Effect_ParticleRisingGlow_H__
 #define __Effect_ParticleRisingGlow_H__
 
-#if Effect_ParticleRisingGlow_Enabled
-
 struct ParticleRisingGlow
 {
     Vector2 pos;
@@ -59,7 +57,5 @@ public:
 
     void FastForward(double TimeToPass);
 };
-
-#endif // Effect_ParticleRisingGlow_Enabled
 
 #endif //__Effect_ParticleRisingGlow_H__

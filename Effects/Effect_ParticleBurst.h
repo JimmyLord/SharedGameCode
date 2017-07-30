@@ -10,8 +10,6 @@
 #ifndef __Effect_ParticleBurst_H__
 #define __Effect_ParticleBurst_H__
 
-#if Effect_ParticleBurst_Enabled
-
 struct ParticleBurst
 {
     Vector2 pos;
@@ -69,7 +67,5 @@ public:
 
     void CreateBurst(int number, Vector2 pos);
 };
-
-#endif // Effect_ParticleBurst_Enabled
 
 #endif //__Effect_ParticleBurst_H__

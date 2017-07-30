@@ -27,7 +27,6 @@ SharedCamera2D::SharedCamera2D()
     m_matProj.SetIdentity();
     m_matViewProj.SetIdentity();
 
-    MyAssert( false ); // set these 6 vars with real values.
     m_GameWidth = 0;
     m_GameHeight = 0;
     m_ScreenOffsetX = 0;
@@ -38,6 +37,16 @@ SharedCamera2D::SharedCamera2D()
 
 SharedCamera2D::~SharedCamera2D()
 {
+}
+
+void SharedCamera2D::SetGameSize(float gamewidth, float gameheight, float offsetx, float offsety, float width, float height)
+{
+    m_GameWidth = gamewidth;
+    m_GameHeight = gameheight;
+    m_ScreenOffsetX = offsetx;
+    m_ScreenOffsetY = offsety;
+    m_ScreenWidth = width;
+    m_ScreenHeight = height;
 }
 
 void SharedCamera2D::SetViewSize(float width, float height)

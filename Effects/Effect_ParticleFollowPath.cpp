@@ -10,8 +10,6 @@
 #include "SharedCommonHeader.h"
 #include "Effect_ParticleFollowPath.h"
 
-#if Effect_ParticleFollowPath_Enabled
-
 Effect_ParticleFollowPath::Effect_ParticleFollowPath(ParticleRenderer* pRenderer)
 {
     m_TimeAlive = 0;
@@ -184,9 +182,9 @@ void Effect_ParticleFollowPath::Tick(double TimePassed)
     }
 }
 
-void Effect_ParticleFollowPath::Draw()
+void Effect_ParticleFollowPath::Draw(MyMatrix* matviewproj)
 {
-    m_pRenderer->Draw( 0 );
+    m_pRenderer->Draw( 0, 0, matviewproj, 0, 0, 0, 0, 0, 0, 0, 0 );
 }
 
 bool Effect_ParticleFollowPath::OnTouch(int action, int id, float x, float y, float pressure, float size)
@@ -198,5 +196,3 @@ bool Effect_ParticleFollowPath::OnButtons(GameCoreButtonActions action, GameCore
 {
     return false;
 }
-
-#endif // Effect_ParticleFollowPath_Enabled

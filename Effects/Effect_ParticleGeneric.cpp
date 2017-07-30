@@ -10,8 +10,6 @@
 #include "SharedCommonHeader.h"
 #include "Effect_ParticleGeneric.h"
 
-#if Effect_ParticleGeneric_Enabled
-
 Effect_ParticleGeneric::Effect_ParticleGeneric(ParticleRenderer* pRenderer)
 {
     m_TimeAlive = 0;
@@ -205,9 +203,9 @@ void Effect_ParticleGeneric::Tick(double TimePassed)
     }
 }
 
-void Effect_ParticleGeneric::Draw()
+void Effect_ParticleGeneric::Draw(MyMatrix* matviewproj)
 {
-    m_pRenderer->Draw( 0 );
+    m_pRenderer->Draw( 0, 0, matviewproj, 0, 0, 0, 0, 0, 0, 0, 0 );
 }
 
 bool Effect_ParticleGeneric::OnTouch(int action, int id, float x, float y, float pressure, float size)
@@ -219,5 +217,3 @@ bool Effect_ParticleGeneric::OnButtons(GameCoreButtonActions action, GameCoreBut
 {
     return false;
 }
-
-#endif // Effect_ParticleGeneric_Enabled

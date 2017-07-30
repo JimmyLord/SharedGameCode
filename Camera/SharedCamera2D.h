@@ -34,6 +34,7 @@ public:
     SharedCamera2D();
     ~SharedCamera2D();
 
+    void SetGameSize(float gamewidth, float gameheight, float offsetx, float offsety, float width, float height);
     void SetViewSize(float width, float height);
     void SetPos(float newx, float newy);
     void SetZoom(float newzoom);

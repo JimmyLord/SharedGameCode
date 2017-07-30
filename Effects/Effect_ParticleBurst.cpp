@@ -10,8 +10,6 @@
 #include "SharedCommonHeader.h"
 #include "Effect_ParticleBurst.h"
 
-#if Effect_ParticleBurst_Enabled
-
 Effect_ParticleBurst::Effect_ParticleBurst(ParticleRenderer* pRenderer)
 {
     m_TimeAlive = 0;
@@ -170,5 +168,3 @@ bool Effect_ParticleBurst::OnButtons(GameCoreButtonActions action, GameCoreButto
 {
     return false;
 }
-
-#endif // Effect_ParticleBurst_Enabled

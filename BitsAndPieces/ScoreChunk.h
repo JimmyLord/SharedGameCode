@@ -52,14 +52,7 @@ public:
     float m_TimeAlive;
     float m_TimeToLive;
 
-    ScoreChunk(MyActivePool<ScoreChunk*>* pPool)
-    : m_Color(255, 255, 255, 255)
-    , m_ShadowColor(0, 0, 0, 128)
-    {
-        Reset();
-
-        m_pScoreChunkPool = pPool;
-    }
+    ScoreChunk(MyActivePool<ScoreChunk*>* pPool);
 
     void Reset();
     void Setup( MyMeshText* pTextMesh, float x, float y, float fontheight, ColorByte color, ScoreChunkAnimType animtype, float duration, unsigned char justification, const char* string, int value );

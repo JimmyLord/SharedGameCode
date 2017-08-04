@@ -10,10 +10,19 @@
 #include "SharedCommonHeader.h"
 #include "ScoreChunk.h"
 
+ScoreChunk::ScoreChunk(MyActivePool<ScoreChunk*>* pPool)
+: m_Color(255, 255, 255, 255)
+, m_ShadowColor(0, 0, 0, 128)
+{
+    Reset();
+
+    MyAssert( pPool );
+
+    m_pScoreChunkPool = pPool;
+}
+
 void ScoreChunk::Reset()
 {
-    m_pScoreChunkPool = 0;
-
     m_pFont = 0;
     m_String[0] = 0;
     m_Value = 0;
@@ -110,6 +119,7 @@ void ScoreChunk::Tick(double TimePassed)
 
     if( timealive > m_TimeToLive )
     {
+        MyAssert( m_pScoreChunkPool );
         m_pScoreChunkPool->MakeObjectInactive( this );
     }
 }

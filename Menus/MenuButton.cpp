@@ -760,9 +760,9 @@ void MenuButton::SetString(const char* str1, const char* str2, const char* str3)
     if( str1 != 0 )
     {
         if( str1[0] == '.' )
-            totallen += strlen( g_pLanguageTable->LookUp( str1 ) );
+            totallen += (int)strlen( g_pLanguageTable->LookUp( str1 ) );
         else
-            totallen += strlen( str1 );
+            totallen += (int)strlen( str1 );
         sprintf_s( m_Strings[0], MAX_STRING_LENGTH, "%s", str1 );
         //m_Style = MBTS_SingleLine;
     }
@@ -770,9 +770,9 @@ void MenuButton::SetString(const char* str1, const char* str2, const char* str3)
     if( str2 != 0 )
     {
         if( str2[0] == '.' )
-            totallen += strlen( g_pLanguageTable->LookUp( str2 ) );
+            totallen += (int)strlen( g_pLanguageTable->LookUp( str2 ) );
         else
-            totallen += strlen( str2 );
+            totallen += (int)strlen( str2 );
         sprintf_s( m_Strings[1], MAX_STRING_LENGTH, "%s", str2 );
         //m_Style = MBTS_DoubleLine;
     }
@@ -784,9 +784,9 @@ void MenuButton::SetString(const char* str1, const char* str2, const char* str3)
     if( str3 != 0 )
     {
         if( str3[0] == '.' )
-            totallen += strlen( g_pLanguageTable->LookUp( str3 ) );
+            totallen += (int)strlen( g_pLanguageTable->LookUp( str3 ) );
         else
-            totallen += strlen( str3 );
+            totallen += (int)strlen( str3 );
         sprintf_s( m_Strings[2], MAX_STRING_LENGTH, "%s", str3 );
         //m_Style = MBTS_TripleLine;
     }

@@ -55,7 +55,7 @@ const char* MenuInputBox::TriggerOnCollision(int fingerid, float x, float y, boo
 
     if( action != 0 )
     {
-        g_pGameCore->m_KeyboardOpenRequested = true;
+        g_pGameCore->RequestKeyboardOpen();
         return m_ButtonAction;
     }
 
@@ -82,7 +82,7 @@ bool MenuInputBox::OnKeys(GameCoreButtonActions action, int keycode, int unicode
 
     if( keycode == MYKEYCODE_ENTER )
     {
-        g_pGameCore->m_KeyboardCloseRequested = true;
+        g_pGameCore->RequestKeyboardClose();
         return true;
     }
 

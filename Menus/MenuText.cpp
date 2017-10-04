@@ -179,8 +179,6 @@ void MenuText::Draw(MyMatrix* matviewproj)
 
         if( m_DrawAsPartOfBatch == false )
         {
-            m_pMeshText->m_MeshReady = true;
-
             // create a material for the font on the stack and set it. TODO: do better...
             MaterialDefinition pTempMaterial;
             pTempMaterial.SetShader( g_pShaderGroupManager->FindShaderGroupByName( "Shader_TextureVertexColor" ) );

@@ -267,10 +267,10 @@ void MenuButton::Draw(MyMatrix* matviewproj)
 
     if( m_pMeshText )
     {
-        MyAssert( m_pMeshText->m_SubmeshList.Count() > 0 );
+        MyAssert( m_pMeshText->GetSubmeshListCount() > 0 );
 
-        m_pMeshText->m_SubmeshList[0]->m_NumVertsToDraw = 0;
-        m_pMeshText->m_SubmeshList[0]->m_NumIndicesToDraw = 0;
+        m_pMeshText->GetSubmesh( 0 )->m_NumVertsToDraw = 0;
+        m_pMeshText->GetSubmesh( 0 )->m_NumIndicesToDraw = 0;
     }
 
     //float scrw = g_pGame->m_GameWidth;
@@ -525,8 +525,6 @@ void MenuButton::Draw(MyMatrix* matviewproj)
     // draw the text mesh.
     if( m_pFont && m_pMeshText )
     {
-        m_pMeshText->m_MeshReady = true;
-
         // create a material for the font on the stack and set it. TODO: do better...
         MaterialDefinition pTempMaterial;
         //m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );

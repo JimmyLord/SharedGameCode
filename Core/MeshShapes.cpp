@@ -430,5 +430,7 @@ int MyMeshText::CreateString(bool concat, float fontheight, float x, float y, fl
         }
     }
 
+    m_MeshReady = true;
+
     return numlines;
 }

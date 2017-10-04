@@ -121,7 +121,6 @@ void MenuScrollingText::Draw(MyMatrix* matviewproj)
         }
     }
 
-    m_peTextMesh->m_MeshReady = true;
     // TODO: MYENGINE
     //m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
     m_pMaterial->SetShader( g_pShaderGroupManager->FindShaderGroupByName( "Shader_TextureVertexColor" ) );

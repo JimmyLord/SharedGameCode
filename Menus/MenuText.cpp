@@ -131,14 +131,13 @@ MenuText* CastAs_MenuText(MenuItem* pMenuItem)
 #if MYFW_USING_LUA
 void MenuText::LuaRegister(lua_State* luastate)
 {
-    luabridge::getGlobalNamespace( luastate ).addFunction( "CastAs_MenuText", CastAs_MenuText );
+    luabridge::getGlobalNamespace( luastate ).addFunction( "CastAs_MenuText", CastAs_MenuText ); // MenuText* CastAs_MenuText(MenuItem* pMenuItem)
 
     luabridge::getGlobalNamespace( luastate )
         .beginClass<MenuText>( "MenuText" )
             //.addData( "localmatrix", &MenuText::m_LocalTransform )
-
-            .addFunction( "SetPositionAndSize", &MenuText::SetPositionAndSize )
-            .addFunction( "SetString", &MenuText::SetString )
+            .addFunction( "SetPositionAndSize", &MenuText::SetPositionAndSize ) // void MenuText::SetPositionAndSize(float x, float y, float w, float h, float inputw, float inputh)
+            .addFunction( "SetString", &MenuText::SetString ) // void MenuText::SetString(const char* str)
         .endClass();
 }
 #endif //MYFW_USING_LUA
@@ -218,6 +217,7 @@ MyRect MenuText::GetBoundingRect()
     return rect;
 }
 
+// Exposed to Lua, change elsewhere if function signature changes.
 void MenuText::SetPositionAndSize(float x, float y, float w, float h, float inputw, float inputh)
 {
     m_Position.x = x;
@@ -226,6 +226,7 @@ void MenuText::SetPositionAndSize(float x, float y, float w, float h, float inpu
     m_TextSize.Set( w, h );
 }
 
+// Exposed to Lua, change elsewhere if function signature changes.
 void MenuText::SetString(const char* str)
 {
     SetStringFormatted( str );

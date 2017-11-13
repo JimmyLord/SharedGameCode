@@ -230,13 +230,13 @@ void MenuButton::LuaRegister(lua_State* luastate)
         .beginClass<MenuButton>( "MenuButton" )
             //.addData( "localmatrix", &MenuButton::m_LocalTransform )
 
-            .addFunction( "SetSize", &MenuButton::SetSize )
-            .addFunction( "SetPositionAndSize", &MenuButton::SetPositionAndSize )
-            .addFunction( "SetString", &MenuButton::SetString )
-            .addFunction( "SetStringNumber", &MenuButton::SetStringNumber )
+            .addFunction( "SetSize", &MenuButton::SetSize ) // void MenuButton::SetSize(float w, float h, float inputw, float inputh)
+            .addFunction( "SetPositionAndSize", &MenuButton::SetPositionAndSize ) // void MenuButton::SetPositionAndSize(float x, float y, float w, float h, float inputw, float inputh)
+            .addFunction( "SetString", &MenuButton::SetString ) // void MenuButton::SetString(const char* str1, const char* str2, const char* str3)
+            .addFunction( "SetStringNumber", &MenuButton::SetStringNumber ) // void MenuButton::SetStringNumber(int stringnumber, const char* str1)
 
-            .addFunction( "GetSize", &MenuButton::GetSize )
-            .addFunction( "GetBGSize", &MenuButton::GetBGSize )
+            .addFunction( "GetSize", &MenuButton::GetSize ) // Vector2 MenuButton::GetSize()
+            .addFunction( "GetBGSize", &MenuButton::GetBGSize ) // Vector2 MenuButton::GetBGSize()
         .endClass();
 }
 #endif //MYFW_USING_LUA
@@ -733,6 +733,7 @@ void MenuButton::PlaySound()
     //}
 }
 
+// Exposed to Lua, change elsewhere if function signature changes.
 void MenuButton::SetSize(float w, float h, float inputw, float inputh)
 {
     m_BGSize.Set( w, h );
@@ -741,6 +742,7 @@ void MenuButton::SetSize(float w, float h, float inputw, float inputh)
     m_InputHeight = inputh;
 }
 
+// Exposed to Lua, change elsewhere if function signature changes.
 void MenuButton::SetPositionAndSize(float x, float y, float w, float h, float inputw, float inputh)
 {
     m_Position.Set( x, y );
@@ -750,6 +752,7 @@ void MenuButton::SetPositionAndSize(float x, float y, float w, float h, float in
     m_InputHeight = inputh;
 }
 
+// Exposed to Lua, change elsewhere if function signature changes.
 void MenuButton::SetString(const char* str1, const char* str2, const char* str3)
 {
     int totallen = 0;
@@ -802,6 +805,7 @@ void MenuButton::SetString(const char* str1, const char* str2, const char* str3)
     }
 }
 
+// Exposed to Lua, change elsewhere if function signature changes.
 void MenuButton::SetStringNumber(int stringnumber, const char* str1)
 {
     SetStringNumberFormatted( stringnumber, str1 );

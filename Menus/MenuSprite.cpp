@@ -62,8 +62,7 @@ void MenuSprite::LuaRegister(lua_State* luastate)
     luabridge::getGlobalNamespace( luastate )
         .beginClass<MenuSprite>( "MenuSprite" )
             //.addData( "localmatrix", &MenuSprite::m_LocalTransform )
-
-            .addFunction( "SetPositionAndSize", &MenuSprite::SetPositionAndSize )
+            .addFunction( "SetPositionAndSize", &MenuSprite::SetPositionAndSize ) // void MenuSprite::SetPositionAndSize(float x, float y, float w, float h, float inputw, float inputh)
         .endClass();
 }
 #endif //MYFW_USING_LUA
@@ -176,6 +175,7 @@ MyRect MenuSprite::GetBoundingRect()
     return rect;
 }
 
+// Exposed to Lua, change elsewhere if function signature changes.
 void MenuSprite::SetPositionAndSize(float x, float y, float w, float h, float inputw, float inputh)
 {
     m_Position.Set( x, y );

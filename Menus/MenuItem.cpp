@@ -93,20 +93,20 @@ void MenuItem::LuaRegister(lua_State* luastate)
         .beginClass<MenuItem>( "MenuItem" )
             //.addData( "localmatrix", &ComponentMenuPage::m_LocalTransform )
 
-            .addFunction( "SetName", &MenuItem::SetName )
+            .addFunction( "SetName", &MenuItem::SetName ) // void MenuItem::SetName(const char* name)
 
-            .addFunction( "SetPosition", &MenuItem::SetPosition )
-            .addFunction( "SetSize", &MenuItem::SetSize )
-            .addFunction( "SetPositionAndSize", &MenuItem::SetPositionAndSize )
-            .addFunction( "SetAnchorPoint", &MenuItem::SetAnchorPoint )
+            .addFunction( "SetPosition", &MenuItem::SetPosition ) // void MenuItem::SetPosition(float x, float y)
+            .addFunction( "SetSize", &MenuItem::SetSize ) // void MenuItem::SetSize(float w, float h, float inputw, float inputh)
+            .addFunction( "SetPositionAndSize", &MenuItem::SetPositionAndSize ) // void MenuItem::SetPositionAndSize(float x, float y, float w, float h, float inputw, float inputh)
+            .addFunction( "SetAnchorPoint", &MenuItem::SetAnchorPoint ) // void MenuItem::SetAnchorPoint(MenuItemAnchorPoint anchortype)
 
-            .addFunction( "GetSize", &MenuItem::GetSize )
+            .addFunction( "GetSize", &MenuItem::GetSize ) // Vector2 MenuItem::GetSize()
 
-            .addFunction( "SetVisible", &MenuItem::SetVisible )
-            .addFunction( "SetEnabled", &MenuItem::SetEnabled )
-            .addFunction( "SetVisibleAndEnabled", &MenuItem::SetVisibleAndEnabled )
+            .addFunction( "SetVisible", &MenuItem::SetVisible ) // void MenuItem::SetVisible(bool visible)
+            .addFunction( "SetEnabled", &MenuItem::SetEnabled ) // void MenuItem::SetEnabled(bool enabled)
+            .addFunction( "SetVisibleAndEnabled", &MenuItem::SetVisibleAndEnabled ) // void MenuItem::SetVisibleAndEnabled(bool value)
 
-            .addFunction( "GetBoundingRect", &MenuItem::GetBoundingRect )
+            .addFunction( "GetBoundingRect", &MenuItem::GetBoundingRect ) // MyRect MenuItem::GetBoundingRect()
         .endClass();
 }
 #endif //MYFW_USING_LUA
@@ -141,6 +141,7 @@ int MenuItem::CheckForCollisionPosition(float x, float y, bool held)
     return 0;
 }
 
+// Exposed to Lua, change elsewhere if function signature changes.
 void MenuItem::SetName(const char* name)
 {
     MyAssert( name );
@@ -160,21 +161,25 @@ void MenuItem::SetName(const char* name)
 #endif //MYFW_USING_WX
 }
 
+// Exposed to Lua, change elsewhere if function signature changes.
 void MenuItem::SetPosition(float x, float y)
 {
     m_Position.Set( x, y );
 }
 
+// Exposed to Lua, change elsewhere if function signature changes.
 void MenuItem::SetSize(float w, float h, float inputw, float inputh)
 {
     SetPositionAndSize( m_Position.x, m_Position.y, w, h, inputw, inputh );
 }
 
+// Exposed to Lua, change elsewhere if function signature changes.
 void MenuItem::SetPositionAndSize(float x, float y, float w, float h, float inputw, float inputh)
 {
     m_Position.Set( x, y );
 }
 
+// Exposed to Lua, change elsewhere if function signature changes.
 void MenuItem::SetAnchorPoint(MenuItemAnchorPoint anchortype)
 {
     m_AnchorPoint = anchortype;

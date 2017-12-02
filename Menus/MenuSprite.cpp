@@ -93,7 +93,7 @@ void MenuSprite::Draw(MyMatrix* matviewproj)
     MaterialDefinition* pMaterial = m_pMaterials[Material_Sprite];
 
     //Vector4 uvs = m_BGSpriteUVs;
-    ColorByte bgcolor = m_BGColor;
+    //ColorByte bgcolor = m_BGColor;
 
     //if( pSprite )
     //    pSprite->SetTint( ColorByte(255,255,255,255) );

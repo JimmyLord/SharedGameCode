@@ -82,8 +82,8 @@ void MenuScrollBox::Draw(MyMatrix* matviewproj)
     {
         if( m_pMenuItems[i] )
         {
-            float offx = m_Position.x - m_ScrollAmount.x;
-            float offy = m_Position.y + m_ScrollAmount.y;
+            //float offx = m_Position.x - m_ScrollAmount.x;
+            //float offy = m_Position.y + m_ScrollAmount.y;
             //m_pMenuItems[i]->SetPositionOffset( offx, offy );
 
             MyRect bbox = m_pMenuItems[i]->GetBoundingRect();

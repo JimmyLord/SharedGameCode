@@ -223,11 +223,11 @@ public:
     void FillPropertiesWindow();
 
     // Watch panel callbacks.
-    static void StaticOnDropFont(void* pObjectPtr, int controlid, wxCoord x, wxCoord y) { ((MenuButton*)pObjectPtr)->OnDropFont(controlid, x, y); }
-    void OnDropFont(int controlid, wxCoord x, wxCoord y);
+    static void StaticOnDropFont(void* pObjectPtr, int controlid, int x, int y) { ((MenuButton*)pObjectPtr)->OnDropFont(controlid, x, y); }
+    void OnDropFont(int controlid, int x, int y);
 
-    static void StaticOnDropMaterial(void* pObjectPtr, int controlid, wxCoord x, wxCoord y) { ((MenuButton*)pObjectPtr)->OnDropMaterial(controlid, x, y); }
-    void OnDropMaterial(int controlid, wxCoord x, wxCoord y);
+    static void StaticOnDropMaterial(void* pObjectPtr, int controlid, int x, int y) { ((MenuButton*)pObjectPtr)->OnDropMaterial(controlid, x, y); }
+    void OnDropMaterial(int controlid, int x, int y);
 
     static void StaticOnValueChanged(void* pObjectPtr, int controlid, bool directlychanged, bool finishedchanging, double oldvalue, bool valuewaschangedbydragging) { ((MenuButton*)pObjectPtr)->OnValueChanged( controlid, finishedchanging ); }
     void OnValueChanged(int controlid, bool finishedchanging);

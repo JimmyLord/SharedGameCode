@@ -243,7 +243,7 @@ void MenuSprite::FillPropertiesWindow()
     }
 }
 
-void MenuSprite::OnDropMaterial(int controlid, wxCoord x, wxCoord y)
+void MenuSprite::OnDropMaterial(int controlid, int x, int y)
 {
     DragAndDropItem* pDropItem = g_DragAndDropStruct.GetItem( 0 );
 

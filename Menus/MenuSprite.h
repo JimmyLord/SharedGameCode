@@ -82,8 +82,8 @@ public:
     void FillPropertiesWindow();
 
     // Watch panel callbacks.
-    static void StaticOnDropMaterial(void* pObjectPtr, int controlid, wxCoord x, wxCoord y) { ((MenuSprite*)pObjectPtr)->OnDropMaterial(controlid, x, y); }
-    void OnDropMaterial(int controlid, wxCoord x, wxCoord y);
+    static void StaticOnDropMaterial(void* pObjectPtr, int controlid, int x, int y) { ((MenuSprite*)pObjectPtr)->OnDropMaterial(controlid, x, y); }
+    void OnDropMaterial(int controlid, int x, int y);
 #endif //MYFW_USING_WX
 };
 

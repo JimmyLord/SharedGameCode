@@ -1004,7 +1004,7 @@ void MenuButton::FillPropertiesWindow()
     g_pPanelWatch->AddString( "Action", &m_ButtonAction[0], MAX_BUTTON_ACTION_LENGTH );
 }
 
-void MenuButton::OnDropFont(int controlid, wxCoord x, wxCoord y)
+void MenuButton::OnDropFont(int controlid, int x, int y)
 {
     DragAndDropItem* pDropItem = g_DragAndDropStruct.GetItem( 0 );
 
@@ -1036,7 +1036,7 @@ void MenuButton::OnDropFont(int controlid, wxCoord x, wxCoord y)
     }
 }
 
-void MenuButton::OnDropMaterial(int controlid, wxCoord x, wxCoord y)
+void MenuButton::OnDropMaterial(int controlid, int x, int y)
 {
     DragAndDropItem* pDropItem = g_DragAndDropStruct.GetItem( 0 );
 

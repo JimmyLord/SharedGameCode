@@ -273,7 +273,7 @@ void MenuText::FillPropertiesWindow()
     g_pPanelWatch->AddString( "String", &m_String[0], MAX_MenuText_STRING );
 }
 
-void MenuText::OnDropFont(int controlid, wxCoord x, wxCoord y)
+void MenuText::OnDropFont(int controlid, int x, int y)
 {
     DragAndDropItem* pDropItem = g_DragAndDropStruct.GetItem( 0 );
 

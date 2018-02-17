@@ -79,8 +79,8 @@ public:
     void FillPropertiesWindow();
 
     // Watch panel callbacks.
-    static void StaticOnDropFont(void* pObjectPtr, int controlid, wxCoord x, wxCoord y) { ((MenuText*)pObjectPtr)->OnDropFont(controlid, x, y); }
-    void OnDropFont(int controlid, wxCoord x, wxCoord y);
+    static void StaticOnDropFont(void* pObjectPtr, int controlid, int x, int y) { ((MenuText*)pObjectPtr)->OnDropFont(controlid, x, y); }
+    void OnDropFont(int controlid, int x, int y);
 #endif //MYFW_USING_WX
 };
 

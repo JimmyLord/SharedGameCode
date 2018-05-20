@@ -54,16 +54,16 @@ MenuScrollBox::~MenuScrollBox()
     SAFE_DELETE_ARRAY( m_pMenuItems );
 }
 
-void MenuScrollBox::Tick(double timepassed)
+void MenuScrollBox::Tick(float deltaTime)
 {
-    MenuButton::Tick( timepassed );
+    MenuButton::Tick( deltaTime );
 
     if( m_InitialFinger == -1 && m_Momentum.LengthSquared() != 0 )
     {
         m_Momentum *= 0.99f;
 
-        m_ScrollAmount.x -= m_Momentum.x * (float)timepassed * 30;
-        m_ScrollAmount.y += m_Momentum.y * (float)timepassed * 30;
+        m_ScrollAmount.x -= m_Momentum.x * deltaTime * 30;
+        m_ScrollAmount.y += m_Momentum.y * deltaTime * 30;
     }
 
     MyClamp( m_ScrollAmount.x, m_MinScrollAmount.x, m_MaxScrollAmount.x );

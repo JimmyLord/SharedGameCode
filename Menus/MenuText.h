@@ -57,7 +57,7 @@ public:
 #endif //MYFW_USING_LUA
 
     //virtual void StartClosing();
-    //virtual void Tick(double TimePassed);
+    //virtual void Tick(float deltaTime);
     virtual void Draw(MyMatrix* matviewproj);
 
     //virtual float TestCollision(int fingerid, float x, float y, bool fingerwentdown = true);

@@ -246,11 +246,11 @@ void MenuButton::StartClosing()
     MenuItem::StartClosing();
 }
 
-void MenuButton::Tick(double timepassed)
+void MenuButton::Tick(float deltaTime)
 {
-    m_TimeHeld += timepassed;
+    m_TimeHeld += deltaTime;
 
-    MenuItem::Tick( timepassed );
+    MenuItem::Tick( deltaTime );
 }
 
 void MenuButton::Draw(MyMatrix* matviewproj)

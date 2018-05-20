@@ -126,7 +126,7 @@ public:
 #endif //MYFW_USING_LUA
 
     virtual void StartClosing();
-    virtual void Tick(double timepassed);
+    virtual void Tick(float deltaTime);
     virtual void Draw(MyMatrix* matviewproj);
     virtual bool CheckForCollision(float x, float y);
     virtual int CheckForCollisionPosition(float x, float y, bool held);

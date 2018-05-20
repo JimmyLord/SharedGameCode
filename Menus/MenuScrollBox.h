@@ -46,7 +46,7 @@ public:
     MenuScrollBox();
     virtual ~MenuScrollBox();
 
-    virtual void Tick(double timepassed);
+    virtual void Tick(float deltaTime);
     virtual void Draw(MyMatrix* matviewproj);
     virtual bool CheckForCollision(float x, float y);
 

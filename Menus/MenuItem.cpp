@@ -116,15 +116,15 @@ void MenuItem::StartClosing()
     m_Closing = true;
 }
 
-void MenuItem::Tick(double timepassed)
+void MenuItem::Tick(float deltaTime)
 {
     if( m_Closing == false )
     {
         if( m_UseTweenIn )
-            m_TweenIn.Tick( timepassed );
+            m_TweenIn.Tick( deltaTime );
     }
     else if( m_Closing && m_UseTweenOut )
-        m_TweenOut.Tick( timepassed );
+        m_TweenOut.Tick( deltaTime );
 }
 
 void MenuItem::Draw(MyMatrix* matviewproj)

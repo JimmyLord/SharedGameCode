@@ -469,7 +469,7 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
     #if USE_D3D
                             g_pD3DContext->Draw( textstrlen*6, 0 );
     #else
-                            MyDrawArrays( GL_TRIANGLES, 0, textstrlen*6 );
+                            MyDrawArrays( GL_TRIANGLES, 0, textstrlen*6, false );
                             //MyDrawElements( GL_TRIANGLES, textstrlen*6, GL_UNSIGNED_SHORT, 0 );   //The starting point of the IBO
     #endif
                             pShader->DeactivateShader( g_pRTQGlobals->m_pVertexBufferIDImmediate, true );
@@ -563,10 +563,10 @@ void RenderTextQuickBatchEnd()
             {
     #if USE_D3D
                 //g_pD3DContext->Draw( textstrlen*6, 0 );
-                MyDrawArrays( GL_TRIANGLES, 0, g_pRTQGlobals->m_BatchNumLetters*6 );
+                MyDrawArrays( GL_TRIANGLES, 0, g_pRTQGlobals->m_BatchNumLetters*6, false );
     #else
-                MyDrawArrays( GL_TRIANGLES, 0, g_pRTQGlobals->m_BatchNumLetters*6 );
-                //MyDrawElements( GL_TRIANGLES, textstrlen*6, GL_UNSIGNED_SHORT, 0 );   //The starting point of the IBO
+                MyDrawArrays( GL_TRIANGLES, 0, g_pRTQGlobals->m_BatchNumLetters*6, false );
+                //MyDrawElements( GL_TRIANGLES, textstrlen*6, GL_UNSIGNED_SHORT, 0, false );   //The starting point of the IBO
     #endif
                 pShader->DeactivateShader( g_pRTQGlobals->m_pVertexBuffer, true );
             }

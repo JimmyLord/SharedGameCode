@@ -67,7 +67,7 @@ void MenuSprite::LuaRegister(lua_State* luastate)
 }
 #endif //MYFW_USING_LUA
 
-void MenuSprite::Draw(MyMatrix* matviewproj)
+void MenuSprite::Draw(MyMatrix* pMatProj, MyMatrix* pMatView)
 {
     if( m_Visible == false )
         return;
@@ -130,7 +130,7 @@ void MenuSprite::Draw(MyMatrix* matviewproj)
             world.m41 = m_Position.x + bgshadowoffx;
             world.m42 = m_Position.y + bgshadowoffy;
 
-            m_pSprite->Draw( &world, matviewproj );//&g_pGame->m_OrthoMatrixGameSize );
+            m_pSprite->Draw( pMatProj, pMatView, &world );//&g_pGame->m_OrthoMatrixGameSize );
         }
 
         //pSprite->Create( bgwidth, bgheight, uvs.x, uvs.y, uvs.z, uvs.w, m_Justification );
@@ -147,7 +147,7 @@ void MenuSprite::Draw(MyMatrix* matviewproj)
             world.m41 = m_Position.x;
             world.m42 = m_Position.y;
 
-            m_pSprite->Draw( &world, matviewproj );//&g_pGame->m_OrthoMatrixGameSize );
+            m_pSprite->Draw( pMatProj, pMatView, &world );//&g_pGame->m_OrthoMatrixGameSize );
         }
     }
 

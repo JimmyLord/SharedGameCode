@@ -42,13 +42,13 @@ void MenuScrollingText::SetTextMesh(MyMeshText* pMesh)
     m_peTextMesh = pMesh;
 }
 
-void MenuScrollingText::Draw(MyMatrix* matviewproj)
+void MenuScrollingText::Draw(MyMatrix* pMatProj, MyMatrix* pMatView)
 {
     if( m_peTextMesh == 0 )
         return;
     MyAssert( m_peTextMesh );
 
-    MenuScrollBox::Draw( matviewproj );
+    MenuScrollBox::Draw( pMatProj, pMatView );
 
     float x = m_Position.x + m_ScrollAmount.x;
     float y = m_Position.y + m_ScrollAmount.y;
@@ -127,7 +127,7 @@ void MenuScrollingText::Draw(MyMatrix* matviewproj)
     m_pMaterial->SetTextureColor( m_pFont->m_pTextureDef );
     m_peTextMesh->SetMaterial( m_pMaterial, 0 );
     //m_peTextMesh->Draw( &g_pGame->m_OrthoMatrixGameSize, 0, 0, 0, 0, 0, 0, 0 );
-    m_peTextMesh->Draw( 0, matviewproj, 0, 0, 0, 0, 0, 0, 0, 0 );
+    m_peTextMesh->Draw( pMatProj, pMatView, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
 }
 
 #if MYFW_USING_WX

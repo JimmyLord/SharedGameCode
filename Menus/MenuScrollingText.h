@@ -31,7 +31,7 @@ public:
 
     void SetTextMesh(MyMeshText* pMesh);
 
-    virtual void Draw(MyMatrix* matviewproj);
+    virtual void Draw(MyMatrix* pMatProj, MyMatrix* pMatView);
 
 #if MYFW_USING_WX
     // Object panel callbacks.

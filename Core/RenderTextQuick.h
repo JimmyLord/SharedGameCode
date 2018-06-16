@@ -44,7 +44,8 @@ public:
     //BufferDefinition* m_pIndexBufferID;
 
     MaterialDefinition* m_pMaterial;
-    MyMatrix* m_pMatViewProj;
+    MyMatrix* m_pMatProj;
+    MyMatrix* m_pMatView;
 
     bool m_WordWrap;
     int m_WordWrapWidthLimit;

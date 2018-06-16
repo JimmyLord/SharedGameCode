@@ -127,7 +127,7 @@ public:
 
     virtual void StartClosing();
     virtual void Tick(float deltaTime);
-    virtual void Draw(MyMatrix* matviewproj);
+    virtual void Draw(MyMatrix* pMatProj, MyMatrix* pMatView);
     virtual bool CheckForCollision(float x, float y);
     virtual int CheckForCollisionPosition(float x, float y, bool held);
 

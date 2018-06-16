@@ -68,7 +68,7 @@ MenuCheckBox::~MenuCheckBox()
 {
 }
 
-void MenuCheckBox::Draw(MyMatrix* matviewproj)
+void MenuCheckBox::Draw(MyMatrix* pMatProj, MyMatrix* pMatView)
 {
     if( m_Visible == false )
         return;
@@ -124,7 +124,7 @@ void MenuCheckBox::Draw(MyMatrix* matviewproj)
             MyMatrix world;
             world.SetIdentity();
             world.SetTranslation( m_PosX+CheckBoxshadowoffx, m_PosY+CheckBoxshadowoffy, 0.1f );
-            pShadowSprite->Draw( &world, matviewproj ); //&g_pGame->m_OrthoMatrixGameSize );
+            pShadowSprite->Draw( pMatProj, pMatView, &world ); //&g_pGame->m_OrthoMatrixGameSize );
         }
 
         pSprite->Create( "MenuCheckBox", bgwidth, bgheight, uvs.x, uvs.y, uvs.z, uvs.w, Justify_CenterX|Justify_CenterY );
@@ -137,7 +137,7 @@ void MenuCheckBox::Draw(MyMatrix* matviewproj)
         MyMatrix world;
         world.SetIdentity();
         world.SetTranslation( m_PosX, m_PosY, 0 );
-        pSprite->Draw( &world, matviewproj ); //&g_pGame->m_OrthoMatrixGameSize );
+        pSprite->Draw( pMatProj, pMatView, &world ); //&g_pGame->m_OrthoMatrixGameSize );
     }
 
     float y;

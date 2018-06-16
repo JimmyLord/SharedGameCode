@@ -253,7 +253,7 @@ void MenuButton::Tick(float deltaTime)
     MenuItem::Tick( deltaTime );
 }
 
-void MenuButton::Draw(MyMatrix* matviewproj)
+void MenuButton::Draw(MyMatrix* pMatProj, MyMatrix* pMatView)
 {
     if( m_Visible == false )
         return;
@@ -357,7 +357,7 @@ void MenuButton::Draw(MyMatrix* matviewproj)
                 shadowmat.Translate( buttonshadowoffx, buttonshadowoffy, 0 );
 
                 //m_pSprite->SetTransform( shadowmat );
-                m_pSprite->Draw( &shadowmat, matviewproj ); //&g_pGame->m_OrthoMatrixGameSize );
+                m_pSprite->Draw( pMatProj, pMatView, &shadowmat );
             }
 
             if( pMaterial != 0 )
@@ -368,7 +368,7 @@ void MenuButton::Draw(MyMatrix* matviewproj)
                 //m_pSprite->SetTransform( transform );
                 //transform.m41 = 300;
                 //transform.m42 = 300;
-                m_pSprite->Draw( &transform, matviewproj ); //&g_pGame->m_OrthoMatrixGameSize );
+                m_pSprite->Draw( pMatProj, pMatView, &transform );
             }
         }
     }
@@ -426,7 +426,7 @@ void MenuButton::Draw(MyMatrix* matviewproj)
             numlights = 1;
         }
 
-        pMesh->Draw( &matfinalmesh, &m_pBGMeshCamera->m_matViewProj, &m_pBGMeshCamera->m_Eye, 0,
+        pMesh->Draw( &m_pBGMeshCamera->m_matProj, &m_pBGMeshCamera->m_matView, &matfinalmesh, &m_pBGMeshCamera->m_Eye, 0,
                      &m_pBGMeshLight, numlights, 0, 0, 0, 0 );
     }
 
@@ -532,7 +532,7 @@ void MenuButton::Draw(MyMatrix* matviewproj)
         pTempMaterial.SetBlendType( MaterialBlendType_On );
         pTempMaterial.SetTextureColor( m_pFont->m_pTextureDef );
         m_pMeshText->SetMaterial( &pTempMaterial, 0 );
-        m_pMeshText->Draw( 0, matviewproj, 0, 0, 0, 0, 0, 0, 0, 0 );
+        m_pMeshText->Draw( pMatProj, pMatView, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
         m_pMeshText->SetMaterial( 0, 0 );
 #if _DEBUG
         pTempMaterial.RemoveFinalRefIfCreatedOnStackToAvoidAssertInDestructor();

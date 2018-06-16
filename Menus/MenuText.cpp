@@ -142,7 +142,7 @@ void MenuText::LuaRegister(lua_State* luastate)
 }
 #endif //MYFW_USING_LUA
 
-void MenuText::Draw(MyMatrix* matviewproj)
+void MenuText::Draw(MyMatrix* pMatProj, MyMatrix* pMatView)
 {
     if( m_Visible == false )
         return;
@@ -184,7 +184,7 @@ void MenuText::Draw(MyMatrix* matviewproj)
             pTempMaterial.SetBlendType( MaterialBlendType_On );
             pTempMaterial.SetTextureColor( m_pFont->m_pTextureDef );
             m_pMeshText->SetMaterial( &pTempMaterial, 0 );
-            m_pMeshText->Draw( 0, matviewproj, 0, 0, 0, 0, 0, 0, 0, 0 );
+            m_pMeshText->Draw( pMatProj, pMatView, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
             m_pMeshText->SetMaterial( 0, 0 );
 #if _DEBUG
             pTempMaterial.RemoveFinalRefIfCreatedOnStackToAvoidAssertInDestructor();

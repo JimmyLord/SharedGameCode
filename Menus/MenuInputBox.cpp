@@ -41,12 +41,12 @@ void MenuInputBox::SetInputString(const char* str, ...)
     va_end( arg );
 }
 
-void MenuInputBox::Draw(MyMatrix* matviewproj)
+void MenuInputBox::Draw(MyMatrix* pMatProj, MyMatrix* pMatView)
 {
     MenuButton::SetString( m_InputBuffer );
     //SetString( m_Strings[0], m_InputBuffer );
 
-    MenuButton::Draw( matviewproj );
+    MenuButton::Draw( pMatProj, pMatView );
 }
 
 const char* MenuInputBox::TriggerOnCollision(int fingerid, float x, float y, bool careifheld, bool releaseifnocollision)

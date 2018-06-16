@@ -47,7 +47,7 @@ public:
     virtual ~MenuScrollBox();
 
     virtual void Tick(float deltaTime);
-    virtual void Draw(MyMatrix* matviewproj);
+    virtual void Draw(MyMatrix* pMatProj, MyMatrix* pMatView);
     virtual bool CheckForCollision(float x, float y);
 
     //virtual float TestCollision(int fingerid, float x, float y, bool fingerwentdown = true);

@@ -70,7 +70,7 @@ void MenuScrollBox::Tick(float deltaTime)
     MyClamp( m_ScrollAmount.y, m_MinScrollAmount.y, m_MaxScrollAmount.y );
 }
 
-void MenuScrollBox::Draw(MyMatrix* matviewproj)
+void MenuScrollBox::Draw(MyMatrix* pMatProj, MyMatrix* pMatView)
 {
     //MenuButton::Draw();
     if( m_Visible == false )
@@ -96,7 +96,7 @@ void MenuScrollBox::Draw(MyMatrix* matviewproj)
             if( bbox.y + bbox.h < m_ScreenBottom || bbox.y > m_ScreenTop )
                 continue;
 
-            m_pMenuItems[i]->Draw( matviewproj );
+            m_pMenuItems[i]->Draw( pMatProj, pMatView );
         }
     }
 }

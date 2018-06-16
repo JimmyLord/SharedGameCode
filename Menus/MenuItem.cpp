@@ -127,7 +127,7 @@ void MenuItem::Tick(float deltaTime)
         m_TweenOut.Tick( deltaTime );
 }
 
-void MenuItem::Draw(MyMatrix* matviewproj)
+void MenuItem::Draw(MyMatrix* pMatProj, MyMatrix* pMatView)
 {
 }
 

@@ -57,7 +57,7 @@ public:
 
     //virtual void StartClosing();
     //virtual void Tick(float deltaTime);
-    virtual void Draw(MyMatrix* matviewproj);
+    virtual void Draw(MyMatrix* pMatProj, MyMatrix* pMatView);
 
     //virtual float TestCollision(int fingerid, float x, float y, bool fingerwentdown = true);
     //virtual bool HoldOnCollision(int fingerid, float x, float y, bool releaseifnottouching, bool fingerwentdown = true);

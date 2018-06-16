@@ -24,7 +24,7 @@ public:
     MenuInputBox();
     virtual ~MenuInputBox();
 
-    virtual void Draw(MyMatrix* matviewproj);
+    virtual void Draw(MyMatrix* pMatProj, MyMatrix* pMatView);
 
     virtual const char* TriggerOnCollision(int fingerid, float x, float y, bool careifheld, bool releaseifnocollision = true); // returns the action triggered, -1 is no action.
 

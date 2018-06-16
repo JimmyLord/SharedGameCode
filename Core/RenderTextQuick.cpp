@@ -26,7 +26,8 @@ RenderTextQuickGlobals::RenderTextQuickGlobals()
 {
     MyAssert( g_pMaterialManager );
 
-    m_pMatViewProj = 0;
+    m_pMatProj = 0;
+    m_pMatView = 0;
 
     m_BatchMode = false;
     m_pBatchTexture = 0;
@@ -461,7 +462,7 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
 
                         if( pShader->ActivateAndProgramShader(
                             g_pRTQGlobals->m_pVertexBufferIDImmediate, 0, GL_UNSIGNED_SHORT,
-                            g_pRTQGlobals->m_pMatViewProj, //&g_pGame->m_OrthoMatrixGameSize,
+                            g_pRTQGlobals->m_pMatProj, g_pRTQGlobals->m_pMatView, //&g_pGame->m_OrthoMatrixGameSize,
                             &position, g_pRTQGlobals->m_pMaterial ) )
                         //if( pShader->ActivateAndProgramShader( &g_pGame->m_OrthoMatrixGameSize,
                         //    &position, pVertToDraws, pFont->m_pTextureDef->m_TextureID ) )
@@ -558,7 +559,7 @@ void RenderTextQuickBatchEnd()
 
             if( pShader->ActivateAndProgramShader(
                     g_pRTQGlobals->m_pVertexBuffer, 0, GL_UNSIGNED_SHORT,
-                    g_pRTQGlobals->m_pMatViewProj, //&g_pGame->m_OrthoMatrixGameSize,
+                    g_pRTQGlobals->m_pMatProj, g_pRTQGlobals->m_pMatView, //&g_pGame->m_OrthoMatrixGameSize,
                     &position, g_pRTQGlobals->m_pMaterial ) )
             {
     #if USE_D3D

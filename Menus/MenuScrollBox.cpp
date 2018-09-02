@@ -290,39 +290,39 @@ MenuItemTypes MenuScrollBox::GetMenuItemType(int index)
     return m_pMenuItems[index]->m_MenuItemType;
 }
 
-#define GETMENUTYPE(index, type, typeclass) \
+#define GETMENUTYPE_Scrollbox(index, type, typeclass) \
     MyAssert( m_pMenuItems[index]->m_MenuItemType == type ); \
     if( m_pMenuItems[index]->m_MenuItemType != type ) return 0; \
     return (typeclass*)m_pMenuItems[index];
 
 MenuSprite* MenuScrollBox::GetMenuSprite(int index)
 {
-    GETMENUTYPE( index, MIT_Sprite, MenuSprite );
+    GETMENUTYPE_Scrollbox( index, MIT_Sprite, MenuSprite );
 }
 
 MenuText* MenuScrollBox::GetMenuText(int index)
 {
-    GETMENUTYPE( index, MIT_Text, MenuText );
+    GETMENUTYPE_Scrollbox( index, MIT_Text, MenuText );
 }
 
 MenuButton* MenuScrollBox::GetMenuButton(int index)
 {
-    GETMENUTYPE( index, MIT_Button, MenuButton );
+    GETMENUTYPE_Scrollbox( index, MIT_Button, MenuButton );
 }
 
 MenuScrollBox* MenuScrollBox::GetMenuScrollBox(int index)
 {
-    GETMENUTYPE( index, MIT_ScrollBox, MenuScrollBox );
+    GETMENUTYPE_Scrollbox( index, MIT_ScrollBox, MenuScrollBox );
 }
 
 MenuScrollingText* MenuScrollBox::GetMenuScrollingText(int index)
 {
-    GETMENUTYPE( index, MIT_ScrollingText, MenuScrollingText );
+    GETMENUTYPE_Scrollbox( index, MIT_ScrollingText, MenuScrollingText );
 }
 
 MenuInputBox* MenuScrollBox::GetMenuInputBox(int index)
 {
-    GETMENUTYPE( index, MIT_InputBox, MenuInputBox );
+    GETMENUTYPE_Scrollbox( index, MIT_InputBox, MenuInputBox );
 }
 
 MenuSprite* MenuScrollBox::CreateMenuSprite(int index)

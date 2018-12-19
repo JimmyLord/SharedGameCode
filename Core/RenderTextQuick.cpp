@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2012-2016 Jimmy Lord http://www.flatheadgames.com
+// Copyright (c) 2012-2018 Jimmy Lord http://www.flatheadgames.com
 //
 // This software is provided 'as-is', without any express or implied warranty.  In no event will the authors be held liable for any damages arising from the use of this software.
 // Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
@@ -9,6 +9,8 @@
 
 #include "SharedCommonHeader.h"
 #include "../Menus/LanguageTable.h"
+#include "../Framework/MyFramework/SourceCommon/Renderers/Renderer_Enums.h"
+#include "../Framework/MyFramework/SourceCommon/Renderers/Renderer_Base.h"
 #include "RenderTextQuick.h"
 
 int g_TextShadowStyleLetterCount[TextShadowStyle_NumStyles] =
@@ -461,7 +463,7 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
                         }
 
                         if( pShader->ActivateAndProgramShader(
-                            g_pRTQGlobals->m_pVertexBufferIDImmediate, 0, GL_UNSIGNED_SHORT,
+                            g_pRTQGlobals->m_pVertexBufferIDImmediate, 0, MyRE::IndexType_U16,
                             g_pRTQGlobals->m_pMatProj, g_pRTQGlobals->m_pMatView, //&g_pGame->m_OrthoMatrixGameSize,
                             &position, g_pRTQGlobals->m_pMaterial ) )
                         //if( pShader->ActivateAndProgramShader( &g_pGame->m_OrthoMatrixGameSize,
@@ -470,8 +472,8 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
     #if USE_D3D
                             g_pD3DContext->Draw( textstrlen*6, 0 );
     #else
-                            MyDrawArrays( GL_TRIANGLES, 0, textstrlen*6, false );
-                            //MyDrawElements( GL_TRIANGLES, textstrlen*6, GL_UNSIGNED_SHORT, 0 );   //The starting point of the IBO
+                            g_pRenderer->DrawArrays( MyRE::PrimitiveType_Triangles, 0, textstrlen*6, false );
+                            //g_pRenderer->DrawElements( MyRE::PrimitiveType_Triangles, textstrlen*6, MyRE::IndexType_U16, 0 );   //The starting point of the IBO
     #endif
                             pShader->DeactivateShader( g_pRTQGlobals->m_pVertexBufferIDImmediate, true );
                         }
@@ -558,16 +560,16 @@ void RenderTextQuickBatchEnd()
             g_pRTQGlobals->m_pMaterial->SetTextureColor( g_pRTQGlobals->m_pBatchTexture );
 
             if( pShader->ActivateAndProgramShader(
-                    g_pRTQGlobals->m_pVertexBuffer, 0, GL_UNSIGNED_SHORT,
+                    g_pRTQGlobals->m_pVertexBuffer, 0, MyRE::IndexType_U16,
                     g_pRTQGlobals->m_pMatProj, g_pRTQGlobals->m_pMatView, //&g_pGame->m_OrthoMatrixGameSize,
                     &position, g_pRTQGlobals->m_pMaterial ) )
             {
     #if USE_D3D
                 //g_pD3DContext->Draw( textstrlen*6, 0 );
-                MyDrawArrays( GL_TRIANGLES, 0, g_pRTQGlobals->m_BatchNumLetters*6, false );
+                g_pRenderer->DrawArrays( GL_TRIANGLES, 0, g_pRTQGlobals->m_BatchNumLetters*6, false );
     #else
-                MyDrawArrays( GL_TRIANGLES, 0, g_pRTQGlobals->m_BatchNumLetters*6, false );
-                //MyDrawElements( GL_TRIANGLES, textstrlen*6, GL_UNSIGNED_SHORT, 0, false );   //The starting point of the IBO
+                g_pRenderer->DrawArrays( MyRE::PrimitiveType_Triangles, 0, g_pRTQGlobals->m_BatchNumLetters*6, false );
+                //g_pRenderer->DrawElements( MyRE::PrimitiveType_Triangles, textstrlen*6, MyRE::IndexType_U16, 0, false );   //The starting point of the IBO
     #endif
                 pShader->DeactivateShader( g_pRTQGlobals->m_pVertexBuffer, true );
             }

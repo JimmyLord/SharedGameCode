@@ -181,8 +181,8 @@ void MenuText::Draw(MyMatrix* pMatProj, MyMatrix* pMatView)
             // create a material for the font on the stack and set it. TODO: do better...
             MaterialDefinition pTempMaterial;
             pTempMaterial.SetShader( g_pShaderGroupManager->FindShaderGroupByName( "Shader_TextureVertexColor" ) );
-            pTempMaterial.SetBlendType( MaterialBlendType_On );
-            pTempMaterial.SetTextureColor( m_pFont->m_pTextureDef );
+            pTempMaterial.SetBlendType( MyRE::MaterialBlendType_On );
+            pTempMaterial.SetTextureColor( m_pFont->GetTexture() );
             m_pMeshText->SetMaterial( &pTempMaterial, 0 );
             m_pMeshText->Draw( pMatProj, pMatView, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
             m_pMeshText->SetMaterial( 0, 0 );

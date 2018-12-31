@@ -146,7 +146,7 @@ cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int nu
                     cJSONExt_AddNumberToObjectIfDiffers( menuitem, "Justify", (unsigned char)pMenuText->m_Justification, (unsigned char)Justify_Center );
 
                     if( pMenuText->GetFont() )
-                        cJSON_AddStringToObject( menuitem, "Font", pMenuText->GetFont()->m_pFile->GetFullPath() );
+                        cJSON_AddStringToObject( menuitem, "Font", pMenuText->GetFont()->GetFile()->GetFullPath() );
 
                     if( pMenuText->m_String[0] != 0 )
                         cJSON_AddStringToObject( menuitem, "String", pMenuText->m_String );
@@ -188,7 +188,7 @@ cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int nu
                     }
 
                     if( pMenuButton->m_pFont )
-                        cJSON_AddStringToObject( menuitem, "Font", pMenuButton->m_pFont->m_pFile->GetFullPath() );
+                        cJSON_AddStringToObject( menuitem, "Font", pMenuButton->m_pFont->GetFile()->GetFullPath() );
 
                     if( pMenuButton->m_Strings[0][0] != 0 )
                         cJSON_AddStringToObject( menuitem, "String1", pMenuButton->m_Strings[0] );

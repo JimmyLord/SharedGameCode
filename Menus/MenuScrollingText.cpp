@@ -124,7 +124,7 @@ void MenuScrollingText::Draw(MyMatrix* pMatProj, MyMatrix* pMatView)
     // TODO: MYENGINE
     //m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
     m_pMaterial->SetShader( g_pShaderGroupManager->FindShaderGroupByName( "Shader_TextureVertexColor" ) );
-    m_pMaterial->SetTextureColor( m_pFont->m_pTextureDef );
+    m_pMaterial->SetTextureColor( m_pFont->GetTexture() );
     m_peTextMesh->SetMaterial( m_pMaterial, 0 );
     //m_peTextMesh->Draw( &g_pGame->m_OrthoMatrixGameSize, 0, 0, 0, 0, 0, 0, 0 );
     m_peTextMesh->Draw( pMatProj, pMatView, 0, 0, 0, 0, 0, 0, 0, 0, 0 );

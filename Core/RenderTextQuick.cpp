@@ -13,6 +13,10 @@
 #include "../Framework/MyFramework/SourceCommon/Renderers/Renderer_Base.h"
 #include "RenderTextQuick.h"
 
+// TODO: Fix GL Includes.
+#include <gl/GL.h>
+#include "../Framework/MyFramework/SourceCommon/GL/GLext.h"
+
 int g_TextShadowStyleLetterCount[TextShadowStyle_NumStyles] =
 {
     1,
@@ -76,7 +80,7 @@ Vector2 GetStringSize(FontDefinition* pFont, float fontheight, const char* text,
     vsnprintf_s( tempbuffer, sizeof(tempbuffer), _TRUNCATE, stringtodraw, arg );
     va_end(arg);
 
-    return pFont->m_pBMFont->GetSize( tempbuffer, fontheight );
+    return pFont->GetBMFont()->GetSize( tempbuffer, fontheight );
 }
 
 int RenderTextQuick(FontDefinition* pFont, float fontheight, float x, float y, unsigned char justificationflags, const char* text, ...)
@@ -278,7 +282,7 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
 
     int numlines = 0;
 
-    if( pFont && pFont->m_pBMFont && pFont->m_pTextureDef && pFont->m_pTextureDef->GetTextureID() )
+    if( pFont && pFont->GetBMFont() && pFont->GetTexture() && pFont->GetTexture()->GetTextureID() )
     {
         bool moretexttocome = true;
         const char* stringpos = stringtodraw;
@@ -370,7 +374,7 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
                 g_pRTQGlobals->m_pVertexBuffer = g_pBufferManager->CreateBuffer( 0, sizeof(Vertex_XYZUV_RGBA)*g_pRTQGlobals->m_VBONumVerts, GL_ARRAY_BUFFER, GL_DYNAMIC_DRAW, false, 2, VertexFormat_XYZUV_RGBA, "RenderTextQuick", "Verts" );
             }
 
-            textstrlen = pFont->m_pBMFont->GenerateVerts( stringtodraw, false, pVertToDraws, fontheight, GL_TRIANGLES, justificationflags, color );
+            textstrlen = pFont->GetBMFont()->GenerateVerts( stringtodraw, false, pVertToDraws, fontheight, GL_TRIANGLES, justificationflags, color );
 
             MyMatrix position;
             position.SetIdentity();
@@ -395,7 +399,7 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
                     pVertToDraws[i].z = out.z;
                 }
 
-                if( g_pRTQGlobals->m_pBatchTexture != pFont->m_pTextureDef ||
+                if( g_pRTQGlobals->m_pBatchTexture != pFont->GetTexture() ||
                     (g_pRTQGlobals->m_BatchNumLetters + textstrlen)*6 > g_pRTQGlobals->m_VBONumVerts )
                 {
                     LOGInfo( LOGTag, "RenderTextQuick Batch Forced to render, look into it\n" );
@@ -453,7 +457,7 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
 
                         // TODO: MYENGINE
                         //g_pRTQGlobals->m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
-                        g_pRTQGlobals->m_pMaterial->SetTextureColor( pFont->m_pTextureDef );
+                        g_pRTQGlobals->m_pMaterial->SetTextureColor( pFont->GetTexture() );
 
                         // Enable blending if necessary. TODO: sort draws and only set this once.
                         if( g_pRTQGlobals->m_pMaterial->IsTransparent( pShader ) )
@@ -467,7 +471,7 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
                             g_pRTQGlobals->m_pMatProj, g_pRTQGlobals->m_pMatView, //&g_pGame->m_OrthoMatrixGameSize,
                             &position, g_pRTQGlobals->m_pMaterial ) )
                         //if( pShader->ActivateAndProgramShader( &g_pGame->m_OrthoMatrixGameSize,
-                        //    &position, pVertToDraws, pFont->m_pTextureDef->m_TextureID ) )
+                        //    &position, pVertToDraws, pFont->GetTexture()->m_TextureID ) )
                         {
     #if USE_D3D
                             g_pD3DContext->Draw( textstrlen*6, 0 );
@@ -498,12 +502,12 @@ void RenderTextQuickBatchStart(FontDefinition* pFont)
 {
     MyAssert( g_pRTQGlobals );
     MyAssert( pFont );
-    MyAssert( pFont->m_pTextureDef );
-    MyAssert( pFont->m_pTextureDef->GetTextureID() );
+    MyAssert( pFont->GetTexture() );
+    MyAssert( pFont->GetTexture()->GetTextureID() );
 
     if( g_pRTQGlobals->m_BatchMode == true && g_pRTQGlobals->m_BatchNumLetters )
     {
-        if( g_pRTQGlobals->m_pBatchTexture == pFont->m_pTextureDef )
+        if( g_pRTQGlobals->m_pBatchTexture == pFont->GetTexture() )
         {
             LOGInfo( LOGTag, "RenderTextQuickBatchStart called without endbatch and with same texture\n" );
         }
@@ -515,7 +519,7 @@ void RenderTextQuickBatchStart(FontDefinition* pFont)
     }
 
     g_pRTQGlobals->m_BatchMode = true;
-    g_pRTQGlobals->m_pBatchTexture = pFont->m_pTextureDef;
+    g_pRTQGlobals->m_pBatchTexture = pFont->GetTexture();
     g_pRTQGlobals->m_BatchNumLetters = 0;
 }
 

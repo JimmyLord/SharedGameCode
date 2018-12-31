@@ -15,6 +15,9 @@
 #include "MenuButton.h"
 #include "../Camera/SharedCamera3D.h"
 
+// TODO: Fix GL Includes.
+#include "../Framework/MyFramework/SourceCommon/Shaders/GLHelpers.h"
+
 ColorByte MenuButtonColors[MBCT_NumColors] =
 {
     ColorByte(255,255,255,255), //100,100,150,255), //255,81,205,255),  // MBCT_SelectableBG
@@ -529,8 +532,8 @@ void MenuButton::Draw(MyMatrix* pMatProj, MyMatrix* pMatView)
         MaterialDefinition pTempMaterial;
         //m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
         pTempMaterial.SetShader( g_pShaderGroupManager->FindShaderGroupByName( "Shader_TextureVertexColor" ) );
-        pTempMaterial.SetBlendType( MaterialBlendType_On );
-        pTempMaterial.SetTextureColor( m_pFont->m_pTextureDef );
+        pTempMaterial.SetBlendType( MyRE::MaterialBlendType_On );
+        pTempMaterial.SetTextureColor( m_pFont->GetTexture() );
         m_pMeshText->SetMaterial( &pTempMaterial, 0 );
         m_pMeshText->Draw( pMatProj, pMatView, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
         m_pMeshText->SetMaterial( 0, 0 );

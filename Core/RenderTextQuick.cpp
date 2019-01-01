@@ -369,12 +369,12 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
                 g_pRTQGlobals->m_VBONumVerts = 1200*6;
 
                 // create a large buffer...
-                g_pRTQGlobals->m_pVertexBufferIDImmediate = g_pBufferManager->CreateBuffer( 0, sizeof(Vertex_XYZUV_RGBA)*100*6, GL_ARRAY_BUFFER, GL_DYNAMIC_DRAW, true, 2, VertexFormat_XYZUV_RGBA, "RenderTextQuick", "VertsImmediate" );
+                g_pRTQGlobals->m_pVertexBufferIDImmediate = g_pBufferManager->CreateBuffer( 0, sizeof(Vertex_XYZUV_RGBA)*100*6, MyRE::BufferType_Vertex, MyRE::BufferUsage_DynamicDraw, true, 2, VertexFormat_XYZUV_RGBA, "RenderTextQuick", "VertsImmediate" );
 
-                g_pRTQGlobals->m_pVertexBuffer = g_pBufferManager->CreateBuffer( 0, sizeof(Vertex_XYZUV_RGBA)*g_pRTQGlobals->m_VBONumVerts, GL_ARRAY_BUFFER, GL_DYNAMIC_DRAW, false, 2, VertexFormat_XYZUV_RGBA, "RenderTextQuick", "Verts" );
+                g_pRTQGlobals->m_pVertexBuffer = g_pBufferManager->CreateBuffer( 0, sizeof(Vertex_XYZUV_RGBA)*g_pRTQGlobals->m_VBONumVerts, MyRE::BufferType_Vertex, MyRE::BufferUsage_DynamicDraw, false, 2, VertexFormat_XYZUV_RGBA, "RenderTextQuick", "Verts" );
             }
 
-            textstrlen = pFont->GetBMFont()->GenerateVerts( stringtodraw, false, pVertToDraws, fontheight, GL_TRIANGLES, justificationflags, color );
+            textstrlen = pFont->GetBMFont()->GenerateVerts( stringtodraw, false, pVertToDraws, fontheight, justificationflags, color );
 
             MyMatrix position;
             position.SetIdentity();
@@ -462,8 +462,8 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
                         // Enable blending if necessary. TODO: sort draws and only set this once.
                         if( g_pRTQGlobals->m_pMaterial->IsTransparent( pShader ) )
                         {
-                            glEnable( GL_BLEND );
-                            glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+                            g_pRenderer->SetBlendEnabled( true );
+                            g_pRenderer->SetBlendFunc( MyRE::BlendFactor_SrcAlpha, MyRE::BlendFactor_OneMinusSrcAlpha );
                         }
 
                         if( pShader->ActivateAndProgramShader(
@@ -482,8 +482,8 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
                             pShader->DeactivateShader( g_pRTQGlobals->m_pVertexBufferIDImmediate, true );
                         }
 
-                        // always disable blending
-                        glDisable( GL_BLEND );
+                        // Always disable blending.
+                        g_pRenderer->SetBlendEnabled( false );
                     }
                 }
             }
@@ -555,8 +555,8 @@ void RenderTextQuickBatchEnd()
             // Enable blending if necessary. TODO: sort draws and only set this once.
             if( g_pRTQGlobals->m_pMaterial->IsTransparent( pShader ) )
             {
-                glEnable( GL_BLEND );
-                glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+                g_pRenderer->SetBlendEnabled( true );
+                g_pRenderer->SetBlendFunc( MyRE::BlendFactor_SrcAlpha, MyRE::BlendFactor_OneMinusSrcAlpha );
             }
 
             // TODO: MYENGINE
@@ -578,8 +578,8 @@ void RenderTextQuickBatchEnd()
                 pShader->DeactivateShader( g_pRTQGlobals->m_pVertexBuffer, true );
             }
 
-            // always disable blending
-            glDisable( GL_BLEND );
+            // Always disable blending.
+            g_pRenderer->SetBlendEnabled( false );
         }
     }
 

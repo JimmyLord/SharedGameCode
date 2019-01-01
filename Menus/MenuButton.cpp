@@ -15,9 +15,6 @@
 #include "MenuButton.h"
 #include "../Camera/SharedCamera3D.h"
 
-// TODO: Fix GL Includes.
-#include "../Framework/MyFramework/SourceCommon/Shaders/GLHelpers.h"
-
 ColorByte MenuButtonColors[MBCT_NumColors] =
 {
     ColorByte(255,255,255,255), //100,100,150,255), //255,81,205,255),  // MBCT_SelectableBG
@@ -541,8 +538,6 @@ void MenuButton::Draw(MyMatrix* pMatProj, MyMatrix* pMatView)
         pTempMaterial.RemoveFinalRefIfCreatedOnStackToAvoidAssertInDestructor();
 #endif
     }
-
-    checkGlError( "end of MenuButton::Draw()" );
 }
 
 bool MenuButton::CheckForCollision(float x, float y)

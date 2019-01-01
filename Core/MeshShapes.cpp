@@ -12,9 +12,6 @@
 #include "../Core/MeshShapes.h"
 #include "../Menus/LanguageTable.h"
 
-// TODO: Fix GL Includes.
-#include <gl/GL.h>
-
 MyMeshText::MyMeshText(int maxletters, FontDefinition* pFont)
 {
     m_pFont = pFont;
@@ -412,7 +409,7 @@ int MyMeshText::CreateString(bool concat, float fontheight, float x, float y, fl
 
         pVertsToDraw += m_SubmeshList[0]->m_NumVertsToDraw;
 
-        unsigned int textstrlen = m_pFont->GetBMFont()->GenerateVerts( stringtodraw, true, pVertsToDraw, fontheight, GL_TRIANGLES, justificationflags, color );
+        unsigned int textstrlen = m_pFont->GetBMFont()->GenerateVerts( stringtodraw, true, pVertsToDraw, fontheight, justificationflags, color );
 
         m_SubmeshList[0]->m_NumVertsToDraw += (unsigned short)(textstrlen * 4);
         m_SubmeshList[0]->m_NumIndicesToDraw += textstrlen * 6;

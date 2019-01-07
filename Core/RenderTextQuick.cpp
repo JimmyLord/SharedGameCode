@@ -9,8 +9,9 @@
 
 #include "SharedCommonHeader.h"
 #include "../Menus/LanguageTable.h"
-#include "../Framework/MyFramework/SourceCommon/Renderers/Renderer_Enums.h"
-#include "../Framework/MyFramework/SourceCommon/Renderers/Renderer_Base.h"
+#include "../Framework/MyFramework/SourceCommon/Renderers/BaseClasses/Renderer_Enums.h"
+#include "../Framework/MyFramework/SourceCommon/Renderers/BaseClasses/Renderer_Base.h"
+#include "../Framework/MyFramework/SourceCommon/Renderers/BaseClasses/Shader_Base.h"
 #include "RenderTextQuick.h"
 
 // TODO: Fix GL Includes.
@@ -409,7 +410,9 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
 
                 int offset = sizeof(Vertex_XYZUV_RGBA)*g_pRTQGlobals->m_BatchNumLetters*6;
                 int size = sizeof(Vertex_XYZUV_RGBA)*textstrlen*6;
-                memcpy( &g_pRTQGlobals->m_pVertexBuffer->m_pData[offset], pVertToDraws, size );
+
+                char* pVerts = (char*)g_pRTQGlobals->m_pVertexBuffer->GetData( true );
+                memcpy( &pVerts[offset], pVertToDraws, size );
 
                 g_pRTQGlobals->m_BatchNumLetters += textstrlen;
 
@@ -449,17 +452,18 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
                     if( pShader )
                     {
                         int size = sizeof(Vertex_XYZUV_RGBA)*textstrlen*6;
-                        memcpy( &g_pRTQGlobals->m_pVertexBufferIDImmediate->m_pData[0], pVertToDraws, size );
+                        
+                        Vertex_XYZUV_RGBA* pVerts = (Vertex_XYZUV_RGBA*)g_pRTQGlobals->m_pVertexBufferIDImmediate->GetData( true );
+                        memcpy( pVerts, pVertToDraws, size );
                         //(Vertex_XYZUV_RGBA*)g_pRTQGlobals->m_pVertexBufferIDImmediate->m_pData,6
 
-                        g_pRTQGlobals->m_pVertexBufferIDImmediate->m_Dirty = true;
                         g_pRTQGlobals->m_pVertexBufferIDImmediate->Rebuild( 0, sizeof(Vertex_XYZUV_RGBA)*textstrlen*6 );
 
                         // TODO: MYENGINE
                         //g_pRTQGlobals->m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
                         g_pRTQGlobals->m_pMaterial->SetTextureColor( pFont->GetTexture() );
 
-                        // Enable blending if necessary. TODO: sort draws and only set this once.
+                        // Enable blending if necessary. TODO: Sort draws and only set this once.
                         if( g_pRTQGlobals->m_pMaterial->IsTransparent( pShader ) )
                         {
                             g_pRenderer->SetBlendEnabled( true );
@@ -539,10 +543,9 @@ void RenderTextQuickBatchEnd()
     MyMatrix position;
     position.SetIdentity();
 
-    // rebuild buffer if dirty.
-    g_pRTQGlobals->m_pVertexBuffer->m_Dirty = true;
+    // Rebuild buffer if dirty.
     g_pRTQGlobals->m_pVertexBuffer->Rebuild( 0, sizeof(Vertex_XYZUV_RGBA)*g_pRTQGlobals->m_BatchNumLetters*6 );
-    MyAssert( g_pRTQGlobals->m_pVertexBuffer->m_Dirty == false );
+    MyAssert( g_pRTQGlobals->m_pVertexBuffer->IsDirty() == false );
 
     // TODO: MYENGINE
     //Shader_Base* pShader = 0;//(Shader_Base*)g_pGame->m_pShader_TextureVertexColor->GlobalPass();

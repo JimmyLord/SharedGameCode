@@ -14,10 +14,6 @@
 #include "../Framework/MyFramework/SourceCommon/Renderers/BaseClasses/Shader_Base.h"
 #include "RenderTextQuick.h"
 
-// TODO: Fix GL Includes.
-#include <gl/GL.h>
-#include "../Framework/MyFramework/SourceCommon/GL/GLext.h"
-
 int g_TextShadowStyleLetterCount[TextShadowStyle_NumStyles] =
 {
     1,

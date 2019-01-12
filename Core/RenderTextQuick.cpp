@@ -279,7 +279,7 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
 
     int numlines = 0;
 
-    if( pFont && pFont->GetBMFont() && pFont->GetTexture() && pFont->GetTexture()->GetTextureID() )
+    if( pFont && pFont->GetBMFont() && pFont->GetTexture() && pFont->GetTexture()->IsFullyLoaded() )
     {
         bool moretexttocome = true;
         const char* stringpos = stringtodraw;
@@ -503,7 +503,7 @@ void RenderTextQuickBatchStart(FontDefinition* pFont)
     MyAssert( g_pRTQGlobals );
     MyAssert( pFont );
     MyAssert( pFont->GetTexture() );
-    MyAssert( pFont->GetTexture()->GetTextureID() );
+    MyAssert( pFont->GetTexture()->IsFullyLoaded() );
 
     if( g_pRTQGlobals->m_BatchMode == true && g_pRTQGlobals->m_BatchNumLetters )
     {

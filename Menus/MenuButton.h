@@ -11,6 +11,7 @@
 #define __MenuButton_H__
 
 #include "MenuItem.h"
+#include "../Core/RenderTextQuick.h"
 
 class MyMeshText;
 class SharedCamera3D;

@@ -10,6 +10,8 @@
 #ifndef __MeshShapes_H__
 #define __MeshShapes_H__
 
+#include "RenderTextQuick.h"
+
 class MyMeshText : public MyMesh
 {
 public:

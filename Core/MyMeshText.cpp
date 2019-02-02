@@ -9,7 +9,7 @@
 
 #include "SharedCommonHeader.h"
 #include "../Core/RenderTextQuick.h"
-#include "../Core/MeshShapes.h"
+#include "../Core/MyMeshText.h"
 #include "../Menus/LanguageTable.h"
 
 MyMeshText::MyMeshText(int maxletters, FontDefinition* pFont)

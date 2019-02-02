@@ -67,23 +67,6 @@ enum MenuNavDir
     MenuNavDir_Left,
 };
 
-#if MYFW_USING_WX
-typedef void (*MenuItemDeletedCallbackFunc)(void* pObjectPtr, MenuItem* pMenuItem);
-struct MenuItemDeletedCallbackStruct
-{
-    void* pObj;
-    MenuItemDeletedCallbackFunc pFunc;
-};
-#endif
-
-#if MYFW_USING_WX
-class MenuItemEventHandler : public wxEvtHandler
-{
-public:
-    void OnPopupClick(wxEvent &evt);
-};
-#endif
-
 class MenuItem
 {
 public:
@@ -152,28 +135,6 @@ public:
     virtual MyRect GetBoundingRect() { return MyRect(0,0,0,0); }
 
     virtual void SetNavigable(bool navigable) { m_Navigable = navigable; }
-
-#if MYFW_USING_WX
-    static void StaticFillPropertiesWindow(void* pObjectPtr, wxTreeItemId id, unsigned int count) { ((MenuItem*)pObjectPtr)->FillPropertiesWindow(); }
-    void FillPropertiesWindow();
-
-    // Object panel callbacks.
-    MenuItemEventHandler m_MenuItemEventHandler;
-    static void StaticOnRightClick(void* pObjectPtr, wxTreeItemId id) { ((MenuItem*)pObjectPtr)->OnRightClick(); }
-    virtual void OnRightClick();
-
-    MenuItemDeletedCallbackStruct m_MenuItemDeletedCallbackStruct;
-    void RegisterMenuItemDeletedCallback(void* pObj, MenuItemDeletedCallbackFunc pFunc);
-
-    static void StaticOnLabelEdit(void* pObjectPtr, wxTreeItemId id, wxString newlabel) { ((MenuItem*)pObjectPtr)->OnLabelEdit( newlabel ); }
-    void OnLabelEdit(wxString newlabel);
-
-    static void StaticOnAnchorTypeChanged(void* pObjectPtr, int controlid, bool directlychanged, bool finishedchanging, double oldvalue, bool valuewaschangedbydragging) { ((MenuItem*)pObjectPtr)->OnAnchorTypeChanged( controlid, finishedchanging, oldvalue ); }
-    void OnAnchorTypeChanged(int controlid, bool finishedchanging, double oldvalue);    
-
-    static void StaticOnDrag(void* pObjectPtr) { ((MenuItem*)pObjectPtr)->OnDrag(); }
-    void OnDrag();
-#endif //MYFW_USING_WX
 
     void SetMenuItemNavigation(int up, int right, int down, int left);
     int GetMenuItemNavigation(MenuNavDir dir);

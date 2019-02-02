@@ -7,8 +7,8 @@
 // 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
-#ifndef __MeshShapes_H__
-#define __MeshShapes_H__
+#ifndef __MyMeshText_H__
+#define __MyMeshText_H__
 
 #include "RenderTextQuick.h"
 
@@ -43,4 +43,4 @@ public:
     int CreateString(bool concat, float fontheight, float x, float y, float z, float rotz, unsigned char justificationflags, ColorByte color, Vector2 size, const char* text, ...);
 };
 
-#endif //__MeshShapes_H__
+#endif //__MyMeshText_H__

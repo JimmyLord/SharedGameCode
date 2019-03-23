@@ -23,7 +23,7 @@ MenuText::MenuText()
     m_pMaterial = g_pMaterialManager->CreateMaterial();
 
     int maxletters = MAX_MenuText_STRING;
-    m_pMeshText = MyNew MyMeshText( maxletters, 0 );
+    m_pMeshText = MyNew MyMeshText( maxletters, 0, g_pMeshManager );
     m_MeshAllocatedLocally = true;
     m_DrawAsPartOfBatch = false;
 
@@ -57,11 +57,11 @@ MenuText::MenuText(int maxletters)
     m_pMaterial = g_pMaterialManager->CreateMaterial();
 
     if( maxletters == -1 )
-        m_pMeshText = MyNew MyMeshText( MAX_MenuText_STRING*2, 0 );
+        m_pMeshText = MyNew MyMeshText( MAX_MenuText_STRING*2, 0, g_pMeshManager );
     else if( maxletters > 0 )
-        m_pMeshText = MyNew MyMeshText( maxletters, 0 );
+        m_pMeshText = MyNew MyMeshText( maxletters, 0, g_pMeshManager );
     else
-        m_pMeshText = MyNew MyMeshText( MAX_MenuText_STRING, 0 );
+        m_pMeshText = MyNew MyMeshText( MAX_MenuText_STRING, 0, g_pMeshManager );
 
     m_MeshAllocatedLocally = true;
     m_DrawAsPartOfBatch = false;

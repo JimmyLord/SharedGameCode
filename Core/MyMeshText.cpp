@@ -8,11 +8,13 @@
 // 3. This notice may not be removed or altered from any source distribution.
 
 #include "SharedCommonHeader.h"
+#include "../../Framework/MyFramework/SourceCommon/Meshes/MeshManager.h"
 #include "../Core/RenderTextQuick.h"
 #include "../Core/MyMeshText.h"
 #include "../Menus/LanguageTable.h"
 
-MyMeshText::MyMeshText(int maxletters, FontDefinition* pFont)
+MyMeshText::MyMeshText(int maxletters, FontDefinition* pFont, MeshManager* pMeshManager)
+: MyMesh()
 {
     m_pFont = pFont;
 
@@ -22,7 +24,7 @@ MyMeshText::MyMeshText(int maxletters, FontDefinition* pFont)
 #endif
 
     // Create buffers and base set of indices.
-    VertexFormat_Dynamic_Desc* pVertFormat = g_pVertexFormatManager->GetDynamicVertexFormat( 1, false, false, false, true, 0 );
+    VertexFormat_Dynamic_Desc* pVertFormat = pMeshManager->GetVertexFormatManager()->GetDynamicVertexFormat( 1, false, false, false, true, 0 );
     CreateOneSubmeshWithBuffers( pVertFormat, (unsigned short)maxletters*4, 2, maxletters*6, true );
 
     unsigned short* pIndices = GetIndices( true );

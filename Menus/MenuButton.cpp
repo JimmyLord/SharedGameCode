@@ -78,9 +78,9 @@ MenuButton::MenuButton(int maxletters)
     //m_pMaterial = 0; //g_pMaterialManager->CreateMaterial();
 
     if( maxletters == -1 )
-        m_pMeshText = MyNew MyMeshText( 3*MAX_STRING_LENGTH, 0 );
+        m_pMeshText = MyNew MyMeshText( 3*MAX_STRING_LENGTH, 0, g_pMeshManager );
     else if( maxletters > 0 )
-        m_pMeshText = MyNew MyMeshText( maxletters, 0 );
+        m_pMeshText = MyNew MyMeshText( maxletters, 0, g_pMeshManager );
     else
         m_pMeshText = 0;
 
@@ -799,7 +799,7 @@ void MenuButton::SetString(const char* str1, const char* str2, const char* str3)
         int multiplier = 1;
         multiplier = g_TextShadowStyleLetterCount[m_TextShadowStyle];
 
-        m_pMeshText = MyNew MyMeshText( totallen * multiplier, 0 );
+        m_pMeshText = MyNew MyMeshText( totallen * multiplier, 0, g_pMeshManager );
     }
 }
 
@@ -826,7 +826,7 @@ void MenuButton::SetStringNumberFormatted(int stringnumber, const char* str1, ..
         int multiplier = 1;
         multiplier = g_TextShadowStyleLetterCount[m_TextShadowStyle];
 
-        m_pMeshText = MyNew MyMeshText( totallen * multiplier, 0 );
+        m_pMeshText = MyNew MyMeshText( totallen * multiplier, 0, g_pMeshManager );
     }
 }
 

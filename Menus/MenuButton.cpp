@@ -526,7 +526,7 @@ void MenuButton::Draw(MyMatrix* pMatProj, MyMatrix* pMatView)
     if( m_pFont && m_pMeshText )
     {
         // create a material for the font on the stack and set it. TODO: do better...
-        MaterialDefinition pTempMaterial;
+        MaterialDefinition pTempMaterial( g_pMaterialManager );
         //m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
         pTempMaterial.SetShader( g_pShaderGroupManager->FindShaderGroupByName( "Shader_TextureVertexColor" ) );
         pTempMaterial.SetBlendType( MyRE::MaterialBlendType_On );

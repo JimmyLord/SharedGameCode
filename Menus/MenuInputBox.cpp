@@ -12,8 +12,8 @@
 #include "../Core/RenderTextQuick.h"
 #include "MenuInputBox.h"
 
-MenuInputBox::MenuInputBox()
-: MenuButton(MaxStringLength)
+MenuInputBox::MenuInputBox(GameCore* pGameCore)
+: MenuButton( pGameCore, MaxStringLength )
 {
     m_MenuItemType = MIT_InputBox;
 

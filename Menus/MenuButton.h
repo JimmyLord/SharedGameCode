@@ -161,7 +161,7 @@ public:
     void PlaySound();
 
 public:
-    MenuButton(int maxletters);
+    MenuButton(GameCore* pGameCore, int maxletters);
     ~MenuButton();
 
     MenuButton& operator=(const MenuButton& other);

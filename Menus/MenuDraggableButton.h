@@ -16,7 +16,7 @@
 class MenuDraggableButton : public MenuButton
 {
 public:
-	MenuDraggableButton(int maxletters) : MenuButton( maxletters ) {}
+	MenuDraggableButton(GameCore* pGameCore, int maxletters) : MenuButton( pGameCore, maxletters ) {}
 
     virtual bool ReleaseOnNoCollision(int fingerid, float x, float y);
 };

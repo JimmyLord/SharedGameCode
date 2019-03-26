@@ -43,8 +43,9 @@ const char* MenuButton::m_MaterialNames[Materials_NumTypes] =
     "MatBG", "MatBGDisabled", "MatBGPressed", "MatBGOverlay", "MatShadow",
 };
 
-MenuButton::MenuButton(int maxletters)
-: m_TextShadowStyle(TextShadowStyle_Single)
+MenuButton::MenuButton(GameCore* pGameCore, int maxletters)
+: MenuItem( pGameCore )
+, m_TextShadowStyle(TextShadowStyle_Single)
 , m_TextOffset(0,0)
 , m_TextColor(255,255,255,255)
 , m_TextShadowColor(0,0,0,200)
@@ -261,7 +262,7 @@ void MenuButton::Draw(MyMatrix* pMatProj, MyMatrix* pMatView)
     // create a sprite if one doesn't exist.
     if( m_pSprite == 0 )
     {
-        m_pSprite = MyNew MySprite( false );
+        m_pSprite = MyNew MySprite();
         m_pSprite->Create( "MenuButton Sprite", 1, 1, 0, 1, 0, 1, Justify_Center, false );
     }
 
@@ -528,7 +529,7 @@ void MenuButton::Draw(MyMatrix* pMatProj, MyMatrix* pMatView)
         // create a material for the font on the stack and set it. TODO: do better...
         MaterialDefinition pTempMaterial( g_pMaterialManager );
         //m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
-        pTempMaterial.SetShader( g_pShaderGroupManager->FindShaderGroupByName( "Shader_TextureVertexColor" ) );
+        pTempMaterial.SetShader( m_pGameCore->GetManagers()->GetShaderGroupManager()->FindShaderGroupByName( "Shader_TextureVertexColor" ) );
         pTempMaterial.SetBlendType( MyRE::MaterialBlendType_On );
         pTempMaterial.SetTextureColor( m_pFont->GetTexture() );
         m_pMeshText->SetMaterial( &pTempMaterial, 0 );

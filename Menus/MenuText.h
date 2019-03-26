@@ -45,9 +45,9 @@ public:
 protected:
 
 public:
-    MenuText();
-    MenuText(int maxletters);
-    MenuText(MyMeshText* pMeshText);
+    MenuText(GameCore* pGameCore);
+    MenuText(GameCore* pGameCore, int maxletters);
+    MenuText(GameCore* pGameCore, MyMeshText* pMeshText);
     ~MenuText();
 
     MenuText& operator=(const MenuText& other);

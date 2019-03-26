@@ -59,7 +59,7 @@ public:
     MySprite* m_pSprite;
 
 public:
-    MenuSlider();
+    MenuSlider(GameCore* pGameCore);
     ~MenuSlider();
 
     void Draw(MyMatrix* pMatProj, MyMatrix* pMatView);

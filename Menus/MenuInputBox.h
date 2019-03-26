@@ -21,7 +21,7 @@ public:
     char m_InputBuffer[MaxStringLength+1];
 
 public:
-    MenuInputBox();
+    MenuInputBox(GameCore* pGameCore);
     virtual ~MenuInputBox();
 
     virtual void Draw(MyMatrix* pMatProj, MyMatrix* pMatView);

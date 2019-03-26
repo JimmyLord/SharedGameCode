@@ -19,7 +19,8 @@ ColorByte MenuSliderColors[MSCT_NumColors] =
     ColorByte(0,0,0,0),         // MSCT_BGColor
 };
 
-MenuSlider::MenuSlider()
+MenuSlider::MenuSlider(GameCore* pGameCore)
+: MenuItem( pGameCore )
 {
     m_Disabled = false;
 

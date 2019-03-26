@@ -46,7 +46,7 @@ protected:
     MaterialDefinition* m_pMaterials[Materials_NumTypes];
 
 public:
-    MenuSprite();
+    MenuSprite(GameCore* pGameCore);
     ~MenuSprite();
 
     MenuSprite& operator=(const MenuSprite& other);

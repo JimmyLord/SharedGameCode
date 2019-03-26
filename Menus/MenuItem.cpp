@@ -20,8 +20,10 @@ const char* MenuItemAnchorPointStrings[Anchor_NumTypes] =
     "Bottom Right",
 };
 
-MenuItem::MenuItem()
+MenuItem::MenuItem(GameCore* pGameCore)
 {
+    m_pGameCore = pGameCore;
+
     m_MenuItemType = MIT_Base;
 
     m_Name[0] = 0;

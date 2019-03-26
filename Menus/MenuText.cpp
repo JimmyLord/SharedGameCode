@@ -12,8 +12,9 @@
 #include "../Core/MyMeshText.h"
 #include "MenuText.h"
 
-MenuText::MenuText()
-: m_TextColor(255,255,255,255)
+MenuText::MenuText(GameCore* pGameCore)
+: MenuItem( pGameCore )
+, m_TextColor(255,255,255,255)
 , m_TextShadowColor(0,0,0,200)
 {
     m_MenuItemType = MIT_Text;
@@ -46,8 +47,9 @@ MenuText::MenuText()
     m_DropShadowOffsetY = -3; // must default to -3 for save/load
 }
 
-MenuText::MenuText(int maxletters)
-: m_TextColor(255,255,255,255)
+MenuText::MenuText(GameCore* pGameCore, int maxletters)
+: MenuItem( pGameCore )
+, m_TextColor(255,255,255,255)
 , m_TextShadowColor(0,0,0,200)
 {
     m_MenuItemType = MIT_Text;
@@ -77,8 +79,9 @@ MenuText::MenuText(int maxletters)
     m_DropShadowOffsetY = -3;
 }
 
-MenuText::MenuText(MyMeshText* pMeshText)
-: m_TextColor(255,255,255,255)
+MenuText::MenuText(GameCore* pGameCore, MyMeshText* pMeshText)
+: MenuItem( pGameCore )
+, m_TextColor(255,255,255,255)
 , m_TextShadowColor(0,0,0,200)
 {
     m_MenuItemType = MIT_Text;
@@ -180,7 +183,7 @@ void MenuText::Draw(MyMatrix* pMatProj, MyMatrix* pMatView)
         {
             // create a material for the font on the stack and set it. TODO: do better...
             MaterialDefinition pTempMaterial( g_pMaterialManager );
-            pTempMaterial.SetShader( g_pShaderGroupManager->FindShaderGroupByName( "Shader_TextureVertexColor" ) );
+            pTempMaterial.SetShader( m_pGameCore->GetManagers()->GetShaderGroupManager()->FindShaderGroupByName( "Shader_TextureVertexColor" ) );
             pTempMaterial.SetBlendType( MyRE::MaterialBlendType_On );
             pTempMaterial.SetTextureColor( m_pFont->GetTexture() );
             m_pMeshText->SetMaterial( &pTempMaterial, 0 );

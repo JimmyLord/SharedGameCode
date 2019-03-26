@@ -16,7 +16,8 @@
 #include "MenuItem.h"
 #include "MenuScrollingText.h"
 
-MenuScrollingText::MenuScrollingText()
+MenuScrollingText::MenuScrollingText(GameCore* pGameCore)
+: MenuScrollBox( pGameCore )
 {
     m_MenuItemType = MIT_ScrollingText;
 
@@ -123,7 +124,7 @@ void MenuScrollingText::Draw(MyMatrix* pMatProj, MyMatrix* pMatView)
 
     // TODO: MYENGINE
     //m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
-    m_pMaterial->SetShader( g_pShaderGroupManager->FindShaderGroupByName( "Shader_TextureVertexColor" ) );
+    m_pMaterial->SetShader( m_pGameCore->GetManagers()->GetShaderGroupManager()->FindShaderGroupByName( "Shader_TextureVertexColor" ) );
     m_pMaterial->SetTextureColor( m_pFont->GetTexture() );
     m_peTextMesh->SetMaterial( m_pMaterial, 0 );
     //m_peTextMesh->Draw( &g_pGame->m_OrthoMatrixGameSize, 0, 0, 0, 0, 0, 0, 0 );

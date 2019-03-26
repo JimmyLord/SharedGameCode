@@ -43,7 +43,7 @@ public:
     int m_ScreenBottom;
 
 public:
-    MenuScrollBox();
+    MenuScrollBox(GameCore* pGameCore);
     virtual ~MenuScrollBox();
 
     virtual void Tick(float deltaTime);
@@ -70,12 +70,12 @@ public:
     MenuScrollingText* GetMenuScrollingText(int index);
     MenuInputBox* GetMenuInputBox(int index);
 
-    MenuSprite* CreateMenuSprite(int index);
-    MenuText* CreateMenuText(int index, MyMeshText* pMeshText);
-    MenuButton* CreateMenuButton(int index);
-    MenuScrollBox* CreateMenuScrollBox(int index);
-    MenuScrollingText* CreateMenuScrollingText(int index);
-    MenuInputBox* CreateMenuInputBox(int index);
+    MenuSprite* CreateMenuSprite(GameCore* pGameCore, int index);
+    MenuText* CreateMenuText(GameCore* pGameCore, int index, MyMeshText* pMeshText);
+    MenuButton* CreateMenuButton(GameCore* pGameCore, int index);
+    MenuScrollBox* CreateMenuScrollBox(GameCore* pGameCore, int index);
+    MenuScrollingText* CreateMenuScrollingText(GameCore* pGameCore, int index);
+    MenuInputBox* CreateMenuInputBox(GameCore* pGameCore, int index);
 };
 
 #endif //__MenuScrollBox_H__

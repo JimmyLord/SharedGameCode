@@ -83,7 +83,7 @@ protected:
     void PlaySound();
 
 public:
-    MenuCheckBox();
+    MenuCheckBox(GameCore* pGameCore);
     ~MenuCheckBox();
 
     virtual void Draw(MyMatrix* pMatProj, MyMatrix* pMatView);

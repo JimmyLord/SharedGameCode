@@ -11,6 +11,7 @@
 #define __MenuItem_H__
 
 class ComponentMenuPage;
+class GameCore;
 class MenuItem;
 class Screen_Base;
 
@@ -72,6 +73,8 @@ class MenuItem
 public:
     static const int MAX_MENUITEM_NAME_LENGTH = 32;
 
+    GameCore* m_pGameCore;
+
     MenuItemTypes m_MenuItemType;
 
     char m_Name[MAX_MENUITEM_NAME_LENGTH];
@@ -99,7 +102,7 @@ public:
 #endif
 
 public:
-    MenuItem();
+    MenuItem(GameCore* pGameCore);
     virtual ~MenuItem();
 
     MenuItem& operator=(const MenuItem& other);

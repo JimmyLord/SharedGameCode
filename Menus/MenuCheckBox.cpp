@@ -22,7 +22,8 @@ ColorByte DefaultMenuCheckBoxColors[MCBCT_NumColors] =
     ColorByte(255,255,255,255), // MCBCT_Text
 };
 
-MenuCheckBox::MenuCheckBox()
+MenuCheckBox::MenuCheckBox(GameCore* pGameCore)
+: MenuItem( pGameCore )
 {
     m_MenuItemType = MIT_CheckBox;
 

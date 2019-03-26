@@ -22,8 +22,8 @@
 #include "MenuText.h"
 #include "MenuInputBox.h"
 
-MenuScrollBox::MenuScrollBox()
-: MenuButton(0)
+MenuScrollBox::MenuScrollBox(GameCore* pGameCore)
+: MenuButton( pGameCore, 0 )
 {
     m_MenuItemType = MIT_ScrollBox;
 
@@ -325,44 +325,44 @@ MenuInputBox* MenuScrollBox::GetMenuInputBox(int index)
     GETMENUTYPE_Scrollbox( index, MIT_InputBox, MenuInputBox );
 }
 
-MenuSprite* MenuScrollBox::CreateMenuSprite(int index)
+MenuSprite* MenuScrollBox::CreateMenuSprite(GameCore* pGameCore, int index)
 {
     MyAssert( m_pMenuItems[index] == 0 );
-    m_pMenuItems[index] = MyNew MenuSprite;
+    m_pMenuItems[index] = MyNew MenuSprite( pGameCore );
     return (MenuSprite*)m_pMenuItems[index];
 }
 
-MenuText* MenuScrollBox::CreateMenuText(int index, MyMeshText* pMeshText)
+MenuText* MenuScrollBox::CreateMenuText(GameCore* pGameCore, int index, MyMeshText* pMeshText)
 {
     MyAssert( m_pMenuItems[index] == 0 );
-    m_pMenuItems[index] = MyNew MenuText( pMeshText );
+    m_pMenuItems[index] = MyNew MenuText( pGameCore, pMeshText );
     return (MenuText*)m_pMenuItems[index];
 }
 
-MenuButton* MenuScrollBox::CreateMenuButton(int index)
+MenuButton* MenuScrollBox::CreateMenuButton(GameCore* pGameCore, int index)
 {
     MyAssert( m_pMenuItems[index] == 0 );
-    m_pMenuItems[index] = MyNew MenuButton(0);
+    m_pMenuItems[index] = MyNew MenuButton( pGameCore, 0 );
     return (MenuButton*)m_pMenuItems[index];
 }
 
-MenuScrollBox* MenuScrollBox::CreateMenuScrollBox(int index)
+MenuScrollBox* MenuScrollBox::CreateMenuScrollBox(GameCore* pGameCore, int index)
 {
     MyAssert( m_pMenuItems[index] == 0 );
-    m_pMenuItems[index] = MyNew MenuScrollBox;
+    m_pMenuItems[index] = MyNew MenuScrollBox( pGameCore );
     return (MenuScrollBox*)m_pMenuItems[index];
 }
 
-MenuScrollingText* MenuScrollBox::CreateMenuScrollingText(int index)
+MenuScrollingText* MenuScrollBox::CreateMenuScrollingText(GameCore* pGameCore, int index)
 {
     MyAssert( m_pMenuItems[index] == 0 );
-    m_pMenuItems[index] = MyNew MenuScrollingText;
+    m_pMenuItems[index] = MyNew MenuScrollingText( pGameCore );
     return (MenuScrollingText*)m_pMenuItems[index];
 }
 
-MenuInputBox* MenuScrollBox::CreateMenuInputBox(int index)
+MenuInputBox* MenuScrollBox::CreateMenuInputBox(GameCore* pGameCore, int index)
 {
     MyAssert( m_pMenuItems[index] == 0 );
-    m_pMenuItems[index] = MyNew MenuInputBox;
+    m_pMenuItems[index] = MyNew MenuInputBox( pGameCore );
     return (MenuInputBox*)m_pMenuItems[index];
 }

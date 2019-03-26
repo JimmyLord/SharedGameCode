@@ -15,8 +15,9 @@ const char* MenuSprite::m_MaterialNames[Materials_NumTypes] =
     "MatSprite", "MatShadow",
 };
 
-MenuSprite::MenuSprite()
-: m_BGColor(50,50,50,255)
+MenuSprite::MenuSprite(GameCore* pGameCore)
+: MenuItem( pGameCore )
+, m_BGColor(50,50,50,255)
 {
     m_MenuItemType = MIT_Sprite;
 
@@ -74,7 +75,7 @@ void MenuSprite::Draw(MyMatrix* pMatProj, MyMatrix* pMatView)
 
     if( m_pSprite == 0 )
     {
-        m_pSprite = MyNew MySprite( false );
+        m_pSprite = MyNew MySprite();
         m_pSprite->Create( "MenuSprite Sprite", 1, 1, 0, 1, 0, 1, Justify_Center, false );
     }
 

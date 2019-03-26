@@ -26,7 +26,7 @@ public:
     float m_BottomFade0;
 
 public:
-    MenuScrollingText();
+    MenuScrollingText(GameCore* pGameCore);
     virtual ~MenuScrollingText();
 
     void SetTextMesh(MyMeshText* pMesh);

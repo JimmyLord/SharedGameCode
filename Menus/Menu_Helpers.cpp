@@ -22,23 +22,23 @@ MenuScrollingText* GetMenuScrollingText(MenuItem** itemarray, int index) { GETME
 MenuInputBox* GetMenuInputBox(MenuItem** itemarray, int index)           { GETMENUTYPE( itemarray, index, MIT_InputBox, MenuInputBox ); }
 MenuCheckBox* GetMenuCheckBox(MenuItem** itemarray, int index)           { GETMENUTYPE( itemarray, index, MIT_CheckBox, MenuCheckBox ); }
 
-#define CREATEMENUTYPE(itemarray, index, typeclass) \
+#define CREATEMENUTYPE(pGameCore, itemarray, index, typeclass) \
     MyAssert( itemarray[index] == 0 ); \
-    itemarray[index] = MyNew typeclass; \
+    itemarray[index] = MyNew typeclass(pGameCore); \
     return (typeclass*)itemarray[index];
 
-#define CREATEMENUTYPEINT(itemarray, index, typeclass, value) \
+#define CREATEMENUTYPEINT(pGameCore, itemarray, index, typeclass, value) \
     MyAssert( itemarray[index] == 0 ); \
-    itemarray[index] = MyNew typeclass(value); \
+    itemarray[index] = MyNew typeclass(pGameCore, value); \
     return (typeclass*)itemarray[index];
 
-MenuSprite* CreateMenuSprite(MenuItem** itemarray, int index)                    { CREATEMENUTYPE( itemarray, index, MenuSprite ); }
-MenuText* CreateMenuText(MenuItem** itemarray, int index, int maxletters)        { CREATEMENUTYPEINT( itemarray, index, MenuText, maxletters ); }
-MenuButton* CreateMenuButton(MenuItem** itemarray, int index, int maxletters)    { CREATEMENUTYPEINT( itemarray, index, MenuButton, maxletters ); }
-//MenuScrollBox* CreateMenuScrollBox(MenuItem** itemarray, int index)              { CREATEMENUTYPE( itemarray, index, MenuScrollBox ); }
-MenuScrollingText* CreateMenuScrollingText(MenuItem** itemarray, int index)      { CREATEMENUTYPE( itemarray, index, MenuScrollingText ); }
-MenuInputBox* CreateMenuInputBox(MenuItem** itemarray, int index)                { CREATEMENUTYPE( itemarray, index, MenuInputBox ); }
-MenuCheckBox* CreateMenuCheckBox(MenuItem** itemarray, int index)                { CREATEMENUTYPE( itemarray, index, MenuCheckBox ); }
+MenuSprite* CreateMenuSprite(GameCore* pGameCore, MenuItem** itemarray, int index)                    { CREATEMENUTYPE( pGameCore, itemarray, index, MenuSprite ); }
+MenuText* CreateMenuText(GameCore* pGameCore, MenuItem** itemarray, int index, int maxletters)        { CREATEMENUTYPEINT( pGameCore, itemarray, index, MenuText, maxletters ); }
+MenuButton* CreateMenuButton(GameCore* pGameCore, MenuItem** itemarray, int index, int maxletters)    { CREATEMENUTYPEINT( pGameCore, itemarray, index, MenuButton, maxletters ); }
+//MenuScrollBox* CreateMenuScrollBox(GameCore* pGameCore, MenuItem** itemarray, int index)              { CREATEMENUTYPE( pGameCore, itemarray, index, MenuScrollBox ); }
+MenuScrollingText* CreateMenuScrollingText(GameCore* pGameCore, MenuItem** itemarray, int index)      { CREATEMENUTYPE( pGameCore, itemarray, index, MenuScrollingText ); }
+MenuInputBox* CreateMenuInputBox(GameCore* pGameCore, MenuItem** itemarray, int index)                { CREATEMENUTYPE( pGameCore, itemarray, index, MenuInputBox ); }
+MenuCheckBox* CreateMenuCheckBox(GameCore* pGameCore, MenuItem** itemarray, int index)                { CREATEMENUTYPE( pGameCore, itemarray, index, MenuCheckBox ); }
 
 Vector2 Menu_ImportExport::GetRelativePositionToAnchorPoint(MenuItemAnchorPoint anchorpointtype, Vector2 pos, Vector4 ExtentsBLTR)
 {
@@ -263,11 +263,11 @@ unsigned int Menu_ImportExport::ImportMenuLayout(cJSON* layout, MenuItem** itema
                     cJSONExt_GetInt( jMenuItem, "LettersNeeded", &lettersneeded );
 
                     MenuItem* pMenuItem = 0;
-                    if( jMIT->valueint == MIT_Sprite )        pMenuItem = CreateMenuSprite( itemarray, i );
-                    if( jMIT->valueint == MIT_Text )          pMenuItem = CreateMenuText( itemarray, i, lettersneeded );
-                    if( jMIT->valueint == MIT_Button )        pMenuItem = CreateMenuButton( itemarray, i, lettersneeded );
-                    if( jMIT->valueint == MIT_InputBox )      pMenuItem = CreateMenuInputBox( itemarray, i );
-                    if( jMIT->valueint == MIT_ScrollingText ) pMenuItem = CreateMenuScrollingText( itemarray, i );
+                    if( jMIT->valueint == MIT_Sprite )        pMenuItem = CreateMenuSprite( g_pGameCore, itemarray, i );
+                    if( jMIT->valueint == MIT_Text )          pMenuItem = CreateMenuText( g_pGameCore, itemarray, i, lettersneeded );
+                    if( jMIT->valueint == MIT_Button )        pMenuItem = CreateMenuButton( g_pGameCore, itemarray, i, lettersneeded );
+                    if( jMIT->valueint == MIT_InputBox )      pMenuItem = CreateMenuInputBox( g_pGameCore, itemarray, i );
+                    if( jMIT->valueint == MIT_ScrollingText ) pMenuItem = CreateMenuScrollingText( g_pGameCore, itemarray, i );
 
                     cJSONExt_GetString( jMenuItem, "Name", pMenuItem->m_Name, MenuItem::MAX_MENUITEM_NAME_LENGTH );
 

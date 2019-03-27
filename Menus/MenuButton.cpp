@@ -76,12 +76,12 @@ MenuButton::MenuButton(GameCore* pGameCore, int maxletters)
         m_Strings[i][0] = 0;
     m_ToolTipString[0] = 0;
 
-    //m_pMaterial = 0; //g_pMaterialManager->CreateMaterial();
+    MeshManager* pMeshManager = m_pGameCore->GetManagers()->GetMeshManager();
 
     if( maxletters == -1 )
-        m_pMeshText = MyNew MyMeshText( 3*MAX_STRING_LENGTH, 0, g_pMeshManager );
+        m_pMeshText = MyNew MyMeshText( 3*MAX_STRING_LENGTH, 0, pMeshManager );
     else if( maxletters > 0 )
-        m_pMeshText = MyNew MyMeshText( maxletters, 0, g_pMeshManager );
+        m_pMeshText = MyNew MyMeshText( maxletters, 0, pMeshManager );
     else
         m_pMeshText = 0;
 
@@ -527,7 +527,7 @@ void MenuButton::Draw(MyMatrix* pMatProj, MyMatrix* pMatView)
     if( m_pFont && m_pMeshText )
     {
         // create a material for the font on the stack and set it. TODO: do better...
-        MaterialDefinition pTempMaterial( g_pMaterialManager );
+        MaterialDefinition pTempMaterial( m_pGameCore->GetManagers()->GetMaterialManager() );
         //m_pMaterial->SetShader( g_pGame->m_pShader_TextureVertexColor );
         pTempMaterial.SetShader( m_pGameCore->GetManagers()->GetShaderGroupManager()->FindShaderGroupByName( "Shader_TextureVertexColor" ) );
         pTempMaterial.SetBlendType( MyRE::MaterialBlendType_On );
@@ -800,7 +800,8 @@ void MenuButton::SetString(const char* str1, const char* str2, const char* str3)
         int multiplier = 1;
         multiplier = g_TextShadowStyleLetterCount[m_TextShadowStyle];
 
-        m_pMeshText = MyNew MyMeshText( totallen * multiplier, 0, g_pMeshManager );
+        MeshManager* pMeshManager = m_pGameCore->GetManagers()->GetMeshManager();
+        m_pMeshText = MyNew MyMeshText( totallen * multiplier, 0, pMeshManager );
     }
 }
 
@@ -827,7 +828,8 @@ void MenuButton::SetStringNumberFormatted(int stringnumber, const char* str1, ..
         int multiplier = 1;
         multiplier = g_TextShadowStyleLetterCount[m_TextShadowStyle];
 
-        m_pMeshText = MyNew MyMeshText( totallen * multiplier, 0, g_pMeshManager );
+        MeshManager* pMeshManager = m_pGameCore->GetManagers()->GetMeshManager();
+        m_pMeshText = MyNew MyMeshText( totallen * multiplier, 0, pMeshManager );
     }
 }
 

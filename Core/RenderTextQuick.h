@@ -56,7 +56,7 @@ public:
                              // RTQ*'s don't call each other so buffer won't get overwritten.
 
 public:
-    RenderTextQuickGlobals();
+    RenderTextQuickGlobals(GameCore* pGameCore);
     virtual ~RenderTextQuickGlobals();
 
     void SetWrapMode(bool wrap, int widthlimit, int lineincsize, bool countonly);

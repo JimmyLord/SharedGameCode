@@ -21,7 +21,7 @@ MenuScrollingText::MenuScrollingText(GameCore* pGameCore)
 {
     m_MenuItemType = MIT_ScrollingText;
 
-    m_pMaterial = g_pMaterialManager->CreateMaterial();
+    m_pMaterial = m_pGameCore->GetManagers()->GetMaterialManager()->CreateMaterial();
     m_peTextMesh = 0;
 
     m_StringToShow = 0;

@@ -236,7 +236,7 @@ cJSON* Menu_ImportExport::ExportMenuLayout(MenuItem** itemarray, unsigned int nu
     return menuitemarray;
 }
 
-unsigned int Menu_ImportExport::ImportMenuLayout(cJSON* layout, MenuItem** itemarray, unsigned int maxitems, Vector4 ExtentsBLTR)
+unsigned int Menu_ImportExport::ImportMenuLayout(GameCore* pGameCore, cJSON* layout, MenuItem** itemarray, unsigned int maxitems, Vector4 ExtentsBLTR)
 {
     if( layout == 0 )
         return 0;
@@ -263,11 +263,11 @@ unsigned int Menu_ImportExport::ImportMenuLayout(cJSON* layout, MenuItem** itema
                     cJSONExt_GetInt( jMenuItem, "LettersNeeded", &lettersneeded );
 
                     MenuItem* pMenuItem = 0;
-                    if( jMIT->valueint == MIT_Sprite )        pMenuItem = CreateMenuSprite( g_pGameCore, itemarray, i );
-                    if( jMIT->valueint == MIT_Text )          pMenuItem = CreateMenuText( g_pGameCore, itemarray, i, lettersneeded );
-                    if( jMIT->valueint == MIT_Button )        pMenuItem = CreateMenuButton( g_pGameCore, itemarray, i, lettersneeded );
-                    if( jMIT->valueint == MIT_InputBox )      pMenuItem = CreateMenuInputBox( g_pGameCore, itemarray, i );
-                    if( jMIT->valueint == MIT_ScrollingText ) pMenuItem = CreateMenuScrollingText( g_pGameCore, itemarray, i );
+                    if( jMIT->valueint == MIT_Sprite )        pMenuItem = CreateMenuSprite( pGameCore, itemarray, i );
+                    if( jMIT->valueint == MIT_Text )          pMenuItem = CreateMenuText( pGameCore, itemarray, i, lettersneeded );
+                    if( jMIT->valueint == MIT_Button )        pMenuItem = CreateMenuButton( pGameCore, itemarray, i, lettersneeded );
+                    if( jMIT->valueint == MIT_InputBox )      pMenuItem = CreateMenuInputBox( pGameCore, itemarray, i );
+                    if( jMIT->valueint == MIT_ScrollingText ) pMenuItem = CreateMenuScrollingText( pGameCore, itemarray, i );
 
                     cJSONExt_GetString( jMenuItem, "Name", pMenuItem->m_Name, MenuItem::MAX_MENUITEM_NAME_LENGTH );
 
@@ -320,7 +320,7 @@ unsigned int Menu_ImportExport::ImportMenuLayout(cJSON* layout, MenuItem** itema
                                 cJSON* jMaterial = cJSON_GetObjectItem( jMenuItem, MenuSprite::m_MaterialNames[i] );
                                 if( jMaterial )
                                 {
-                                    MaterialDefinition* pMaterial = g_pMaterialManager->LoadMaterial( jMaterial->valuestring );
+                                    MaterialDefinition* pMaterial = pGameCore->GetManagers()->GetMaterialManager()->LoadMaterial( jMaterial->valuestring );
                                     if( pMaterial )
                                     {
                                         pMenuSprite->SetMaterial( i, pMaterial );
@@ -345,7 +345,7 @@ unsigned int Menu_ImportExport::ImportMenuLayout(cJSON* layout, MenuItem** itema
                             cJSON* jFont = cJSON_GetObjectItem( jMenuItem, "Font" );
                             if( jFont )
                             {
-                                FontDefinition* pFont = g_pFontManager->CreateFont( jFont->valuestring );
+                                FontDefinition* pFont = pGameCore->GetManagers()->GetFontManager()->CreateFont( jFont->valuestring );
                                 pMenuText->SetFont( pFont );
                                 pFont->Release();
                             }
@@ -380,7 +380,7 @@ unsigned int Menu_ImportExport::ImportMenuLayout(cJSON* layout, MenuItem** itema
                                 cJSON* jMaterial = cJSON_GetObjectItem( jMenuItem, MenuButton::m_MaterialNames[i] );
                                 if( jMaterial )
                                 {
-                                    MaterialDefinition* pMaterial = g_pMaterialManager->LoadMaterial( jMaterial->valuestring );
+                                    MaterialDefinition* pMaterial = pGameCore->GetManagers()->GetMaterialManager()->LoadMaterial( jMaterial->valuestring );
                                     if( pMaterial )
                                     {
                                         pMenuButton->SetMaterial( i, pMaterial );
@@ -392,7 +392,7 @@ unsigned int Menu_ImportExport::ImportMenuLayout(cJSON* layout, MenuItem** itema
                             cJSON* jFont = cJSON_GetObjectItem( jMenuItem, "Font" );
                             if( jFont )
                             {
-                                FontDefinition* pFont = g_pFontManager->CreateFont( jFont->valuestring );
+                                FontDefinition* pFont = pGameCore->GetManagers()->GetFontManager()->CreateFont( jFont->valuestring );
                                 pMenuButton->SetFont( pFont );
                                 pFont->Release();
                             }

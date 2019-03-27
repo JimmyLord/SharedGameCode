@@ -21,10 +21,12 @@ MenuText::MenuText(GameCore* pGameCore)
 
     m_String[0] = 0;
 
-    m_pMaterial = g_pMaterialManager->CreateMaterial();
+    m_pMaterial = m_pGameCore->GetManagers()->GetMaterialManager()->CreateMaterial();
+
+    MeshManager* pMeshManager = m_pGameCore->GetManagers()->GetMeshManager();
 
     int maxletters = MAX_MenuText_STRING;
-    m_pMeshText = MyNew MyMeshText( maxletters, 0, g_pMeshManager );
+    m_pMeshText = MyNew MyMeshText( maxletters, 0, pMeshManager );
     m_MeshAllocatedLocally = true;
     m_DrawAsPartOfBatch = false;
 
@@ -56,14 +58,16 @@ MenuText::MenuText(GameCore* pGameCore, int maxletters)
 
     m_String[0] = 0;
 
-    m_pMaterial = g_pMaterialManager->CreateMaterial();
+    m_pMaterial = m_pGameCore->GetManagers()->GetMaterialManager()->CreateMaterial();
+
+    MeshManager* pMeshManager = m_pGameCore->GetManagers()->GetMeshManager();
 
     if( maxletters == -1 )
-        m_pMeshText = MyNew MyMeshText( MAX_MenuText_STRING*2, 0, g_pMeshManager );
+        m_pMeshText = MyNew MyMeshText( MAX_MenuText_STRING*2, 0, pMeshManager );
     else if( maxletters > 0 )
-        m_pMeshText = MyNew MyMeshText( maxletters, 0, g_pMeshManager );
+        m_pMeshText = MyNew MyMeshText( maxletters, 0, pMeshManager );
     else
-        m_pMeshText = MyNew MyMeshText( MAX_MenuText_STRING, 0, g_pMeshManager );
+        m_pMeshText = MyNew MyMeshText( MAX_MenuText_STRING, 0, pMeshManager );
 
     m_MeshAllocatedLocally = true;
     m_DrawAsPartOfBatch = false;
@@ -88,7 +92,7 @@ MenuText::MenuText(GameCore* pGameCore, MyMeshText* pMeshText)
 
     m_String[0] = 0;
 
-    m_pMaterial = g_pMaterialManager->CreateMaterial();
+    m_pMaterial = m_pGameCore->GetManagers()->GetMaterialManager()->CreateMaterial();
 
     m_pMeshText = pMeshText;
     m_MeshAllocatedLocally = false;
@@ -182,7 +186,7 @@ void MenuText::Draw(MyMatrix* pMatProj, MyMatrix* pMatView)
         if( m_DrawAsPartOfBatch == false )
         {
             // create a material for the font on the stack and set it. TODO: do better...
-            MaterialDefinition pTempMaterial( g_pMaterialManager );
+            MaterialDefinition pTempMaterial( m_pGameCore->GetManagers()->GetMaterialManager() );
             pTempMaterial.SetShader( m_pGameCore->GetManagers()->GetShaderGroupManager()->FindShaderGroupByName( "Shader_TextureVertexColor" ) );
             pTempMaterial.SetBlendType( MyRE::MaterialBlendType_On );
             pTempMaterial.SetTextureColor( m_pFont->GetTexture() );

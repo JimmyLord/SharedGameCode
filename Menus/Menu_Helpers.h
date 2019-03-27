@@ -26,7 +26,7 @@ public:
     static Vector2 GetAbsolutePositionFromAnchorPoint(MenuItemAnchorPoint anchorpointtype, Vector2 pos, Vector4 ExtentsBLTR);
 
     static cJSON* ExportMenuLayout(MenuItem** itemarray, unsigned int numitems, Vector4 ExtentsBLTR);
-    static unsigned int ImportMenuLayout(cJSON* layout, MenuItem** itemarray, unsigned int maxitems, Vector4 ExtentsBLTR);
+    static unsigned int ImportMenuLayout(GameCore* pGameCore, cJSON* layout, MenuItem** itemarray, unsigned int maxitems, Vector4 ExtentsBLTR);
 };
 
 #endif //__MenuImportExport_H__

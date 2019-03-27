@@ -25,10 +25,8 @@ int g_TextShadowStyleLetterCount[TextShadowStyle_NumStyles] =
 
 RenderTextQuickGlobals* g_pRTQGlobals = 0;
 
-RenderTextQuickGlobals::RenderTextQuickGlobals()
+RenderTextQuickGlobals::RenderTextQuickGlobals(GameCore* pGameCore)
 {
-    MyAssert( g_pMaterialManager );
-
     m_pMatProj = 0;
     m_pMatView = 0;
 
@@ -41,7 +39,7 @@ RenderTextQuickGlobals::RenderTextQuickGlobals()
     m_pVertexBuffer = 0;
     //BufferDefinition* m_pIndexBufferID = 0; // TODO: cleanup.
 
-    m_pMaterial = 0;
+    m_pMaterial = pGameCore->GetManagers()->GetMaterialManager()->CreateMaterial();
 
     m_WordWrap = false;
     m_WordWrapWidthLimit = 0;
@@ -269,9 +267,6 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
     MyAssert( g_pRTQGlobals );
     if( g_pRTQGlobals == 0 )
         return 0;
-
-    if( g_pRTQGlobals->m_pMaterial == 0 )
-        g_pRTQGlobals->m_pMaterial = g_pMaterialManager->CreateMaterial();
 
     const char* stringtodraw = text;
     if( g_pLanguageTable != 0 && text[0] == '.' )

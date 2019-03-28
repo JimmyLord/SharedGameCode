@@ -34,6 +34,8 @@ extern int g_TextShadowStyleLetterCount[TextShadowStyle_NumStyles];
 class RenderTextQuickGlobals
 {
 public:
+    GameCore* m_pGameCore;
+
     bool m_BatchMode;
     TextureDefinition* m_pBatchTexture;
     int m_BatchNumLetters;

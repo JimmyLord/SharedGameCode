@@ -25,7 +25,7 @@ public:
     LanguageTable();
     ~LanguageTable();
 
-    void Initialize(const char* filename);
+    void Initialize(FileManager* pFileManager, const char* filename);
     void SetActiveLanguage(int language);
     bool StringExists(const char* stringtofind, int languagetosearch = -1, ...);
     const char* LookUp(const char* stringtofind, int languagetosearch = -1, ...);

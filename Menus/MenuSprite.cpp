@@ -75,8 +75,10 @@ void MenuSprite::Draw(MyMatrix* pMatProj, MyMatrix* pMatView)
 
     if( m_pSprite == 0 )
     {
+        BufferManager* pBufferManager = m_pGameCore->GetManagers()->GetBufferManager();
+
         m_pSprite = MyNew MySprite();
-        m_pSprite->Create( "MenuSprite Sprite", 1, 1, 0, 1, 0, 1, Justify_Center, false );
+        m_pSprite->Create( pBufferManager, "MenuSprite Sprite", 1, 1, 0, 1, 0, 1, Justify_Center, false );
     }
 
     //float scrw = g_pGame->m_GameWidth;

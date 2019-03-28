@@ -23,14 +23,13 @@ LanguageTable::LanguageTable()
 
 LanguageTable::~LanguageTable()
 {
-    if( m_pFile )
-        g_pFileManager->FreeFile( m_pFile );
+    SAFE_RELEASE( m_pFile );
     cJSON_Delete( m_pJSON );
 }
 
-void LanguageTable::Initialize(const char* filename)
+void LanguageTable::Initialize(FileManager* pFileManager, const char* filename)
 {
-    m_pFile = RequestFile( filename );
+    m_pFile = pFileManager->RequestFile( filename );
 }
 
 void LanguageTable::SetActiveLanguage(int language)
@@ -56,7 +55,7 @@ bool LanguageTable::StringExists(const char* stringtofind, int languagetosearch,
         // parse file.
         m_pJSON = cJSON_Parse( m_pFile->GetBuffer() );
         MyAssert( m_pJSON );
-        g_pFileManager->FreeFile( m_pFile ); // we don't need the file anymore.
+        SAFE_RELEASE( m_pFile ); // We don't need the file anymore.
         m_pFile = 0;
     }
 
@@ -108,7 +107,7 @@ const char* LanguageTable::LookUp(const char* stringtofind, int languagetosearch
         // parse file.
         m_pJSON = cJSON_Parse( m_pFile->GetBuffer() );
         MyAssert( m_pJSON );
-        g_pFileManager->FreeFile( m_pFile ); // we don't need the file anymore.
+        SAFE_RELEASE( m_pFile ); // We don't need the file anymore.
         m_pFile = 0;
     }
 

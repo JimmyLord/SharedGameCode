@@ -13,8 +13,8 @@
 #include "../Core/MyMeshText.h"
 #include "../Menus/LanguageTable.h"
 
-MyMeshText::MyMeshText(int maxletters, FontDefinition* pFont, MeshManager* pMeshManager)
-: MyMesh()
+MyMeshText::MyMeshText(int maxletters, FontDefinition* pFont, GameCore* pGameCore)
+: MyMesh( pGameCore )
 {
     m_pFont = pFont;
 
@@ -24,6 +24,7 @@ MyMeshText::MyMeshText(int maxletters, FontDefinition* pFont, MeshManager* pMesh
 #endif
 
     // Create buffers and base set of indices.
+    MeshManager* pMeshManager = pGameCore->GetManagers()->GetMeshManager();
     VertexFormat_Dynamic_Desc* pVertFormat = pMeshManager->GetVertexFormatManager()->GetDynamicVertexFormat( 1, false, false, false, true, 0 );
     CreateOneSubmeshWithBuffers( pVertFormat, (unsigned short)maxletters*4, 2, maxletters*6, true );
 

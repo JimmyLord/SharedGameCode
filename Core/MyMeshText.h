@@ -23,7 +23,7 @@ public:
 #endif
 
 public:
-    MyMeshText(int maxletters, FontDefinition* pFont, MeshManager* pMeshManager);
+    MyMeshText(int maxletters, FontDefinition* pFont, GameCore* pGameCore);
     virtual ~MyMeshText();
 
     void ClearText();

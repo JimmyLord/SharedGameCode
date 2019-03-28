@@ -72,14 +72,15 @@ void MenuSlider::Draw(MyMatrix* pMatProj, MyMatrix* pMatView)
 
     if( m_pSprite )
     {
-        m_pSprite->Create( "MenuSlider", m_BarThickness, m_VisualRange, 0, 1, 0, 1, Justify_CenterX|Justify_Top );
+        BufferManager* pBufferManager = m_pGameCore->GetManagers()->GetBufferManager();
+        m_pSprite->Create( pBufferManager, "MenuSlider", m_BarThickness, m_VisualRange, 0, 1, 0, 1, Justify_CenterX|Justify_Top );
         MyMatrix world;
         world.SetIdentity();
         world.SetTranslation( centerx, top, 0 );
         //FIX m_pSprite->SetTint( m_Colors[MSCT_BarColor] );
         m_pSprite->Draw( pMatProj, pMatView, &world ); //&g_pGame->m_OrthoMatrix );
 
-        m_pSprite->Create( "MenuSlider", m_HandleWidth, m_HandleHeight, 0, 1, 0, 1, Justify_CenterX|Justify_Top );
+        m_pSprite->Create( pBufferManager, "MenuSlider", m_HandleWidth, m_HandleHeight, 0, 1, 0, 1, Justify_CenterX|Justify_Top );
         world.SetTranslation( centerx, emptypos + m_ValuePerc*m_VisualRange, 0 );
         //FIX m_pSprite->SetTint( m_Colors[MSCT_HandleColor] );
         m_pSprite->Draw( pMatProj, pMatView, &world ); //&g_pGame->m_OrthoMatrix );

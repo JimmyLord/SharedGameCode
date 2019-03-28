@@ -117,9 +117,11 @@ void MenuCheckBox::Draw(MyMatrix* pMatProj, MyMatrix* pMatView)
     // draw the checkbox with drop shadow.
     if( pSprite )
     {
+        BufferManager* pBufferManager = m_pGameCore->GetManagers()->GetBufferManager();
+
         if( pShadowSprite )
         {
-            pShadowSprite->Create( "MenuCheckBox", bgwidth, bgheight, shuvs.x, shuvs.y, shuvs.z, shuvs.w, Justify_CenterX|Justify_CenterY );
+            pShadowSprite->Create( pBufferManager, "MenuCheckBox", bgwidth, bgheight, shuvs.x, shuvs.y, shuvs.z, shuvs.w, Justify_CenterX|Justify_CenterY );
 
             //FIX pShadowSprite->SetTint( ColorByte(0,0,0,64) );
             MyMatrix world;
@@ -128,7 +130,7 @@ void MenuCheckBox::Draw(MyMatrix* pMatProj, MyMatrix* pMatView)
             pShadowSprite->Draw( pMatProj, pMatView, &world ); //&g_pGame->m_OrthoMatrixGameSize );
         }
 
-        pSprite->Create( "MenuCheckBox", bgwidth, bgheight, uvs.x, uvs.y, uvs.z, uvs.w, Justify_CenterX|Justify_CenterY );
+        pSprite->Create( pBufferManager, "MenuCheckBox", bgwidth, bgheight, uvs.x, uvs.y, uvs.z, uvs.w, Justify_CenterX|Justify_CenterY );
 
         //FIX pSprite->SetTint( bgcolor );
         if( m_State == MCBS_HeldDown )

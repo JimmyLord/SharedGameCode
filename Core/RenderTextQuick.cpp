@@ -27,6 +27,8 @@ RenderTextQuickGlobals* g_pRTQGlobals = 0;
 
 RenderTextQuickGlobals::RenderTextQuickGlobals(GameCore* pGameCore)
 {
+    m_pGameCore = pGameCore;
+
     m_pMatProj = 0;
     m_pMatView = 0;
 
@@ -39,7 +41,7 @@ RenderTextQuickGlobals::RenderTextQuickGlobals(GameCore* pGameCore)
     m_pVertexBuffer = 0;
     //BufferDefinition* m_pIndexBufferID = 0; // TODO: cleanup.
 
-    m_pMaterial = pGameCore->GetManagers()->GetMaterialManager()->CreateMaterial();
+    m_pMaterial = m_pGameCore->GetManagers()->GetMaterialManager()->CreateMaterial();
 
     m_WordWrap = false;
     m_WordWrapWidthLimit = 0;
@@ -361,9 +363,10 @@ int RenderTextQuickWithEverything(FontDefinition* pFont, float fontheight, float
                 g_pRTQGlobals->m_VBONumVerts = 1200*6;
 
                 // create a large buffer...
-                g_pRTQGlobals->m_pVertexBufferIDImmediate = g_pBufferManager->CreateBuffer( 0, sizeof(Vertex_XYZUV_RGBA)*100*6, MyRE::BufferType_Vertex, MyRE::BufferUsage_DynamicDraw, true, 2, VertexFormat_XYZUV_RGBA, "RenderTextQuick", "VertsImmediate" );
+                BufferManager* pBufferManager = g_pRTQGlobals->m_pGameCore->GetManagers()->GetBufferManager();
+                g_pRTQGlobals->m_pVertexBufferIDImmediate = pBufferManager->CreateBuffer( 0, sizeof(Vertex_XYZUV_RGBA)*100*6, MyRE::BufferType_Vertex, MyRE::BufferUsage_DynamicDraw, true, 2, VertexFormat_XYZUV_RGBA, "RenderTextQuick", "VertsImmediate" );
 
-                g_pRTQGlobals->m_pVertexBuffer = g_pBufferManager->CreateBuffer( 0, sizeof(Vertex_XYZUV_RGBA)*g_pRTQGlobals->m_VBONumVerts, MyRE::BufferType_Vertex, MyRE::BufferUsage_DynamicDraw, false, 2, VertexFormat_XYZUV_RGBA, "RenderTextQuick", "Verts" );
+                g_pRTQGlobals->m_pVertexBuffer = pBufferManager->CreateBuffer( 0, sizeof(Vertex_XYZUV_RGBA)*g_pRTQGlobals->m_VBONumVerts, MyRE::BufferType_Vertex, MyRE::BufferUsage_DynamicDraw, false, 2, VertexFormat_XYZUV_RGBA, "RenderTextQuick", "Verts" );
             }
 
             textstrlen = pFont->GetBMFont()->GenerateVerts( stringtodraw, false, pVertToDraws, fontheight, justificationflags, color );

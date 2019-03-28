@@ -76,12 +76,10 @@ MenuButton::MenuButton(GameCore* pGameCore, int maxletters)
         m_Strings[i][0] = 0;
     m_ToolTipString[0] = 0;
 
-    MeshManager* pMeshManager = m_pGameCore->GetManagers()->GetMeshManager();
-
     if( maxletters == -1 )
-        m_pMeshText = MyNew MyMeshText( 3*MAX_STRING_LENGTH, 0, pMeshManager );
+        m_pMeshText = MyNew MyMeshText( 3*MAX_STRING_LENGTH, 0, m_pGameCore );
     else if( maxletters > 0 )
-        m_pMeshText = MyNew MyMeshText( maxletters, 0, pMeshManager );
+        m_pMeshText = MyNew MyMeshText( maxletters, 0, m_pGameCore );
     else
         m_pMeshText = 0;
 
@@ -262,8 +260,10 @@ void MenuButton::Draw(MyMatrix* pMatProj, MyMatrix* pMatView)
     // create a sprite if one doesn't exist.
     if( m_pSprite == 0 )
     {
+        BufferManager* pBufferManager = m_pGameCore->GetManagers()->GetBufferManager();
+
         m_pSprite = MyNew MySprite();
-        m_pSprite->Create( "MenuButton Sprite", 1, 1, 0, 1, 0, 1, Justify_Center, false );
+        m_pSprite->Create( pBufferManager, "MenuButton Sprite", 1, 1, 0, 1, 0, 1, Justify_Center, false );
     }
 
     if( m_pMeshText )
@@ -800,8 +800,7 @@ void MenuButton::SetString(const char* str1, const char* str2, const char* str3)
         int multiplier = 1;
         multiplier = g_TextShadowStyleLetterCount[m_TextShadowStyle];
 
-        MeshManager* pMeshManager = m_pGameCore->GetManagers()->GetMeshManager();
-        m_pMeshText = MyNew MyMeshText( totallen * multiplier, 0, pMeshManager );
+        m_pMeshText = MyNew MyMeshText( totallen * multiplier, 0, m_pGameCore );
     }
 }
 
@@ -828,8 +827,7 @@ void MenuButton::SetStringNumberFormatted(int stringnumber, const char* str1, ..
         int multiplier = 1;
         multiplier = g_TextShadowStyleLetterCount[m_TextShadowStyle];
 
-        MeshManager* pMeshManager = m_pGameCore->GetManagers()->GetMeshManager();
-        m_pMeshText = MyNew MyMeshText( totallen * multiplier, 0, pMeshManager );
+        m_pMeshText = MyNew MyMeshText( totallen * multiplier, 0, m_pGameCore );
     }
 }
 
@@ -1020,12 +1018,12 @@ void MenuButton::OnDropFont(int controlid, int x, int y)
 
         if( strcmp( filenameext, ".fnt" ) == 0 )
         {
-            FontDefinition* pFontDef = g_pFontManager->FindFont( pFile );
+            FontDefinition* pFontDef = m_pGameCore->GetManagers()->GetFontManager()->FindFont( pFile );
             if( pFontDef != m_pFont )
             {
                 SAFE_RELEASE( m_pFont );
                 if( pFontDef == 0 )
-                    pFontDef = g_pFontManager->CreateFont( pFile );
+                    pFontDef = m_pGameCore->GetManagers()->GetFontManager()->CreateFont( pFile );
                 else
                     pFontDef->AddRef();
                 m_pFont = pFontDef;

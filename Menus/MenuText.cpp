@@ -23,10 +23,8 @@ MenuText::MenuText(GameCore* pGameCore)
 
     m_pMaterial = m_pGameCore->GetManagers()->GetMaterialManager()->CreateMaterial();
 
-    MeshManager* pMeshManager = m_pGameCore->GetManagers()->GetMeshManager();
-
     int maxletters = MAX_MenuText_STRING;
-    m_pMeshText = MyNew MyMeshText( maxletters, 0, pMeshManager );
+    m_pMeshText = MyNew MyMeshText( maxletters, 0, m_pGameCore );
     m_MeshAllocatedLocally = true;
     m_DrawAsPartOfBatch = false;
 
@@ -39,8 +37,8 @@ MenuText::MenuText(GameCore* pGameCore)
     m_Position.y = 400;
 
     strcpy_s( m_String, MAX_MenuText_STRING, "Text Item" );
-    if( g_pFontManager )
-        SetFont( g_pFontManager->GetFirstFont() );
+    if( m_pGameCore->GetManagers()->GetFontManager() )
+        SetFont( m_pGameCore->GetManagers()->GetFontManager()->GetFirstFont() );
 
     m_TextSize.Set( 0, 0 ); // must default to 0,0 for save/load
 
@@ -60,14 +58,12 @@ MenuText::MenuText(GameCore* pGameCore, int maxletters)
 
     m_pMaterial = m_pGameCore->GetManagers()->GetMaterialManager()->CreateMaterial();
 
-    MeshManager* pMeshManager = m_pGameCore->GetManagers()->GetMeshManager();
-
     if( maxletters == -1 )
-        m_pMeshText = MyNew MyMeshText( MAX_MenuText_STRING*2, 0, pMeshManager );
+        m_pMeshText = MyNew MyMeshText( MAX_MenuText_STRING*2, 0, m_pGameCore );
     else if( maxletters > 0 )
-        m_pMeshText = MyNew MyMeshText( maxletters, 0, pMeshManager );
+        m_pMeshText = MyNew MyMeshText( maxletters, 0, m_pGameCore );
     else
-        m_pMeshText = MyNew MyMeshText( MAX_MenuText_STRING, 0, pMeshManager );
+        m_pMeshText = MyNew MyMeshText( MAX_MenuText_STRING, 0, m_pGameCore );
 
     m_MeshAllocatedLocally = true;
     m_DrawAsPartOfBatch = false;
@@ -295,12 +291,12 @@ void MenuText::OnDropFont(int controlid, int x, int y)
 
         if( strcmp( filenameext, ".fnt" ) == 0 )
         {
-            FontDefinition* pFontDef = g_pFontManager->FindFont( pFile );
+            FontDefinition* pFontDef = m_pGameCore->GetManagers()->GetFontManager()->FindFont( pFile );
             if( pFontDef != m_pFont )
             {
                 SAFE_RELEASE( m_pFont );
                 if( pFontDef == 0 )
-                    pFontDef = g_pFontManager->CreateFont( pFile );
+                    pFontDef = m_pGameCore->GetManagers()->GetFontManager()->CreateFont( pFile );
                 else
                     pFontDef->AddRef();
                 m_pFont = pFontDef;

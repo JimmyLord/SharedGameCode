@@ -58,7 +58,7 @@ public:
     void Setup( MyMeshText* pTextMesh, float x, float y, float fontheight, ColorByte color, ScoreChunkAnimType animtype, float duration, unsigned char justification, const char* string, int value );
     void SetupWithDest( MyMeshText* pTextMesh, float x, float y, float dx, float dy, float fontheight, ColorByte color, ScoreChunkAnimType animtype, float duration, float sittime, float movespeed, unsigned char justification, const char* string, int value );
 
-    void Tick(double TimePassed);
+    void Tick(float TimePassed);
     void Draw();
 
     bool IsActive();

@@ -78,7 +78,7 @@ void ScoreChunk::SetupWithDest( MyMeshText* pTextMesh, float x, float y, float d
     m_Justification = justification;
 }
 
-void ScoreChunk::Tick(double TimePassed)
+void ScoreChunk::Tick(float TimePassed)
 {
     float timepassed = (float)TimePassed;
     m_TimeAlive += timepassed;

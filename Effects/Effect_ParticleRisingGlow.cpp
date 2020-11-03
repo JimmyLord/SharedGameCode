@@ -127,7 +127,7 @@ void Effect_ParticleRisingGlow::Tick(double TimePassed)
 
 void Effect_ParticleRisingGlow::Draw()
 {
-    m_pRenderer->Draw( 0,0,0,0,0,0,0,0,0,0,0 );
+    m_pRenderer->Draw( nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,0,nullptr,nullptr,nullptr,nullptr,true );
 }
 
 bool Effect_ParticleRisingGlow::OnTouch(int action, int id, float x, float y, float pressure, float size)

@@ -65,7 +65,7 @@ public:
 
     virtual void Init();
     virtual bool IsSettled();
-    virtual void Tick(double TimePassed);
+    virtual void Tick(float TimePassed);
     virtual void Draw();
 
     virtual bool OnTouch(int action, int id, float x, float y, float pressure, float size);

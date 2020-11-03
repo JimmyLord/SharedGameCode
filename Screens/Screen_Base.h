@@ -53,6 +53,8 @@ class Screen_Base
     friend class ScreenManager;
 
 protected:
+    GameCore* m_pGame;
+        
     float m_GameHeight;
 
     char m_ScreenName[MAX_SCREENNAME_LENGTH];
@@ -101,7 +103,7 @@ protected:
     //void ImportMenuLayout(const char* layout);
 
 public:
-    Screen_Base();
+    Screen_Base(GameCore* pGame);
     virtual ~Screen_Base();
 
     void SetGameHeight(float height) { m_GameHeight = height; }
@@ -130,7 +132,7 @@ public:
     virtual void OnResized(int x, int y, int w, int h); // window was resized, change the layout if aspect ratio requires.
     virtual void UpdateMenuItems(bool initialsetup);
     virtual bool IsSettled();
-    virtual void Tick(double TimePassed);
+    virtual void Tick(float TimePassed);
     virtual void Draw();
 
     virtual bool OnTouch(int action, int id, float x, float y, float pressure, float size);
@@ -153,8 +155,8 @@ public:
     void SetScreenOverlayToShow(int screen, Screen_Base* pParent = 0, void* pPtr = 0, void* pPtr2 = 0);
     void ReplaceCurrentScreenOverlayWith(int screen, Screen_Base* pParent = 0, void* pPtr = 0, void* pPtr2 = 0);
 
-    void DrawAllMenuItems(MyMatrix* matviewproj);
-    void DrawMenuItem(int index);
+    void DrawAllMenuItems(MyMatrix* pProj, MyMatrix* pView);
+    void DrawMenuItem(MyMatrix* pProj, MyMatrix* pView, int index);
     MenuItem* GetMenuItem(int index);
 
     MenuItemTypes GetMenuItemType(int index);
@@ -167,13 +169,13 @@ public:
     MenuInputBox* GetMenuInputBox(int index);
     MenuCheckBox* GetMenuCheckBox(int index);
 
-    MenuSprite* CreateMenuSprite(int index);
-    MenuText* CreateMenuText(int index, int maxletters = 0);
-    MenuButton* CreateMenuButton(int index, int maxletters = 0);
-    MenuScrollBox* CreateMenuScrollBox(int index);
-    MenuScrollingText* CreateMenuScrollingText(int index);
-    MenuInputBox* CreateMenuInputBox(int index);
-    MenuCheckBox* CreateMenuCheckBox(int index);
+    MenuSprite* CreateMenuSprite(GameCore* pGameCore, int index);
+    MenuText* CreateMenuText(GameCore* pGameCore, int index, int maxletters = 0);
+    MenuButton* CreateMenuButton(GameCore* pGameCore, int index, int maxletters = 0);
+    MenuScrollBox* CreateMenuScrollBox(GameCore* pGameCore, int index);
+    MenuScrollingText* CreateMenuScrollingText(GameCore* pGameCore, int index);
+    MenuInputBox* CreateMenuInputBox(GameCore* pGameCore, int index);
+    MenuCheckBox* CreateMenuCheckBox(GameCore* pGameCore, int index);
 };
 
 #endif //__Screen_Base_H__

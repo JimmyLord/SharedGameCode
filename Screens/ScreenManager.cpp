@@ -229,7 +229,7 @@ bool ScreenManager::IsSettled()
     return true;
 }
 
-void ScreenManager::Tick(double timepassed)
+void ScreenManager::Tick(float timepassed)
 {
     for( unsigned int i=0; i<m_ScreensActive.Count(); i++ )
     {

@@ -184,7 +184,7 @@ void Effect_ParticleFollowPath::Tick(double TimePassed)
 
 void Effect_ParticleFollowPath::Draw(MyMatrix* matviewproj)
 {
-    m_pRenderer->Draw( 0, 0, matviewproj, 0, 0, 0, 0, 0, 0, 0, 0 );
+    m_pRenderer->Draw( nullptr,nullptr,matviewproj,nullptr,nullptr,nullptr,nullptr,nullptr,0,nullptr,nullptr,nullptr,nullptr,true );
 }
 
 bool Effect_ParticleFollowPath::OnTouch(int action, int id, float x, float y, float pressure, float size)

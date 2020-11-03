@@ -15,8 +15,10 @@
 #include "../../../SharedGameCode/Menus/MenuInputBox.h"
 #include "../../../SharedGameCode/Menus/MenuCheckBox.h"
 
-Screen_Base::Screen_Base()
+Screen_Base::Screen_Base(GameCore* pGame)
 {
+    m_pGame = pGame;
+
     m_ScreenName[0] = 0;
     m_ScreenOverlayIndex = -1;
 
@@ -333,7 +335,7 @@ void Screen_Base::CreateMenuItems(int numitems, MenuItemDefinition* menuitems)
         {
         case MIT_Sprite:
             {
-                MenuSprite* pMenuSprite = CreateMenuSprite( i );
+                MenuSprite* pMenuSprite = CreateMenuSprite( m_pGame, i );
 
                 pMenuSprite->SetName( menuitems[i].name );
 
@@ -348,7 +350,7 @@ void Screen_Base::CreateMenuItems(int numitems, MenuItemDefinition* menuitems)
 
         case MIT_Text:
             {
-                MenuText* pText = CreateMenuText( i, menuitems[i].maxletters );
+                MenuText* pText = CreateMenuText( m_pGame, i, menuitems[i].maxletters );
 
                 pText->SetName( menuitems[i].name );
 
@@ -360,7 +362,7 @@ void Screen_Base::CreateMenuItems(int numitems, MenuItemDefinition* menuitems)
 
         case MIT_Button:
             {
-                MenuButton* pButton = CreateMenuButton( i, menuitems[i].maxletters );
+                MenuButton* pButton = CreateMenuButton( m_pGame, i, menuitems[i].maxletters );
 
                 pButton->SetName( menuitems[i].name );
 
@@ -514,7 +516,7 @@ bool Screen_Base::IsSettled()
     return false;
 }
 
-void Screen_Base::Tick(double TimePassed)
+void Screen_Base::Tick(float TimePassed)
 {
     m_TimeAlive += TimePassed;
     m_TimeInState += TimePassed;
@@ -789,20 +791,20 @@ void Screen_Base::SwitchScreenOverlay()
     m_ScreenToShowParam2 = 0;
 }
 
-void Screen_Base::DrawAllMenuItems(MyMatrix* matviewproj)
+void Screen_Base::DrawAllMenuItems(MyMatrix* pProj, MyMatrix* pView)
 {
     for( int i=0; i<m_MenuItemsNeeded; i++ )
     {
         if( m_pMenuItems[i] )
         {
-            m_pMenuItems[i]->Draw( matviewproj );
+            m_pMenuItems[i]->Draw( pProj, pView );
         }
     }
 }
 
-void Screen_Base::DrawMenuItem(int index)
+void Screen_Base::DrawMenuItem(MyMatrix* pProj, MyMatrix* pView, int index)
 {
-    m_pMenuItems[index]->Draw( 0 );
+    m_pMenuItems[index]->Draw( pProj, pView );
 }
 
 MenuItem* Screen_Base::GetMenuItem(int index)
@@ -832,20 +834,20 @@ MenuScrollingText* Screen_Base::GetMenuScrollingText(int index) { GETMENUTYPE( i
 MenuInputBox* Screen_Base::GetMenuInputBox(int index)           { GETMENUTYPE( index, MIT_InputBox, MenuInputBox ); }
 MenuCheckBox* Screen_Base::GetMenuCheckBox(int index)           { GETMENUTYPE( index, MIT_CheckBox, MenuCheckBox ); }
 
-#define CREATEMENUTYPE(index, typeclass) \
+#define CREATEMENUTYPE(game, index, typeclass) \
     MyAssert( m_pMenuItems[index] == 0 ); \
-    m_pMenuItems[index] = MyNew typeclass; \
+    m_pMenuItems[index] = MyNew typeclass(game); \
     return (typeclass*)m_pMenuItems[index];
 
-#define CREATEMENUTYPEINT(index, typeclass, value) \
+#define CREATEMENUTYPEINT(game, index, typeclass, value) \
     MyAssert( m_pMenuItems[index] == 0 ); \
-    m_pMenuItems[index] = MyNew typeclass(value); \
+    m_pMenuItems[index] = MyNew typeclass(game, value); \
     return (typeclass*)m_pMenuItems[index];
 
-MenuSprite* Screen_Base::CreateMenuSprite(int index)                    { CREATEMENUTYPE( index, MenuSprite ); }
-MenuText* Screen_Base::CreateMenuText(int index, int maxletters)        { CREATEMENUTYPEINT( index, MenuText, maxletters ); }
-MenuButton* Screen_Base::CreateMenuButton(int index, int maxletters)    { CREATEMENUTYPEINT( index, MenuButton, maxletters ); }
-MenuScrollBox* Screen_Base::CreateMenuScrollBox(int index)              { CREATEMENUTYPE( index, MenuScrollBox ); }
-MenuScrollingText* Screen_Base::CreateMenuScrollingText(int index)      { CREATEMENUTYPE( index, MenuScrollingText ); }
-MenuInputBox* Screen_Base::CreateMenuInputBox(int index)                { CREATEMENUTYPE( index, MenuInputBox ); }
-MenuCheckBox* Screen_Base::CreateMenuCheckBox(int index)                { CREATEMENUTYPE( index, MenuCheckBox ); }
+MenuSprite* Screen_Base::CreateMenuSprite(GameCore* pGameCore, int index)                    { CREATEMENUTYPE( pGameCore, index, MenuSprite ); }
+MenuText* Screen_Base::CreateMenuText(GameCore* pGameCore, int index, int maxletters)        { CREATEMENUTYPEINT( pGameCore, index, MenuText, maxletters ); }
+MenuButton* Screen_Base::CreateMenuButton(GameCore* pGameCore, int index, int maxletters)    { CREATEMENUTYPEINT( pGameCore, index, MenuButton, maxletters ); }
+MenuScrollBox* Screen_Base::CreateMenuScrollBox(GameCore* pGameCore, int index)              { CREATEMENUTYPE( pGameCore, index, MenuScrollBox ); }
+MenuScrollingText* Screen_Base::CreateMenuScrollingText(GameCore* pGameCore, int index)      { CREATEMENUTYPE( pGameCore, index, MenuScrollingText ); }
+MenuInputBox* Screen_Base::CreateMenuInputBox(GameCore* pGameCore, int index)                { CREATEMENUTYPE( pGameCore, index, MenuInputBox ); }
+MenuCheckBox* Screen_Base::CreateMenuCheckBox(GameCore* pGameCore, int index)                { CREATEMENUTYPE( pGameCore, index, MenuCheckBox ); }

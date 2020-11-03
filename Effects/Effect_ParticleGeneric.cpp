@@ -205,7 +205,7 @@ void Effect_ParticleGeneric::Tick(double TimePassed)
 
 void Effect_ParticleGeneric::Draw(MyMatrix* matviewproj)
 {
-    m_pRenderer->Draw( 0, 0, matviewproj, 0, 0, 0, 0, 0, 0, 0, 0 );
+    m_pRenderer->Draw( nullptr,nullptr,matviewproj,nullptr,nullptr,nullptr,nullptr,nullptr,0,nullptr,nullptr,nullptr,nullptr,true );
 }
 
 bool Effect_ParticleGeneric::OnTouch(int action, int id, float x, float y, float pressure, float size)

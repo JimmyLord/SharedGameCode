@@ -53,7 +53,7 @@ protected:
 
 public:
     virtual bool IsSettled(); // are visible screens settled.
-    virtual void Tick(double timepassed);
+    virtual void Tick(float timepassed);
     virtual void Draw();
 
     virtual void OnResized(int x, int y, int w, int h);

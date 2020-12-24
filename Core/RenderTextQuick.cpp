@@ -9,9 +9,9 @@
 
 #include "SharedCommonHeader.h"
 #include "../Menus/LanguageTable.h"
-#include "../Framework/MyFramework/SourceCommon/Renderers/BaseClasses/Renderer_Enums.h"
-#include "../Framework/MyFramework/SourceCommon/Renderers/BaseClasses/Renderer_Base.h"
-#include "../Framework/MyFramework/SourceCommon/Renderers/BaseClasses/Shader_Base.h"
+#include "../../Framework/MyFramework/SourceCommon/Renderers/BaseClasses/Renderer_Enums.h"
+#include "../../Framework/MyFramework/SourceCommon/Renderers/BaseClasses/Renderer_Base.h"
+#include "../../Framework/MyFramework/SourceCommon/Renderers/BaseClasses/Shader_Base.h"
 #include "RenderTextQuick.h"
 
 int g_TextShadowStyleLetterCount[TextShadowStyle_NumStyles] =

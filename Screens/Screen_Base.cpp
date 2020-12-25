@@ -766,7 +766,7 @@ void Screen_Base::SwitchScreenOverlay()
         default:
             if( m_DestroyCurrentScreen )
                 g_pScreenManager->CloseScreen( this );
-            //newscreen = g_pScreenOverlayManager->CreateScreen( m_ScreenToShow, m_ScreenToShowParentPage, m_ScreenToShowParam1, m_ScreenToShowParam2 );
+            newscreen = g_pScreenOverlayManager->CreateScreen( (ScreenOverlays)m_ScreenToShow, m_ScreenToShowParentPage, m_ScreenToShowParam1, m_ScreenToShowParam2 );
             break;
         }
 
